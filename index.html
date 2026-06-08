@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <title>Mass ITN Campaign 2026 | Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #dce2e8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+      padding: 20px;
+    }
+
+    /* phone frame */
+    .phone-app {
+      max-width: 380px;
+      width: 100%;
+      height: 720px;
+      background: white;
+      border-radius: 42px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* header: light blue - increased height */
+    .app-header {
+      background: #b3d9ff;
+      padding: 48px 20px 38px 20px;
+      flex-shrink: 0;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .campaign-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1a2a3f;
+      letter-spacing: -0.3px;
+      margin: 0;
+      line-height: 1.3;
+      flex: 1;
+    }
+
+    .logo-image {
+      height: 48px;
+      width: auto;
+      max-width: 80px;
+      object-fit: contain;
+      display: block;
+      background: transparent;
+    }
+
+    .logo-image[src="logo.png"] {
+      background: rgba(255,255,255,0.3);
+      border-radius: 12px;
+    }
+
+    /* back button (shown when iframe is active) */
+    .back-button {
+      background: rgba(26, 42, 63, 0.1);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #1a2a3f;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      margin-bottom: 12px;
+      width: fit-content;
+    }
+
+    .back-button:hover {
+      background: rgba(26, 42, 63, 0.2);
+    }
+
+    .back-button:active {
+      transform: scale(0.96);
+    }
+
+    /* body: flexible area for cards or iframe */
+    .app-body {
+      flex: 1;
+      background: #ffffff;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* cards container - centered grid (shown by default) */
+    .cards-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px 16px 32px 16px;
+      overflow-y: auto;
+    }
+
+    /* 2 columns grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    /* light blue card styling with icons */
+    .card {
+      background: #b3d9ff;
+      border-radius: 20px;
+      padding: 24px 12px 20px 12px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .card:active {
+      transform: scale(0.97);
+      background: #a0ccee;
+    }
+
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-icon svg {
+      width: 32px;
+      height: 32px;
+      stroke: #1a3a5c;
+      stroke-width: 1.7;
+      fill: none;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a2a3f;
+      letter-spacing: -0.2px;
+    }
+
+    /* iframe container (hidden by default) */
+    .iframe-container {
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      background: #f5f7fa;
+    }
+
+    .iframe-wrapper {
+      flex: 1;
+      position: relative;
+      width: 100%;
+    }
+
+    .module-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: white;
+    }
+
+    /* footer: light blue, centered text */
+    .app-footer {
+      background: #b3d9ff;
+      padding: 16px 24px 18px 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 0;
+      flex-shrink: 0;
+    }
+
+    .footer-text {
+      font-size: 17px;
+      font-weight: 600;
+      color: #1a2a3f;
+      letter-spacing: 0.3px;
+    }
+
+    .home-indicator {
+      background: #cbdae6;
+      width: 130px;
+      height: 5px;
+      border-radius: 100px;
+      margin: 6px auto 10px auto;
+      flex-shrink: 0;
+    }
+
+    .app-body::-webkit-scrollbar {
+      width: 4px;
+    }
+    .app-body::-webkit-scrollbar-track {
+      background: #f0f2f5;
+      border-radius: 10px;
+    }
+    .app-body::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 460px) {
+      .phone-app {
+        height: 680px;
+        border-radius: 36px;
+      }
+      .campaign-title {
+        font-size: 20px;
+      }
+      .app-header {
+        padding: 40px 16px 32px 16px;
+      }
+      .logo-image {
+        height: 40px;
+        max-width: 70px;
+      }
+      .card {
+        padding: 18px 8px 14px 8px;
+        gap: 8px;
+      }
+      .card-icon svg {
+        width: 26px;
+        height: 26px;
+      }
+      .card-title {
+        font-size: 13px;
+      }
+      .footer-text {
+        font-size: 15px;
+      }
+      .header-content {
+        gap: 8px;
+      }
+      .cards-grid {
+        gap: 14px;
+      }
+      .cards-container {
+        padding: 20px 16px 40px 16px;
+      }
+      .back-button {
+        padding: 6px 12px;
+        font-size: 12px;
+        margin: 8px 12px 0 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-app">
+    <!-- header: light blue with increased height -->
+    <div class="app-header">
+      <div class="header-content">
+        <h1 class="campaign-title">Mass ITN Campaign 2026</h1>
+        <img src="logo.png" alt="Logo" class="logo-image" onerror="this.style.opacity='0.5'; this.style.border='1px dashed #2c5a7a'; this.alt='Logo'">
+      </div>
+    </div>
+
+    <!-- body: dynamic content (cards or iframe) -->
+    <div class="app-body">
+      <!-- Cards view (default) -->
+      <div id="cardsView" class="cards-container">
+        <div class="cards-grid">
+          <!-- 1. Attendance -->
+          <div class="card" data-module="attendance" data-url="attendance.html">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                <path d="M22 21v-2a4 4 0 0 0-3-3.85" />
+              </svg>
+            </div>
+            <div class="card-title">Attendance</div>
+          </div>
+
+          <!-- 2. Registration -->
+          <div class="card" data-module="registration" data-url="registration.html">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M22 21v-2a4 4 0 0 0-3-3.85" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+            <div class="card-title">Registration</div>
+          </div>
+
+          <!-- 3. Distribution -->
+          <div class="card" data-module="distribution" data-url="distribution.html">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16v16H4z" />
+                <path d="M8 8h8v8H8z" />
+                <path d="M12 4v4" />
+                <path d="M12 16v4" />
+                <path d="M4 12h4" />
+                <path d="M16 12h4" />
+              </svg>
+            </div>
+            <div class="card-title">Distribution</div>
+          </div>
+
+          <!-- 4. Stock -->
+          <div class="card" data-module="stock" data-url="stock.htm">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+              </svg>
+            </div>
+            <div class="card-title">Stock</div>
+          </div>
+
+          <!-- 5. Monitoring -->
+          <div class="card" data-module="monitoring" data-url="monitoring.html">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12a9 9 0 0 1-9 9m9-9a9 9 0 0 0-9-9m9 9h-4m-7 9A9 9 0 0 1 3 12m9 9v-4M3 12a9 9 0 0 1 9-9m-9 9h4m7-9a9 9 0 0 1 9 9" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </div>
+            <div class="card-title">Monitoring</div>
+          </div>
+
+          <!-- 6. Reconciliation -->
+          <div class="card" data-module="reconciliation" data-url="reconciliation.html">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 3h5v5M14 10l6-6M3 16h5v5M10 14l-6 6" />
+                <path d="M21 16v5h-5M16 21l6-6M3 8h5V3M10 10l-6-6" />
+              </svg>
+            </div>
+            <div class="card-title">Reconciliation</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Iframe view (hidden initially) -->
+      <div id="iframeView" class="iframe-container">
+        <button id="backButton" class="back-button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 5l-7 7 7 7"/>
+          </svg>
+          Back to Dashboard
+        </button>
+        <div class="iframe-wrapper">
+          <iframe id="moduleIframe" class="module-iframe" src="about:blank" title="Module Content"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- footer: light blue -->
+    <div class="app-footer">
+      <span class="footer-text">ICF-SL 2026</span>
+    </div>
+    <div class="home-indicator"></div>
+  </div>
+
+  <script>
+    // Get DOM elements
+    const cardsView = document.getElementById('cardsView');
+    const iframeView = document.getElementById('iframeView');
+    const moduleIframe = document.getElementById('moduleIframe');
+    const backButton = document.getElementById('backButton');
+    
+    // Get all card elements
+    const cards = document.querySelectorAll('.card');
+    
+    // Function to show iframe with specific URL
+    function showModule(url, moduleName) {
+      // Set iframe source
+      moduleIframe.src = url;
+      
+      // Hide cards view, show iframe view
+      cardsView.style.display = 'none';
+      iframeView.style.display = 'flex';
+      
+      // Add a small visual feedback for the active module in header (optional)
+      console.log(`Loading module: ${moduleName} from ${url}`);
+    }
+    
+    // Function to hide iframe and show cards
+    function showCards() {
+      // Clear iframe source to stop any ongoing loading
+      moduleIframe.src = 'about:blank';
+      
+      // Show cards view, hide iframe view
+      cardsView.style.display = 'flex';
+      iframeView.style.display = 'none';
+    }
+    
+    // Add click handlers to each card
+    cards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        const url = card.getAttribute('data-url');
+        const moduleName = card.getAttribute('data-module');
+        
+        if (url) {
+          showModule(url, moduleName);
+        } else {
+          console.warn('No URL defined for this card');
+          alert(`Module "${moduleName}" - HTML file not configured yet.`);
+        }
+      });
+    });
+    
+    // Add back button handler
+    backButton.addEventListener('click', () => {
+      showCards();
+    });
+    
+    // Handle iframe load errors (optional - shows error message if file not found)
+    moduleIframe.addEventListener('error', () => {
+      console.warn('Failed to load iframe content');
+    });
+    
+    // Optional: If iframe fails to load due to missing file, show fallback
+    moduleIframe.addEventListener('load', () => {
+      // Check if iframe content is accessible (basic check)
+      try {
+        const iframeDoc = moduleIframe.contentDocument || moduleIframe.contentWindow.document;
+        if (iframeDoc && iframeDoc.body && iframeDoc.body.innerHTML.trim() === '') {
+          // Empty body might indicate missing file
+          console.log('Iframe loaded but content might be empty');
+        }
+      } catch (e) {
+        // Cross-origin or other error - ignore
+        console.log('Cannot access iframe content due to security restrictions');
+      }
+    });
+    
+    // Ensure cards view is visible on initial load
+    cardsView.style.display = 'flex';
+    iframeView.style.display = 'none';
+    
+    // Small helper to handle potential missing files gracefully
+    // Add a CSS style to show a custom error state inside iframe if needed
+    const style = document.createElement('style');
+    style.textContent = `
+      .module-iframe {
+        background: #f9fbfe;
+      }
+      .module-iframe:empty::after {
+        content: "Loading...";
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: #6f7d95;
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
