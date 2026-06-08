@@ -1,6 +1,6 @@
-username,password,tabs
-admin,admin123,"Attendance,Registration,Distribution,Stock,Monitoring,Reconciliation"
-manager,manager123,"Attendance,Registration,Distribution,Stock"
-viewer,viewer123,"Attendance,Monitoring"
-field,field123,"Attendance,Distribution"
-logistics,logistics123,"Stock,Distribution,Reconciliation"
+username,password,Attendance,Registration,Distribution,Stock,Monitoring,Reconciliation
+admin,admin123,Show,Show,Show,Show,Show,Show
+manager,manager123,Show,Show,Show,Show,Hide,Hide
+viewer,viewer123,Show,Hide,Hide,Hide,Show,Hide
+field,field123,Show,Hide,Show,Hide,Hide,Hide
+logistics,logistics123,Hide,Hide,Show,Show,Hide,Show
