@@ -416,6 +416,7 @@
   </div>
 
   <script>
+    // Module definitions with icons and URLs
     const allModules = {
       "Attendance": { url: "attendance.html", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M22 21v-2a4 4 0 0 0-3-3.85" /></svg>` },
       "Registration": { url: "registration.html", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.85" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>` },
@@ -424,6 +425,9 @@
       "Monitoring": { url: "monitoring.html", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-9 9m9-9a9 9 0 0 0-9-9m9 9h-4m-7 9A9 9 0 0 1 3 12m9 9v-4M3 12a9 9 0 0 1 9-9m-9 9h4m7-9a9 9 0 0 1 9 9" /><circle cx="12" cy="12" r="3" /></svg>` },
       "Reconciliation": { url: "reconciliation.html", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M14 10l6-6M3 16h5v5M10 14l-6 6" /><path d="M21 16v5h-5M16 21l6-6M3 8h5V3M10 10l-6-6" /></svg>` }
     };
+
+    // Order of modules (same as CSV columns)
+    const moduleOrder = ["Attendance", "Registration", "Distribution", "Stock", "Monitoring", "Reconciliation"];
 
     const loginScreen = document.getElementById('loginScreen');
     const dashboardView = document.getElementById('dashboardView');
@@ -460,77 +464,113 @@
         }
       }
       result.push(current);
-      return result.map(field => field.replace(/^"|"$/g, ''));
-    }
-
-    function parseCSV(csvText) {
-      const lines = csvText.trim().split(/\r?\n/);
-      if (lines.length < 2) throw new Error('CSV must have header row and at least one user');
-      
-      const users = [];
-      const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
-      const usernameIndex = headers.indexOf('username');
-      const passwordIndex = headers.indexOf('password');
-      const tabsIndex = headers.indexOf('tabs');
-      
-      if (usernameIndex === -1 || passwordIndex === -1) {
-        throw new Error('CSV must contain "username" and "password" columns');
-      }
-      
-      for (let i = 1; i < lines.length; i++) {
-        if (!lines[i].trim()) continue;
-        const row = parseCSVRow(lines[i]);
-        const username = row[usernameIndex]?.trim();
-        const password = row[passwordIndex]?.trim();
-        let tabsRaw = tabsIndex !== -1 ? (row[tabsIndex] || '').trim() : '';
-        
-        if (username && password) {
-          let tabs = [];
-          if (tabsRaw.includes(',') && tabsRaw.includes('"')) {
-            tabs = tabsRaw.split(',').map(t => t.trim().replace(/"/g, ''));
-          } else if (tabsRaw.includes(',')) {
-            tabs = tabsRaw.split(',').map(t => t.trim());
-          } else if (tabsRaw.includes(' ')) {
-            tabs = tabsRaw.split(/\s+/).map(t => t.trim());
-          } else if (tabsRaw) {
-            tabs = [tabsRaw];
-          }
-          users.push({ username, password, tabs });
-        }
-      }
-      
-      if (users.length === 0) throw new Error('No valid user records found');
-      return users;
+      return result.map(field => field.replace(/^"|"$/g, '').trim());
     }
 
     async function loadUserCSV() {
       try {
+        loadingMessage.textContent = 'Loading user data from user.csv...';
         const response = await fetch('user.csv');
-        if (!response.ok) throw new Error(`user.csv not found. Please create user.csv in the same directory.`);
+        
+        if (!response.ok) {
+          throw new Error('user.csv not found. Please create user.csv in the same directory.');
+        }
+        
         const csvText = await response.text();
-        userDatabase = parseCSV(csvText);
-        loadingMessage.textContent = `✓ Loaded ${userDatabase.length} users`;
+        const lines = csvText.trim().split(/\r?\n/);
+        
+        if (lines.length < 2) {
+          throw new Error('CSV must have header row and at least one user');
+        }
+        
+        // Parse header row to get module column names
+        const headers = parseCSVRow(lines[0]);
+        
+        // Find username and password indices
+        const usernameIndex = headers.findIndex(h => h.toLowerCase() === 'username');
+        const passwordIndex = headers.findIndex(h => h.toLowerCase() === 'password');
+        
+        if (usernameIndex === -1 || passwordIndex === -1) {
+          throw new Error('CSV must contain "username" and "password" columns');
+        }
+        
+        // Get module column indices (all columns after password)
+        const moduleIndices = [];
+        const moduleNames = [];
+        
+        for (let i = 0; i < headers.length; i++) {
+          const header = headers[i];
+          if (i !== usernameIndex && i !== passwordIndex && moduleOrder.includes(header)) {
+            moduleIndices.push(i);
+            moduleNames.push(header);
+          }
+        }
+        
+        // Parse each user row
+        const users = [];
+        for (let i = 1; i < lines.length; i++) {
+          if (!lines[i].trim()) continue;
+          
+          const row = parseCSVRow(lines[i]);
+          const username = row[usernameIndex]?.trim();
+          const password = row[passwordIndex]?.trim();
+          
+          if (username && password) {
+            // Build tabs array based on Show/Hide values
+            const tabs = [];
+            for (let j = 0; j < moduleIndices.length; j++) {
+              const value = row[moduleIndices[j]]?.trim();
+              if (value && value.toLowerCase() === 'show') {
+                tabs.push(moduleNames[j]);
+              }
+            }
+            
+            users.push({ username, password, tabs });
+          }
+        }
+        
+        if (users.length === 0) {
+          throw new Error('No valid user records found in CSV');
+        }
+        
+        userDatabase = users;
+        
+        loadingMessage.textContent = `✓ Loaded ${userDatabase.length} users from user.csv`;
         loadingMessage.style.color = '#2ecc71';
+        
+        // Debug info
+        const adminUser = userDatabase.find(u => u.username === 'admin');
+        if (adminUser) {
+          console.log('Admin user tabs:', adminUser.tabs);
+        }
+        
         setTimeout(() => {
           loadingMessage.style.display = 'none';
           loginForm.style.display = 'block';
         }, 1000);
+        
       } catch (error) {
-        loadingMessage.innerHTML = `✗ ${error.message}<br><br>Create user.csv:<br>username,password,tabs<br>admin,admin123,"Attendance,Registration,Distribution,Stock,Monitoring,Reconciliation"`;
+        console.error('Error:', error);
+        loadingMessage.innerHTML = `✗ ${error.message}<br><br>Create user.csv with format:<br>username,password,Attendance,Registration,Distribution,Stock,Monitoring,Reconciliation<br>admin,admin123,Show,Show,Show,Show,Show,Show`;
         loadingMessage.style.color = '#e74c3c';
         loginBtn.disabled = true;
       }
     }
 
     function renderCards(tabs) {
+      console.log('Rendering tabs:', tabs);
+      
       cardsContainer.innerHTML = '';
-      const validTabs = tabs.filter(tab => allModules[tab]);
-      if (validTabs.length === 0) {
-        cardsContainer.innerHTML = `<div style="text-align:center;padding:40px;color:#6f7d95;">No modules assigned</div>`;
+      
+      if (!tabs || tabs.length === 0) {
+        cardsContainer.innerHTML = `<div style="text-align:center;padding:40px;color:#6f7d95;">No modules assigned to this user. Contact administrator to enable modules.</div>`;
         return;
       }
-      validTabs.forEach(tab => {
+      
+      tabs.forEach(tab => {
         const module = allModules[tab];
+        if (!module) return;
+        
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
@@ -552,15 +592,22 @@
     function login() {
       const username = usernameInput.value.trim();
       const password = passwordInput.value;
+      
       if (!username || !password) {
         loginError.textContent = 'Please enter username and password';
         return;
       }
+      
       const user = userDatabase.find(u => u.username === username && u.password === password);
+      
       if (user) {
         currentUser = user.username;
+        console.log('Logged in as:', currentUser);
+        console.log('User tabs from CSV:', user.tabs);
+        
         renderCards(user.tabs);
         dashboardUserInfo.textContent = currentUser;
+        
         loginScreen.style.display = 'none';
         dashboardView.style.display = 'flex';
         loginError.textContent = '';
@@ -585,6 +632,7 @@
       iframeView.style.display = 'none';
       dashboardView.style.display = 'flex';
     });
+    
     usernameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') login(); });
     passwordInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') login(); });
 
