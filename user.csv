@@ -1,8 +1,6 @@
 username,password,tabs
-admin,admin123,Attendance,Registration,Distribution,Stock,Monitoring,Reconciliation
-manager,manager123,Attendance,Registration,Distribution,Stock
-viewer,viewer123,Attendance,Monitoring
-field,field123,Attendance,Distribution
-logistics,logistics123,Stock,Distribution,Reconciliation
-supervisor,sup456,Attendance,Registration,Monitoring,Reconciliation
-dataentry,data789,Registration,Stock
+admin,admin123,"Attendance,Registration,Distribution,Stock,Monitoring,Reconciliation"
+manager,manager123,"Attendance,Registration,Distribution,Stock"
+viewer,viewer123,"Attendance,Monitoring"
+field,field123,"Attendance,Distribution"
+logistics,logistics123,"Stock,Distribution,Reconciliation"
