@@ -306,7 +306,7 @@
    ITN Household Registration — HHR app
    HHR0001 … 10 days · 25 households per day
    ========================================================= */
-const APP_VERSION='2026.08.31a';
+const APP_VERSION='2026.08.31b';
 
 /* =========================================================
    BACKEND — the deployed submission endpoint. It is baked in, so a
@@ -335,7 +335,7 @@ const HIER=[["BO","Bo",[["Bo City",["Aethel CHP","Agape Way CHP","Anglican Dioce
    location code (BO-03-007) is shown while drilling down, but it never enters
    an HHR ID, a token or a record key. */
 const pad=(n,w)=>String(n).padStart(w,'0');
-const HHR_PAD=4;                        /* HHR0001 … HHR3130 */
+const HHR_PAD=5;                        /* HHR00001 … HHR03130 */
 function hhrId(seq){ return 'HHR'+pad(seq,HHR_PAD); }
 const HHRS=[], HHR_BY_ID={}, HHR_AT={};
 (function buildRegistrars(){
@@ -372,11 +372,9 @@ function normId(raw){
    Phone — Communities is a semicolon-separated list). District,
    Chiefdom and PHU come from HIER above and are only repeated in the
    CSV as a check when someone is filling it in.
-   Fetched once at startup and cached, so the app still opens offline
-   after the first successful load; a missing or unreachable CSV just
-   means no communities and blank name/phone to confirm by hand. */
+   The CSV is mandatory. The application must not open unless this file
+   is successfully loaded at startup. No cached fallback is used. */
 const DIR_URL='hhr_directory.csv';
-const DIR_CACHE_KEY='itn_hhr_directory_v1';
 let DIR={};
 function splitCsvLine(l){
   const out=[]; let cur='', q=false;
@@ -391,10 +389,11 @@ function splitCsvLine(l){
 }
 function parseDirectory(txt){
   const lines=String(txt||'').split(/\r?\n/).filter(l=>l.trim().length);
-  if(!lines.length) return;
+  if(!lines.length) throw new Error('Empty HHR directory');
   const header=splitCsvLine(lines[0]).map(h=>h.trim().toLowerCase());
   const col=k=>header.indexOf(k);
   const iId=col('hhrid'), iCom=col('communities'), iF=col('firstname'), iL=col('lastname'), iP=col('phone');
+  if(iId<0 || iCom<0 || iF<0 || iL<0 || iP<0) throw new Error('Invalid HHR directory columns');
   const out={};
   for(let i=1;i<lines.length;i++){
     const c=splitCsvLine(lines[i]);
@@ -417,11 +416,14 @@ function loadDirectory(cb){
   const t=setTimeout(()=>{ try{ ctrl&&ctrl.abort(); }catch(e){} },6000);
   try{
     fetch(DIR_URL,ctrl?{signal:ctrl.signal,cache:'no-store'}:{cache:'no-store'}).then(r=>r.ok?r.text():Promise.reject(r.status)).then(txt=>{
-      clearTimeout(t); Store.set(DIR_CACHE_KEY,txt); parseDirectory(txt); finish(true);
+      clearTimeout(t);
+      parseDirectory(txt);
+      if(!Object.keys(DIR).length) throw new Error('HHR directory contains no valid records');
+      finish(true);
     }).catch(()=>{
       clearTimeout(t);
-      const cached=Store.get(DIR_CACHE_KEY,null);
-      if(cached){ parseDirectory(cached); finish(true); } else finish(false);
+      DIR={};
+      finish(false);
     });
   }catch(e){ clearTimeout(t); finish(false); }
 }
@@ -1766,11 +1768,21 @@ function qCard(q){
   </div>`;
 }
 function hhrDetailsCard(){
+  const pl=hhrPlace(me)||{};
+  const d=dirFor(me)||{};
+  const selectedCommunity=meCommunity || (d.communities&&d.communities.length===1?d.communities[0]:'');
   return `<div class="q-card" id="qc_hhr_details">
     <span class="q-no">HHR</span>
     <div class="q-txt">HHR Demographic Details</div>
-    <div class="q-help">These details identify the registrar and are saved with every household registration.</div>
+    <div class="q-help">These details identify the registrar and location and are saved with every household registration.</div>
     <div class="grid g2" style="margin-top:11px">
+      <div class="field"><div class="lbl">HHR ID</div><input type="text" value="${esc(me)}" readonly></div>
+      <div class="field"><div class="lbl">District</div><input type="text" value="${esc(pl.district||'')}" readonly></div>
+      <div class="field"><div class="lbl">Chiefdom</div><input type="text" value="${esc(pl.chiefdom||'')}" readonly></div>
+      <div class="field"><div class="lbl">PHU</div><input type="text" value="${esc(pl.phu||'')}" readonly></div>
+    </div>
+    <div class="field"><div class="lbl">Community</div><input type="text" value="${esc(selectedCommunity)}" readonly></div>
+    <div class="grid g2">
       <div class="field"><div class="lbl">First name</div><input type="text" id="hhrFirst" value="${esc(meFirst)}" placeholder="First name"></div>
       <div class="field"><div class="lbl">Last name</div><input type="text" id="hhrLast" value="${esc(meLast)}" placeholder="Last name"></div>
     </div>
@@ -1866,6 +1878,11 @@ function saveEdit(){
     itns:itnsFor(form.size),
     token:old.token||form._token,
     _community:meCommunity||old._community||'',
+    _hhrID:me||old._hhrID||'',
+    _district:(hhrPlace(me)||{}).district||old._district||'',
+    _chiefdom:(hhrPlace(me)||{}).chiefdom||old._chiefdom||'',
+    _phu:(hhrPlace(me)||{}).phu||old._phu||'',
+    _phuCode:(hhrPlace(me)||{}).phuCode||old._phuCode||'',
     _hhrFirst:meFirst||old._hhrFirst||'',
     _hhrLast:meLast||old._hhrLast||'',
     _hhrTel:mePhone||old._hhrTel||'',
@@ -1947,9 +1964,7 @@ function finish(gps){
     _wasRevisit:isRevisit(was)?'Yes':'',
     _id:me+'-D'+d+'-H'+h,          /* stable — a resubmission updates this row */
     _hhr:me, _day:d, _hh:h, _serial:hhSerial(d,h),
-    _district:(hhrPlace(me)||{}).district||'', _chiefdom:(hhrPlace(me)||{}).chiefdom||'',
-    _phu:(hhrPlace(me)||{}).phu||'', _phuCode:(hhrPlace(me)||{}).phuCode||'',
-    _community:meCommunity||'', _hhrFirst:meFirst||'', _hhrLast:meLast||'', _hhrTel:mePhone||'',
+    _community:meCommunity||'', _hhrID:me||'', _district:(hhrPlace(me)||{}).district||'', _chiefdom:(hhrPlace(me)||{}).chiefdom||'', _phu:(hhrPlace(me)||{}).phu||'', _phuCode:(hhrPlace(me)||{}).phuCode||'', _hhrFirst:meFirst||'', _hhrLast:meLast||'', _hhrTel:mePhone||'',
     token:form._token, itns:itnsFor(form.size),
     gpsLat:gps.lat, gpsLng:gps.lng, gpsAcc:gps.acc, gpsAt:gps.at,
     _rev:(was._rev||0)+1, _submitted:false, _dirty:false, _submittedAt:'',
@@ -1977,9 +1992,7 @@ function finishRevisit(gps){
   const d=formD,h=formH;
   const rec={
     _id:me+'-D'+d+'-H'+h, _hhr:me, _day:d, _hh:h, _serial:hhSerial(d,h),
-    _district:(hhrPlace(me)||{}).district||'', _chiefdom:(hhrPlace(me)||{}).chiefdom||'',
-    _phu:(hhrPlace(me)||{}).phu||'', _phuCode:(hhrPlace(me)||{}).phuCode||'',
-    _community:meCommunity||'', _hhrFirst:meFirst||'', _hhrLast:meLast||'', _hhrTel:mePhone||'',
+    _community:meCommunity||'', _hhrID:me||'', _district:(hhrPlace(me)||{}).district||'', _chiefdom:(hhrPlace(me)||{}).chiefdom||'', _phu:(hhrPlace(me)||{}).phu||'', _phuCode:(hhrPlace(me)||{}).phuCode||'', _hhrFirst:meFirst||'', _hhrLast:meLast||'', _hhrTel:mePhone||'',
     _status:'Revisit', adults:'No', token:'',
     revisitLat:gps.lat, revisitLng:gps.lng, revisitAcc:gps.acc, revisitAt:gps.at,
     gpsLat:'', gpsLng:'', gpsAcc:'', gpsAt:'',
@@ -2123,7 +2136,17 @@ function boot(){
     if(Store.get(trackOnKey(),false)) autoStart(true);   /* a reload costs a gap, not the day */
   } else { me=null; renderSignIn(); }
 }
-loadDirectory(()=>{ boot(); });
+loadDirectory(ok=>{
+  if(ok){
+    boot();
+  } else {
+    renderSignIn('HHR directory file not found or could not be loaded. Please place hhr_directory.csv in the same GitHub folder as this HTML file.');
+    const input=document.getElementById('siId');
+    const btn=document.getElementById('siBtn');
+    if(input) input.disabled=true;
+    if(btn) btn.disabled=true;
+  }
+});
 </script>
 </body>
 </html>
