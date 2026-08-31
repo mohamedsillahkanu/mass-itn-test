@@ -416,7 +416,7 @@ function loadDirectory(cb){
   const ctrl=('AbortController' in window)?new AbortController():null;
   const t=setTimeout(()=>{ try{ ctrl&&ctrl.abort(); }catch(e){} },6000);
   try{
-    fetch(DIR_URL,ctrl?{signal:ctrl.signal}:{}).then(r=>r.ok?r.text():Promise.reject(r.status)).then(txt=>{
+    fetch(DIR_URL,ctrl?{signal:ctrl.signal,cache:'no-store'}:{cache:'no-store'}).then(r=>r.ok?r.text():Promise.reject(r.status)).then(txt=>{
       clearTimeout(t); Store.set(DIR_CACHE_KEY,txt); parseDirectory(txt); finish(true);
     }).catch(()=>{
       clearTimeout(t);
@@ -598,33 +598,28 @@ function chooseCommunity(c){
   meCommunity=c; Store.set('itn_hhr_community_'+me,c);
   confirmIdentity();
 }
-/* first/last name and telephone go on every record from here on — prefilled
-   from the directory, or from what was confirmed on this device before,
-   always editable so a wrong entry in the CSV does not stick. */
+/* first/last name and telephone go on every record from here on.
+   The GitHub hhr_directory.csv is the source of truth for the signed-in HHR;
+   saved values are used only when the CSV field is blank. The details remain
+   editable on the household form. */
 function confirmIdentity(){
   const d=dirFor(me)||{};
   const saved=Store.get('itn_hhr_ident_'+me,{});
-  const first=saved.first!=null?saved.first:(d.first||'');
-  const last=saved.last!=null?saved.last:(d.last||'');
-  const phone=saved.phone!=null?saved.phone:(d.phone||'');
-  modal(`<h3>Confirm your details</h3>
-    <p>These go on every household you register. Correct them if they are wrong.</p>
-    <div class="field"><div class="lbl">First name</div><input type="text" id="idFirst" value="${esc(first)}" placeholder="First name"></div>
-    <div class="field"><div class="lbl">Last name</div><input type="text" id="idLast" value="${esc(last)}" placeholder="Last name"></div>
-    <div class="field"><div class="lbl">Telephone</div><input type="tel" id="idPhone" inputmode="numeric" maxlength="9" value="${esc(phone)}" placeholder="076123456"></div>
-    <div class="acts"><button class="btn btn-primary btn-block" onclick="saveIdentity()">Continue</button></div>`);
-  setTimeout(()=>{ const f=document.getElementById('idFirst'); if(f) f.focus(); },50);
+  meFirst=d.first!=null&&String(d.first).trim()?String(d.first).trim():(saved.first||'');
+  meLast=d.last!=null&&String(d.last).trim()?String(d.last).trim():(saved.last||'');
+  mePhone=d.phone!=null&&String(d.phone).trim()?String(d.phone).trim():(saved.phone||'');
+  loadDone(); renderMenu();
 }
-function saveIdentity(){
-  const first=document.getElementById('idFirst').value.trim();
-  const last=document.getElementById('idLast').value.trim();
-  const phone=digits(document.getElementById('idPhone').value).slice(0,PHONE_LEN);
-  if(!first||!last){ toast('First and last name are needed'); return; }
-  if(phone.length!==PHONE_LEN){ toast('Telephone must be '+PHONE_LEN+' digits'); return; }
+function saveIdentityFromForm(){
+  const first=(document.getElementById('hhrFirst')||{}).value?.trim()||'';
+  const last=(document.getElementById('hhrLast')||{}).value?.trim()||'';
+  const phone=digits((document.getElementById('hhrPhoneTop')||{}).value||'').slice(0,PHONE_LEN);
+  if(!first||!last){ toast('First and last name are needed'); return false; }
+  if(phone.length!==PHONE_LEN){ toast('Telephone must be '+PHONE_LEN+' digits'); return false; }
   meFirst=first; meLast=last; mePhone=phone;
   Store.set('itn_hhr_ident_'+me,{first:first,last:last,phone:phone});
-  closeModal();
-  loadDone(); renderMenu();
+  Store.set('itn_hhr_phone_'+me,phone);
+  return true;
 }
 function editMyDetails(){ confirmIdentity(); }
 function changeCommunity(){ pickCommunity(); }
@@ -1770,6 +1765,18 @@ function qCard(q){
     ${e?`<div class="err">${esc(e)}</div>`:''}
   </div>`;
 }
+function hhrDetailsCard(){
+  return `<div class="q-card" id="qc_hhr_details">
+    <span class="q-no">HHR</span>
+    <div class="q-txt">HHR Demographic Details</div>
+    <div class="q-help">These details identify the registrar and are saved with every household registration.</div>
+    <div class="grid g2" style="margin-top:11px">
+      <div class="field"><div class="lbl">First name</div><input type="text" id="hhrFirst" value="${esc(meFirst)}" placeholder="First name"></div>
+      <div class="field"><div class="lbl">Last name</div><input type="text" id="hhrLast" value="${esc(meLast)}" placeholder="Last name"></div>
+    </div>
+    <div class="field"><div class="lbl">Telephone</div><input type="tel" id="hhrPhoneTop" inputmode="numeric" maxlength="${PHONE_LEN}" value="${esc(mePhone)}" placeholder="076123456"></div>
+  </div>`;
+}
 function renderForm(){
   refreshToken();
   const d=formD,h=formH;
@@ -1782,6 +1789,7 @@ function renderForm(){
       <div class="hd-head"><div class="id">${esc(editing?(form.token||''):me+' \u00b7 D'+d+' \u00b7 HH'+h)}</div>
         <div class="meta">Household ${h} on Day ${d} \u2014 number ${hhSerial(d,h)} of your ${DAYS*PER_DAY}.${editing?'<br>Correcting the answers on a record that is already registered.':''}</div></div>
       ${editing?`<div class="note">Change the answers that are wrong and save. This updates the same record \u2014 it does not create a second registration, and the token stays as it was given to the household head.</div>`:''}
+      ${hhrDetailsCard()}
       ${visibleQs(form).map(qCard).join('')}
       ${editing?'':gpsCard()}
     </div></div>
@@ -1793,6 +1801,12 @@ function renderForm(){
 }
 function wireForm(){
   const b=document.getElementById('fb'); if(!b) return;
+  b.addEventListener('input',e=>{
+    const i=e.target.closest('#hhrFirst,#hhrLast,#hhrPhoneTop'); if(!i) return;
+    if(i.id==='hhrPhoneTop'){ i.value=digits(i.value).slice(0,PHONE_LEN); mePhone=i.value; }
+    else if(i.id==='hhrFirst') meFirst=i.value;
+    else meLast=i.value;
+  });
   b.addEventListener('click',e=>{
     const o=e.target.closest('.opt'); if(!o) return;
     form[o.dataset.q]=o.dataset.v;
@@ -1824,6 +1838,11 @@ function paint(id,val){
 
 /* ---------- submit: token, then GPS ---------- */
 function submitHH(){
+  if(!saveIdentityFromForm()){
+    const el=document.getElementById('qc_hhr_details');
+    if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
   refreshToken();
   const qs=visibleQs(form), bad=qs.filter(q=>fieldErr(q,form));
   if(bad.length){
