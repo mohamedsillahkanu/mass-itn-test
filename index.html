@@ -544,8 +544,6 @@ function renderSignIn(err,keepId){
           <input type="text" id="siId" autocapitalize="none" autocomplete="off" spellcheck="false"
             placeholder="e.g. HHR0027 or 27" value="${esc(raw)}"></div>
         <div id="siPlace"></div>
-        <div class="field"><div class="lbl">Password</div>
-          <input type="password" id="siPw" autocomplete="off" placeholder="Password"></div>
         <button class="btn btn-primary btn-block" id="siBtn" disabled onclick="doSignIn()">Sign in</button>
       </div>
       <div class="ver">Version ${esc(APP_VERSION)}</div>
@@ -570,16 +568,14 @@ function renderSignIn(err,keepId){
     btn.disabled=false;
   };
   idInp.addEventListener('input',paintPlace);
-  document.getElementById('siPw').addEventListener('keydown',e=>{ if(e.key==='Enter') doSignIn(); });
+  idInp.addEventListener('keydown',e=>{ if(e.key==='Enter') doSignIn(); });
   paintPlace();
   idInp.focus();
 }
 function doSignIn(){
   const idRaw=document.getElementById('siId').value;
   const id=normId(idRaw);
-  const pw=document.getElementById('siPw').value;
   if(!id){ renderSignIn('No HHR with that ID.',idRaw); return; }
-  if(pw!=='admin'){ renderSignIn('Password is wrong. Try again.',idRaw); return; }
   me=id; Store.set(SESS_KEY,me);
   pickCommunity();
 }
