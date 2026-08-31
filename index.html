@@ -1,665 +1,2114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-  <title>Mass ITN Campaign 2026 | Login</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ITN Household Registration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#1b6499">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ITN HHR">
+<style>
+  :root{
+    --sky-50:#f2f8fd; --sky-100:#e3f1fb; --sky-200:#c9e4f7; --sky-300:#9ed0f0;
+    --sky-400:#6ab6e6; --sky-500:#3d9ad6; --sky-600:#2680bd; --sky-700:#1b6499;
+    --ink:#14344d; --muted:#5f7f96; --line:#dceaf5; --white:#fff;
+    --ok:#2aa17c; --ok-bg:#e6f6f1; --bad:#d95468; --bad-bg:#fceaed;
+    --warn:#e0a100; --warn-bg:#fff7e0;
+    --sh-sm:0 2px 8px rgba(38,128,189,.08);
+    --sh-md:0 10px 30px rgba(38,128,189,.14);
+    --sh-lg:0 26px 60px rgba(38,128,189,.22);
+    --disp:'Oswald',system-ui,sans-serif; --body:'Inter',-apple-system,'Segoe UI',Roboto,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{font-family:var(--body);color:var(--ink);background:var(--sky-50);
+    display:flex;align-items:center;justify-content:center;
+    padding:clamp(0px,2vmin,22px);min-height:100vh;min-height:100dvh;}
+  .phone{width:min(100%,clamp(360px,44vh,470px));
+    height:96vh;height:96dvh;max-height:940px;
+    background:#0c2740;border-radius:clamp(28px,4vh,46px);padding:clamp(6px,1vh,12px);
+    box-shadow:var(--sh-lg);}
+  .screen{position:relative;width:100%;height:100%;background:var(--white);
+    border-radius:clamp(20px,3vh,36px);overflow:hidden;}
+  #app{position:absolute;inset:0;display:flex;flex-direction:column;}
+  @media (max-width:700px),(max-height:620px){
+    body{padding:0;min-height:100vh;min-height:100dvh;}
+    .phone{width:100%;max-width:none;height:100vh;height:100dvh;max-height:none;border-radius:0;padding:0;}
+    .screen{border-radius:0;}
+  }
+  @media (min-width:1100px) and (min-height:1000px){
+    .phone{width:min(100%,520px);}
+  }
 
-    body {
-      background: #dce2e8;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      font-family: system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
-      padding: 20px;
-    }
+  .appbar{flex:0 0 auto;background:var(--sky-100);color:var(--sky-700);padding:15px 16px 13px;display:flex;align-items:center;gap:11px;border-bottom:1px solid var(--sky-200);}
+  @supports (padding-top: env(safe-area-inset-top)){
+    .appbar{padding-top:calc(15px + env(safe-area-inset-top));}
+    .footer{padding-bottom:calc(13px + env(safe-area-inset-bottom));}
+  }
+  .ico-btn{width:38px;height:38px;border:none;border-radius:12px;background:var(--white);color:var(--sky-600);display:grid;place-items:center;cursor:pointer;box-shadow:var(--sh-sm);flex:0 0 auto;}
+  .ico-btn:active{transform:scale(.94);}
+  .titles{min-width:0;flex:1;}
+  .eyebrow{font:600 10px/1 var(--body);letter-spacing:.15em;text-transform:uppercase;color:var(--sky-500);}
+  .title{font:600 16.5px/1.15 var(--disp);letter-spacing:.02em;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .tag-pill{font:700 9.5px/1 var(--body);letter-spacing:.06em;padding:6px 8px;border-radius:7px;flex:0 0 auto;}
+  .tag-pill.me{background:var(--sky-600);color:#fff;}
 
-    .phone-app {
-      max-width: 380px;
-      width: 100%;
-      height: 720px;
-      background: white;
-      border-radius: 42px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
+  .body{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+  .footer{flex:0 0 auto;background:var(--sky-100);border-top:1px solid var(--sky-200);padding:13px 16px calc(15px + env(safe-area-inset-bottom));display:flex;gap:10px;}
 
-    .app-header {
-      background: #b3d9ff;
-      padding: 32px 20px 24px 20px;
-      flex-shrink: 0;
-      text-align: center;
-    }
+  .btn{font:600 15px/1 var(--body);border:none;border-radius:14px;padding:15px 18px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .08s,box-shadow .2s;}
+  .btn:active{transform:translateY(1px);}
+  .btn-primary{background:var(--sky-600);color:#fff;box-shadow:0 6px 16px rgba(38,128,189,.3);flex:1;}
+  .btn-primary:disabled{background:var(--sky-200);color:#fff;box-shadow:none;cursor:not-allowed;}
+  .btn-ghost{background:var(--white);color:var(--sky-600);box-shadow:var(--sh-sm);}
+  .btn-ok{background:var(--ok);color:#fff;box-shadow:0 6px 16px rgba(42,161,124,.28);flex:1;}
+  .btn-danger{background:var(--bad-bg);color:var(--bad);box-shadow:none;}
+  .btn-block{width:100%;}
+  .btn-sm{padding:12px 14px;font-size:13.5px;}
 
-    .campaign-title {
-      font-size: 24px;
-      font-weight: 700;
-      color: #1a2a3f;
-      letter-spacing: -0.3px;
-      margin: 0 0 16px 0;
-      line-height: 1.3;
-    }
+  .hero{background:linear-gradient(160deg,var(--sky-500),var(--sky-700));color:#fff;padding:26px 22px 30px;border-bottom-left-radius:30px;border-bottom-right-radius:30px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-60px;top:-70px;width:210px;height:210px;border-radius:50%;background:rgba(255,255,255,.10);}
+  .hero h1{font:600 23px/1.18 var(--disp);margin:0 0 8px;position:relative;}
+  .hero p{font:400 12.5px/1.5 var(--body);color:rgba(255,255,255,.9);max-width:32ch;position:relative;}
 
-    .logo-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+  .list{padding:18px 16px 28px;}
+  .list h2{font:600 20px/1.1 var(--disp);}
+  .sub{font:400 12px/1.45 var(--body);color:var(--muted);margin:6px 0 14px;}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:15px;margin-bottom:13px;box-shadow:var(--sh-sm);}
+  .field{margin-bottom:11px;}
+  .lbl{font:600 11px var(--body);color:var(--muted);margin-bottom:6px;letter-spacing:.02em;}
+  .field input{width:100%;font:500 15px var(--body);color:var(--ink);padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--white);outline:none;transition:.15s;}
+  .field input:focus{border-color:var(--sky-500);box-shadow:0 0 0 3px rgba(61,154,214,.13);}
+  .flag{font:500 11.5px/1.4 var(--body);padding:9px 11px;border-radius:10px;margin-bottom:11px;}
+  .flag.bad{background:var(--bad-bg);color:var(--bad);border:1px solid #f2ccd2;}
+  .flag.ok{background:var(--ok-bg);color:var(--ok);border:1px solid #bfe6d6;}
+  .note{font:400 11.5px/1.5 var(--body);color:var(--sky-700);background:var(--sky-50);border:1px dashed var(--sky-300);border-radius:10px;padding:10px 12px;margin-bottom:13px;}
 
-    .logo-image {
-      height: 56px;
-      width: auto;
-      max-width: 100px;
-      object-fit: contain;
-      display: block;
-    }
+  .grid{display:grid;gap:10px;}
+  .grid.g1{grid-template-columns:1fr;}
+  .grid.g2{grid-template-columns:1fr 1fr;}
+  .grid.g3{grid-template-columns:1fr 1fr 1fr;}
+  .grid.g4{grid-template-columns:repeat(auto-fill,minmax(72px,1fr));}
 
-    .back-button {
-      background: rgba(26, 42, 63, 0.1);
-      border: none;
-      padding: 8px 16px;
-      border-radius: 30px;
-      font-size: 14px;
-      font-weight: 500;
-      color: #1a2a3f;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s ease;
-      margin: 12px 16px 8px 16px;
-      width: fit-content;
-    }
+  .tile{position:relative;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:12px 11px;box-shadow:var(--sh-sm);text-align:left;cursor:pointer;transition:transform .12s,box-shadow .2s,border-color .15s;}
+  .tile:active{transform:scale(.98);}
+  .tile .tn{font:700 14px/1 var(--disp);letter-spacing:.03em;color:var(--ink);}
+  .tile .tb{font:700 8.5px/1 var(--body);letter-spacing:.05em;text-transform:uppercase;padding:5px 6px;border-radius:99px;}
+  .tile .top{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:9px;}
+  .tile .tk{font:500 10px/1.3 var(--body);color:var(--muted);}
+  .tile .tn.small{font-size:12.5px;line-height:1.2;letter-spacing:.01em;}
+  .tile .tb.code{background:var(--sky-50);border:1px solid var(--sky-200);color:var(--sky-700);font-family:var(--disp);letter-spacing:.05em;}
+  .crumb{font:500 10.5px/1.4 var(--body);color:var(--muted);margin:0 2px 10px;}
+  .crumb .cs{color:var(--sky-300);margin:0 6px;}
+  .tile .ttrack{height:6px;background:var(--sky-50);border:1px solid var(--line);border-radius:99px;overflow:hidden;margin-top:8px;}
+  .tile .tfill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--sky-400),var(--sky-600));}
+  .tile .tfill.full{background:var(--ok);}
 
-    .app-body {
-      flex: 1;
-      background: #ffffff;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
+  .tile.done{border-color:var(--ok);background:var(--ok-bg);}
+  .tile.done .tb{background:var(--ok);color:#fff;}
+  .tile.done .tn{color:#16744f;}
+  .tile.todo{border-color:var(--bad);background:var(--bad-bg);}
+  .tile.todo .tb{background:var(--bad);color:#fff;}
+  .tile.todo .tn{color:#a33648;}
+  .tile.next{box-shadow:0 0 0 3px rgba(217,84,104,.18),var(--sh-sm);}
+  .tile.locked{cursor:not-allowed;opacity:.5;}
+  .tile.locked .tb{background:#eef2f5;color:var(--muted);}
 
-    .login-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 24px 20px;
-      gap: 24px;
-      overflow-y: auto;
-    }
+  .hh{aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:8px;text-align:center;}
+  .hh .hn{font:700 19px/1 var(--disp);letter-spacing:.02em;}
+  .hh .hs{font:700 7.5px/1 var(--body);letter-spacing:.05em;text-transform:uppercase;}
+  .hh.done .hn,.hh.done .hs{color:#16744f;}
+  .hh.todo .hn,.hh.todo .hs{color:#a33648;}
+  .hh.locked .hn,.hh.locked .hs{color:var(--muted);}
+  .tile.revisit{border-color:var(--warn);background:var(--warn-bg);}
+  .tile.revisit .tb{background:var(--warn);color:#fff;}
+  .tile.revisit .tn{color:#8a6d00;}
+  .hh.revisit .hn,.hh.revisit .hs{color:#8a6d00;}
+  .hh .pend{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--warn);
+    box-shadow:0 0 0 2px #fff;}
 
-    .login-title {
-      text-align: center;
-      font-size: 22px;
-      font-weight: 600;
-      color: #1a2a3f;
-      margin-bottom: 8px;
-    }
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin:0 2px 13px;}
+  .legend span{display:inline-flex;align-items:center;gap:6px;font:500 10.5px/1 var(--body);color:var(--muted);}
+  .legend i{width:11px;height:11px;border-radius:4px;border:1px solid;display:inline-block;}
+  .legend i.d{background:var(--ok-bg);border-color:var(--ok);}
+  .legend i.t{background:var(--bad-bg);border-color:var(--bad);}
+  .legend i.l{background:#f1f4f7;border-color:#cfd8e0;}
+  .legend i.r{background:var(--warn-bg);border-color:var(--warn);}
+  .legend i.mg{background:var(--ok);border-color:var(--ok);}
+  .legend i.my{background:var(--warn);border-color:var(--warn);}
+  .legend i.s{background:var(--white);border-color:var(--ink);border-width:2px;}
+  .legend i.tk{background:var(--muted);border-color:var(--muted);height:3px;border-radius:2px;}
+  .legend i.tg{background:transparent;border:none;height:0;border-top:2px dashed #98adbd;border-radius:0;}
 
-    .login-subtitle {
-      text-align: center;
-      font-size: 14px;
-      color: #6f7d95;
-      margin-bottom: 16px;
-    }
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:15px;}
+  .stat{background:var(--white);border:1px solid var(--line);border-radius:15px;padding:14px;box-shadow:var(--sh-sm);}
+  .stat .n{font:700 25px/1 var(--disp);color:var(--sky-600);}
+  .stat .n.g{color:var(--ok);} .stat .n.r{color:var(--bad);}
+  .stat .l{font:500 11px/1.3 var(--body);color:var(--muted);margin-top:6px;}
 
-    .loading-indicator {
-      text-align: center;
-      padding: 20px;
-      color: #2c5a7a;
-      font-size: 14px;
-    }
+  .hd-head{background:linear-gradient(160deg,var(--sky-500),var(--sky-700));color:#fff;border-radius:16px;padding:16px;margin-bottom:14px;}
+  .hd-head .id{font:700 20px var(--disp);letter-spacing:.04em;}
+  .hd-head .meta{font:400 11.5px/1.5 var(--body);opacity:.92;margin-top:5px;}
 
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
+  .q-card{background:var(--white);border:1px solid var(--line);border-radius:15px;padding:15px;margin-bottom:11px;box-shadow:var(--sh-sm);scroll-margin-top:14px;}
+  .q-card.missing{border-color:var(--bad);box-shadow:0 0 0 3px rgba(217,84,104,.13);}
+  .q-no{display:inline-block;font:700 10px/1 var(--body);letter-spacing:.08em;color:var(--sky-600);background:var(--sky-50);border:1px solid var(--sky-200);padding:5px 8px;border-radius:6px;margin-bottom:9px;}
+  .q-txt{font:500 15px/1.32 var(--body);color:var(--ink);margin-bottom:4px;}
+  .q-txt .req{color:var(--bad);margin-left:2px;}
+  .q-help{font:400 11.5px/1.45 var(--body);color:var(--muted);margin-bottom:10px;}
+  .q-card .q-txt+.opts,.q-card .q-txt+.field{margin-top:11px;}
+  .opts{display:flex;gap:8px;}
+  .opt{flex:1;display:flex;align-items:center;justify-content:center;gap:9px;padding:13px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--white);cursor:pointer;font:600 14px/1.2 var(--body);color:var(--ink);transition:.13s;}
+  .opt .mark{width:18px;height:18px;border-radius:50%;border:2px solid var(--sky-200);flex:0 0 auto;display:grid;place-items:center;}
+  .opt .mark::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--sky-600);transform:scale(0);transition:transform .15s;}
+  .opt.sel .mark::after{transform:scale(1);}
+  .opt.yes.sel{border-color:var(--ok);background:var(--ok-bg);box-shadow:0 0 0 3px rgba(42,161,124,.12);}
+  .opt.yes.sel .mark{border-color:var(--ok);} .opt.yes.sel .mark::after{background:var(--ok);}
+  .opt.no.sel{border-color:var(--bad);background:var(--bad-bg);box-shadow:0 0 0 3px rgba(217,84,104,.12);}
+  .opt.no.sel .mark{border-color:var(--bad);} .opt.no.sel .mark::after{background:var(--bad);}
+  .field input[readonly]{background:var(--sky-50);font-family:var(--disp);letter-spacing:.05em;color:var(--sky-700);font-size:17px;}
+  .field .calc{font-family:var(--disp);letter-spacing:.04em;color:var(--sky-700);}
+  .unit{position:relative;}
+  .unit .u{position:absolute;right:13px;top:50%;transform:translateY(-50%);font:600 12px var(--body);color:var(--muted);pointer-events:none;}
+  .unit input{padding-right:64px;}
+  .err{font:500 11.5px/1.4 var(--body);color:var(--bad);margin-top:8px;}
+  .gps-diag{font:500 9.5px/1.4 var(--body);color:var(--muted);margin-top:9px;word-break:break-word;
+    background:#f4f6f8;border:1px solid #e3e9ee;border-radius:8px;padding:7px 9px;}
+  .tok-show{font:700 26px/1.1 var(--disp);letter-spacing:.06em;color:var(--sky-700);background:var(--sky-50);border:1.5px dashed var(--sky-300);border-radius:12px;padding:14px;text-align:center;word-break:break-all;}
 
-    .input-group label {
-      font-size: 14px;
-      font-weight: 500;
-      color: #1a2a3f;
-    }
+  .rv-item{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);}
+  .rv-item:last-child{border-bottom:none;}
+  .rv-item .q{font:400 12px/1.35 var(--body);color:var(--muted);flex:1;}
+  .rv-item .a{font:600 12.5px/1.35 var(--body);color:var(--ink);text-align:right;flex:0 0 46%;word-break:break-word;}
 
-    .input-group input {
-      padding: 14px 16px;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 16px;
-      font-size: 16px;
-      background: white;
-    }
+  .menu-card{position:relative;display:flex;align-items:center;gap:15px;width:100%;text-align:left;
+    background:var(--white);border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:13px;
+    cursor:pointer;box-shadow:var(--sh-sm);overflow:hidden;transition:transform .12s,box-shadow .2s;}
+  .menu-card:active{transform:scale(.985);}
+  .menu-card:hover{box-shadow:var(--sh-md);}
+  .menu-card .mi{position:relative;width:54px;height:54px;border-radius:17px;display:grid;place-items:center;flex:0 0 auto;}
+  .menu-card .mi.b{background:var(--sky-100);color:var(--sky-600);}
+  .menu-card .mi.g{background:var(--ok-bg);color:var(--ok);}
+  .menu-card .mi.y{background:var(--warn-bg);color:#b8860b;}
+  .menu-card .mi.s{background:#eaf0f5;color:var(--muted);}
+  .menu-card .mt{position:relative;flex:1;min-width:0;}
+  .menu-card .mt h3{font:600 17.5px/1.1 var(--disp);letter-spacing:.01em;margin-bottom:4px;}
+  .menu-card .mt span{font:400 12px/1.45 var(--body);color:var(--muted);display:block;}
+  .menu-card .mt .mm{font:600 10.5px/1 var(--body);letter-spacing:.04em;color:var(--sky-600);margin-top:9px;display:inline-block;
+    background:var(--sky-50);border:1px solid var(--sky-200);border-radius:99px;padding:6px 9px;}
+  .menu-card .ma{position:relative;color:var(--sky-300);flex:0 0 auto;}
 
-    .input-group input:focus {
-      outline: none;
-      border-color: #b3d9ff;
-      box-shadow: 0 0 0 3px rgba(179, 217, 255, 0.3);
-    }
+  .daybar{display:flex;gap:6px;overflow-x:auto;padding:2px 0 4px;margin-bottom:12px;-webkit-overflow-scrolling:touch;}
+  .daybar button{flex:0 0 auto;border:1.5px solid var(--sky-200);background:var(--white);color:var(--sky-700);
+    border-radius:10px;padding:9px 12px;font:600 12px/1 var(--body);cursor:pointer;}
+  .daybar button.on{background:var(--sky-600);border-color:var(--sky-600);color:#fff;}
+  .daybar button:disabled{opacity:.42;cursor:not-allowed;}
+  #map,#amap{height:clamp(240px,38vh,460px);border-radius:16px;border:1px solid var(--line);overflow:hidden;background:var(--sky-50);box-shadow:var(--sh-sm);}
+  .mk{display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 7px;border-radius:99px;
+    background:var(--sky-600);color:#fff;font:700 11px/1 'Oswald',sans-serif;letter-spacing:.02em;
+    border:2px solid #fff;box-shadow:0 2px 6px rgba(12,39,64,.35);white-space:nowrap;}
+  .mk.multi{font-size:10px;letter-spacing:.04em;}
+  .mk.reg{background:var(--ok);}
+  .mk.rev{background:var(--warn);color:#4a3b00;}
+  .mk.start{box-shadow:0 0 0 3px rgba(20,52,77,.55),0 2px 6px rgba(12,39,64,.35);}
+  .step-row .sn.multi{width:auto;min-width:26px;padding:0 6px;border-radius:99px;font-size:9.5px;}
+  .step-row .sn.reg{background:var(--ok);}
+  .step-row .sn.rev{background:var(--warn);color:#4a3b00;}
+  .leaflet-container{font-family:var(--body);}
+  .mpop{font:400 12px/1.5 var(--body);}
+  .mpop b{font:600 12.5px var(--body);}
+  .steps{max-height:none;}
+  .step-row{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--line);}
+  .step-row:last-child{border-bottom:none;}
+  .step-row .sn{width:26px;height:26px;border-radius:50%;background:var(--sky-600);color:#fff;
+    display:grid;place-items:center;font:700 11px/1 var(--disp);flex:0 0 auto;}
+  .step-row .sn.first{background:var(--ok);} .step-row .sn.last{background:var(--bad);}
+  .step-row .sm{flex:1;min-width:0;}
+  .step-row .sm .t{font:600 12.5px var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .step-row .sm .s{font:400 11px var(--body);color:var(--muted);margin-top:2px;}
+  .step-row .sg{font:600 11px var(--body);color:var(--sky-600);flex:0 0 auto;}
 
-    .login-btn {
-      background: #b3d9ff;
-      border: none;
-      padding: 14px;
-      border-radius: 30px;
-      font-size: 16px;
-      font-weight: 600;
-      color: #1a2a3f;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-top: 8px;
-    }
+  .ring-card{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:13px;box-shadow:var(--sh-sm);
+    display:flex;align-items:center;gap:18px;}
+  .ring-card .rw{flex:0 0 auto;position:relative;width:128px;height:128px;}
+  .ring-card .rl{flex:1;min-width:0;}
+  .ring-card .rl h4{font:600 13px var(--body);margin-bottom:10px;}
+  .ring-txt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .ring-txt .p{font:700 27px/1 var(--disp);color:var(--sky-700);}
+  .ring-txt .s{font:500 10px/1.2 var(--body);color:var(--muted);margin-top:3px;}
+  .kv{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px dashed var(--line);}
+  .kv:last-child{border-bottom:none;}
+  .kv .k{font:400 11.5px var(--body);color:var(--muted);}
+  .kv .v{font:600 12px var(--body);color:var(--ink);}
+  .dayrow{display:flex;align-items:center;gap:10px;padding:8px 0;}
+  .dayrow .dl{font:600 10.5px/1 var(--body);color:var(--muted);width:42px;flex:0 0 auto;letter-spacing:.03em;}
+  .dayrow .dt{flex:1;height:16px;background:var(--sky-50);border:1px solid var(--line);border-radius:99px;position:relative;overflow:hidden;}
+  .dayrow .df{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,var(--sky-400),var(--sky-600));}
+  .dayrow .df.full{background:linear-gradient(90deg,#4cbf9a,var(--ok));}
+  .dayrow .dp{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:repeating-linear-gradient(45deg,rgba(224,161,0,.85) 0 4px,rgba(224,161,0,.45) 4px 8px);}
+  .dayrow .dv{font:600 11px/1 var(--body);color:var(--ink);width:52px;text-align:right;flex:0 0 auto;}
+  .dayrow.locked{opacity:.45;}
+  .achv-legend{display:flex;gap:14px;flex-wrap:wrap;margin:9px 2px 0;}
+  .achv-legend span{display:inline-flex;align-items:center;gap:6px;font:500 10px/1 var(--body);color:var(--muted);}
+  .achv-legend i{width:11px;height:8px;border-radius:3px;display:inline-block;}
+  .achv-legend i.a{background:var(--sky-500);} .achv-legend i.f{background:var(--ok);}
+  .achv-legend i.p{background:var(--warn);} .achv-legend i.t{background:var(--sky-50);border:1px solid var(--line);}
+  .bigstat{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:13px;}
+  .bigstat .b{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--sh-sm);}
+  .bigstat .b .n{font:700 23px/1 var(--disp);color:var(--sky-600);}
+  .bigstat .b .n.g{color:var(--ok);} .bigstat .b .n.w{color:#b8860b;} .bigstat .b .n.r{color:var(--bad);}
+  .bigstat .b .l{font:500 10.5px/1.35 var(--body);color:var(--muted);margin-top:6px;}
 
-    .login-btn:active {
-      transform: scale(0.97);
-    }
+  .sync-bar{display:flex;align-items:center;gap:10px;border-radius:14px;padding:12px 13px;margin-bottom:13px;border:1px solid;}
+  .sync-bar .d{width:9px;height:9px;border-radius:50%;flex:0 0 auto;}
+  .sync-bar .t{flex:1;font:400 11.5px/1.45 var(--body);}
+  .sync-bar.ok{background:var(--ok-bg);border-color:#bfe6d6;color:#1a7a5e;}
+  .sync-bar.ok .d{background:var(--ok);}
+  .sync-bar.warn{background:var(--warn-bg);border-color:#f0dda0;color:#8a6d00;}
+  .sync-bar.warn .d{background:var(--warn);}
+  .sync-bar.wait{background:var(--sky-50);border-color:var(--sky-200);color:var(--sky-700);}
+  .sync-bar.wait .d{background:var(--sky-400);}
+  .sync-bar.off{background:#f4f6f8;border-color:#dfe5ea;color:var(--muted);}
+  .sync-bar.off .d{background:var(--muted);}
+  .sdot{width:9px;height:9px;border-radius:50%;display:inline-block;}
+  .sdot.ok{background:var(--ok);} .sdot.wait{background:var(--warn);}
 
-    .login-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+  .ovl{position:absolute;inset:0;background:rgba(12,39,64,.55);display:flex;align-items:flex-end;justify-content:center;z-index:80;padding:14px;}
+  .sheet{width:100%;background:var(--white);border-radius:22px;padding:20px 18px 18px;box-shadow:var(--sh-lg);animation:rise .22s cubic-bezier(.2,.8,.2,1);max-height:92%;overflow-y:auto;}
+  @keyframes rise{from{transform:translateY(28px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+  .sheet h3{font:600 19px/1.2 var(--disp);margin-bottom:8px;}
+  .sheet p{font:400 12.8px/1.5 var(--body);color:var(--muted);margin-bottom:13px;}
+  .sheet .acts{display:flex;gap:9px;margin-top:14px;}
+  .sheet .acts .btn{flex:1;}
+  .spin{width:34px;height:34px;border:3px solid var(--sky-100);border-top-color:var(--sky-500);border-radius:50%;animation:sp .8s linear infinite;margin:6px auto 14px;}
+  @keyframes sp{to{transform:rotate(360deg);}}
+  .gps-ok{font:600 12.5px var(--body);color:var(--ok);background:var(--ok-bg);border:1px solid #bfe6d6;border-radius:10px;padding:10px 12px;}
 
-    .error-message {
-      color: #e74c3c;
-      font-size: 13px;
-      text-align: center;
-      margin-top: 12px;
-    }
-
-    .dashboard-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-height: 0; /* Important for flex scrolling */
-    }
-
-    .dashboard-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 16px;
-      border-bottom: 1px solid #eef2f8;
-      flex-shrink: 0;
-    }
-
-    .user-info {
-      font-size: 13px;
-      color: #1a3a5c;
-      background: rgba(179, 217, 255, 0.4);
-      padding: 6px 12px;
-      border-radius: 20px;
-    }
-
-    .logout-btn {
-      background: rgba(26, 42, 63, 0.1);
-      border: none;
-      padding: 6px 14px;
-      border-radius: 30px;
-      font-size: 13px;
-      font-weight: 500;
-      color: #1a2a3f;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    /* Scrollable cards container - vertical scroller */
-    .cards-container {
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      min-height: 0; /* Important for flex scrolling */
-    }
-
-    /* Custom scrollbar styling */
-    .cards-container::-webkit-scrollbar {
-      width: 5px;
-    }
-    
-    .cards-container::-webkit-scrollbar-track {
-      background: #eef2f8;
-      border-radius: 10px;
-    }
-    
-    .cards-container::-webkit-scrollbar-thumb {
-      background: #b3d9ff;
-      border-radius: 10px;
-    }
-    
-    .cards-container::-webkit-scrollbar-thumb:hover {
-      background: #9ac6f0;
-    }
-
-    .card {
-      background: #b3d9ff;
-      border-radius: 24px;
-      padding: 20px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-      transition: all 0.2s ease;
-      cursor: pointer;
-      width: 100%;
-      flex-shrink: 0; /* Prevent card from shrinking */
-    }
-
-    .card:active {
-      transform: scale(0.98);
-      background: #a0ccee;
-    }
-
-    .card-left {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      flex: 1;
-    }
-
-    .card-icon {
-      width: 48px;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 28px;
-    }
-
-    .card-icon svg {
-      width: 28px;
-      height: 28px;
-      stroke: #1a3a5c;
-      stroke-width: 1.7;
-      fill: none;
-    }
-
-    .card-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: #1a2a3f;
-    }
-
-    .card-arrow svg {
-      width: 20px;
-      height: 20px;
-      stroke: #1a3a5c;
-      stroke-width: 2;
-      fill: none;
-    }
-
-    .iframe-container {
-      flex: 1;
-      display: none;
-      flex-direction: column;
-      background: #f5f7fa;
-    }
-
-    .iframe-wrapper {
-      flex: 1;
-      position: relative;
-      width: 100%;
-    }
-
-    .module-iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      background: white;
-    }
-
-    .app-footer {
-      background: #b3d9ff;
-      padding: 16px 24px 18px 24px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
-    .footer-text {
-      font-size: 17px;
-      font-weight: 600;
-      color: #1a2a3f;
-    }
-
-    .home-indicator {
-      background: #cbdae6;
-      width: 130px;
-      height: 5px;
-      border-radius: 100px;
-      margin: 6px auto 10px auto;
-      flex-shrink: 0;
-    }
-
-    @media (max-width: 460px) {
-      .phone-app { height: 680px; border-radius: 36px; }
-      .campaign-title { font-size: 20px; }
-      .app-header { padding: 24px 16px 20px 16px; }
-      .logo-image { height: 48px; max-width: 80px; }
-      .card { padding: 14px 18px; }
-      .card-icon { width: 40px; height: 40px; }
-      .card-icon svg { width: 22px; height: 22px; }
-      .card-title { font-size: 16px; }
-      .cards-container {
-        padding: 12px;
-        gap: 12px;
-      }
-    }
-  </style>
+  .ver{text-align:center;font:500 10px/1.4 var(--body);color:var(--muted);margin-top:12px;letter-spacing:.02em;}
+  .toast{position:absolute;left:50%;bottom:94px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font:500 12.5px var(--body);padding:11px 17px;border-radius:12px;box-shadow:var(--sh-md);opacity:0;pointer-events:none;transition:.25s;z-index:50;max-width:88%;text-align:center;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
 </head>
 <body>
-  <div class="phone-app">
-    <div class="app-header">
-      <h1 class="campaign-title">Mass ITN Campaign 2026</h1>
-      <div class="logo-wrapper">
-        <img src="logo.png" alt="Logo" class="logo-image" onerror="this.style.opacity='0.5'; this.style.border='1px dashed #2c5a7a'; this.alt='Logo'">
-      </div>
-    </div>
+<div class="phone"><div class="screen">
+  <div id="app"></div>
+  <div id="modal"></div>
+  <div class="toast" id="toast"></div>
+</div></div>
 
-    <div class="app-body">
-      <div id="loginScreen" class="login-container">
-        <div>
-          <div class="login-title">Welcome Back</div>
-          <div class="login-subtitle">Sign in to access your dashboard</div>
-        </div>
-        
-        <div id="loadingMessage" class="loading-indicator">Loading user data from user.csv...</div>
+<script>
+/* =========================================================
+   ITN Household Registration — HHR app
+   HHR0001 … 10 days · 25 households per day
+   ========================================================= */
+const APP_VERSION='2026.08.31a';
 
-        <div id="loginForm" style="display: none;">
-          <div class="input-group">
-            <label>Username</label>
-            <input type="text" id="usernameInput" placeholder="Enter username" autocomplete="off">
-          </div>
-          <div class="input-group">
-            <label>Password</label>
-            <input type="password" id="passwordInput" placeholder="Enter password">
-          </div>
-          <button class="login-btn" id="loginBtn">Sign In</button>
-          <div id="loginError" class="error-message"></div>
-        </div>
-      </div>
+/* =========================================================
+   BACKEND — the deployed submission endpoint. It is baked in, so a
+   registrar never has to paste anything; "Connect NMDR" is only there
+   if the endpoint is ever redeployed (a new deployment gets a new URL).
+   Records are keyed on _id and UPSERTED, so a resubmitted record
+   updates its own row instead of creating a second one.
+   Sheet: 12DDjaTzgyb_6IjEYgMX7LWxnrTaACKliJ5FnHIDSYsw · tab Registrations
+   ========================================================= */
+let GAS_URL="https://script.google.com/macros/s/AKfycbwxbWj6ybkTdCJucFEbK9DStG1CufHL89939SrEEbSJC5AmwFKjpJ9knFhJbRKmvVIr/exec";
+const DAYS=10;            /* Day 1 … Day 10 */
+const PER_DAY=25;         /* households per HHR per day */
+const HHR_PER_PHU=2;      /* registrars attached to each PHU */
 
-      <div id="dashboardView" style="display: none; flex: 1; flex-direction: column; min-height: 0;">
-        <div class="dashboard-container">
-          <div class="dashboard-header">
-            <span id="dashboardUserInfo" class="user-info"></span>
-            <button id="logoutBtn" class="logout-btn">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                <polyline points="16 17 21 12 16 7" />
-                <line x1="21" y1="12" x2="9" y2="12" />
-              </svg>
-              Logout
-            </button>
-          </div>
-          <div id="cardsContainer" class="cards-container"></div>
-        </div>
-      </div>
+/* =========================================================
+   WHERE THE REGISTRARS SIT
+   District (15, Western Area Urban excluded) > chiefdom > PHU > HHR.
+   Taken from the DHIS2 facility list: 15 districts, 200 chiefdoms,
+   1,565 PHUs. Format: [districtCode, districtName, [[chiefdom,[PHU,…]],…]]
+   ========================================================= */
+const HIER=[["BO","Bo",[["Bo City",["Aethel CHP","Agape Way CHP","Anglican Diocese Clinic","Batiama Layout MCHP","Bo Government Hospital","Bo School Bay CHP","Breakthrough MCHP","Brima Town CHP","EDC Unit CHP","Favour MCHP","Gbanja Town MCHP","Gbotima CHP","Genda CHP","Genda MCHP","Gilas Hospital","Haikel CHP","Kakua Static CHC","Kandeh Town CHP","Kindoya Hospital","Kowama (Kakua) CHP","Lewaibu CHP","Lyn Maternity MCHP","Manjiama CHC","Mercy Ships (Bo City) Hospital","Mid Land MCHP","Morning Star CHP","Nafaya MCHP","Needy CHP","New Police Barracks CHC","Praise Foundation CHC","Red Cross (Bo City) CHC","Rescue Health Care Clinic","Simbo Town CHP","Sowa's Clinic","Spllenz Clinic","St Monica's Clinic","Tengbewabu MCHP","Topkoi Town CHP","UNIMUS MCHP","Walk In Medical Associate Clinic","Yemoh Town CHC"]],["Badjia Chiefdom",["Ngelehun (Badjia) CHC","Njagbahun (Badjia) MCHP","Njandama MCHP"]],["Bagbwe Chiefdom",["Barlie MCHP","Benduma (Bagbwe) MCHP","Kondiama MCHP","Kpetema (Bagbwe) MCHP","Mendewa MCHP","Ngalu CHC","Samie Buma MCHP"]],["Baoma Chiefdom",["Baoma Station CHP","Blamawo MCHP","Faabu CHP","Foindu (Baoma) MCHP","Gbahama (Baoma) CHP","Gerehun CHC","Golu MCHP","Jan Christian Helvings Clinic","Jembe CHC","Jormu (Baoma) MCHP","Kigbai MCHP","Kpunbu MCHP","Mbundorbu MCHP","Pelewahun (Baoma) MCHP","Tugbebu CHP","Yakaji MCHP","Yamandu CHC"]],["Bargbo Chiefdom",["Bum Kaku MCHP","Gbangbalia MCHP","Jimmi CHC","Kakama MCHP","Kasse MCHP","Limba CHP","Mano Yorgbo MCHP","Momajo CHP","Niagorehun (Bargbo) CHP","Senehun Ngolan MCHP"]],["Bongor Chiefdom",["Gbaama MCHP","Lowoma (Bongor) MCHP","Mamboma (Bongor) CHC","Telu CHC"]],["Bumpe Ngao Chiefdom",["Bongor (Bumpe Ngao) MCHP","Buma MCHP","Bumpe CHC","Kabiyama MCHP","Kaniya MCHP","Kpetema (Bumpe Ngao) CHP","Makayonie MCHP","Mokoba MCHP","Mokpende MCHP","Ngolahun (Bumpe Ngao) CHC","Niagorehun Vaakie MCHP","Sahn (Bumpe Ngao) CHP","Serabu (Bumpe Ngao) CHC","Serabu Mission Hospital","Taninahun (Bumpe Ngao) CHP","Walihun (Bumpe Ngao) MCHP","Yengema (Bumpe Ngao) MCHP"]],["Gbo Chiefdom",["Gbaiima CHC","Sembehun Mamagewoh CHC"]],["Jaiama Chiefdom",["Koribondo CHC","Mano-Jaiama CHP","Niayahun CHP"]],["Kakua Chiefdom",["Bandajuma MCHP","Bo Childrens Hospital","Egyptian (Bo) Clinic","Fengehun MCHP","Fullawahun MCHP","Gbongboma MCHP","Gender CHP","Keindeyella MCHP","Maguama CHP","Mamasa Life Saving Hospital","Manjiama CHC","Marie Stopes (Kakua) Clinic","Massah Memorial Maternity MCHP","Ndegbomie MCHP","Nduvuibu MCHP","United Methodist Church Manjama CHC","Veronical MCHP"]],["Komboya Chiefdom",["Gumahun MCHP","Komboya Gbauja MCHP","Kpamajama MCHP","Mano (Komboya) MCHP","Niagorehun (Komboya) MCHP","Njala (Komboya) CHC","Teibor CHP"]],["Lugbu Chiefdom",["Bontiwo MCHP","Feiba CHP","Hima MCHP","Karleh MCHP","Kpetewoma CHP","Ngieyehun MCHP","Sumbuya (Lugbu) CHC","Upper Saama MCHP","Yambama CHP"]],["Niawa Lenga Chiefdom",["Korbu MCHP","Nengbema CHP","Ngogbebu MCHP","Pendebu MCHP","Sahn (Niawa Lenga) CHC"]],["Selenga Chiefdom",["Damballa CHC","Gbangba MCHP"]],["Tikonko Chiefdom",["Gondama (Tikonko) CHC","Griema MCHP","Haikal CHP","Kassama MCHP","Mattru on the Rail MCHP","Mendewa 2 Clinic","Mendewa CHP","Sebehun Tarbay MCHP","Sembehun 17 (Tikonko) CHP","Theresa Hakim CHP","Tikonko (Bo) CHC","Towama MCHP","Veronica MCHP","We Care Health Centre Clinic","Zion CHC"]],["Valunia Chiefdom",["Baomahun CHC","Foya (Valunia) CHP","Grima (Valunia) CHP","Kenema Blango CHC","Kpewama MCHP","Kpuabu MCHP","Mongere CHC","Ngolahun Jabaty CHP","Pujehun (Valunia) CHP"]],["Wonde Chiefdom",["Bathurst MCHP","Fanima (Wonde) MCHP","Gboyama CHC","Kambawama MCHP"]]]],["BOM","Bombali",[["Biriwa Chiefdom",["Bumban CHP","Bumbanday MCHP","Kagbaneh CHC","Kagbankona MCHP","Kakorla MCHP","Kamabai CHC","Kamasikie CHP","Kamathudgu MCHP","Kanikay MCHP","Karina CHP","Kathakeya CHP","Kayainkassa CHP","Kayonkoro CHP","Manjoro MCHP","Waridala Clinic"]],["Bombali Sebora Chiefdom",["Arab (Makeni) Clinic","Maboleh CHP","Maforay (Bombali Sebora) CHP","Makama CHP","Makump CHP","Masory CHP","Pate-Bana Masimbo CHP","Patebana CHC","Rescue International (Bombali Sebora) Clinic","Robat CHP"]],["Bombali Serry Chiefdom",["Manonkoh Clinic","Rokonta CHC"]],["Gbanti (Bombali) Chiefdom",["Kunsho CHP","Panlap CHP","Stocco CHP","Yoni (Gbanti) CHP"]],["Gbendembu Chiefdom",["Gbendembu CHC","Kortohun MCHP","Madina Loko CHP","Mamaka (Gbendembu) MCHP","Mambala MCHP"]],["Kamaranka Chiefdom",["Kamaranka CHC","Makaiba MCHP","Makassa MCHP","Rosint MCHP","Royeama CHP"]],["Magbaimba Ndohahun Chiefdom",["Hunduwa MCHP","Kagbere CHC","Mambiama MCHP","Manjaka MCHP"]],["Makarie Chiefdom",["Fullah Town 1 (Makarie) CHP","Karefay Themne CHP","Kerefay Loko MCHP","Kolisokoh CHP","Mabayo MCHP","Magbaikoli MCHP","Magbenteh Hospital","Makarie MCHP","Mangay Loko MCHP","Marie Stopes (Makarie) Clinic","Masongbo (Makarie) CHC","Mateneh MCHP","Punthun MCHP","Thonkoba CHP","Yainkassa CHP"]],["Mara Chiefdom",["Kiampkakolo MCHP","Manewa MCHP","Mara CHC"]],["Ngowahun Chiefdom",["Kalangba (Ngowahun) CHC","Maharie CHP","Makiteh (Ngowahun) MCHP","Masongbo Loko CHP","Tambiama CHP"]],["Paki Masabong Chiefdom",["Kathanta Bana CHP","Kathekeya Kaboli CHP","Makeni Lol MCHP","Makolor CHP","Mapaki CHC","Masabong Pil MCHP","Masingbi Lol MCHP"]],["Safroko Limba Chiefdom",["Binkolo CHC","Kabombeh MCHP","Kabonka MCHP","Kagbo MCHP","Kapethe MCHP","Kateneh MCHP","Kayasie CHP","Mabonkani MCHP","Maselleh MCHP","Masongbo Limba MCHP"]],["Makeni City",["Bombali Police CHC","Branda Medical Centre Hospital","Caring Hands Clinic","City Garden Clinic","Fullah Town 2 (Makeni City) CHP","Hamanda Clinic","Happy Kid and Adolescent (Makeni City) Clinic","Holy Spirit Hospital","Holy Spirit Mobile Clinic","Loreto Clinic","Makeni Correctional Centre Clinic","Makeni Government Hospital","Masuba Clinic","Modern Clinic","Mordan Clinic","New Hope Hospital","Red Cross (Makeni City) CHP","Sanda Clinic","Stocco Leprosy and TB Hospital","Teko Barracks CHP","Tonko CHP"]]]],["BON","Bonthe",[["Bendu-Cha Chiefdom",["Bendu (Bendu-Cha) CHC","Foya (Bendu-Cha) CHP","Giebina CHP","Mindohun MCHP","Mo-Davies CHP","Taigbe CHP"]],["Bum Chiefdom",["Karlleh MCHP","Madina (Bum) CHC","Mammy CHP","Ngepehun CHP","Ngessehun MCHP","Sogballeh MCHP","Tassor CHP","Torma Bum CHP"]],["Dema Chiefdom",["Bumpetoke (Dema) CHP","Mbaoma (Dema) CHP","Tissana (Dema) CHC","Tombay CHP"]],["Imperi Chiefdom",["Gaindema CHP","Gbamgbaia CHC","Gbamgbama CHC","Jangallor CHP","Junctionla MCHP","Mo-Kepay CHP","Mogbwemo CHC","Mokaba MCHP","Moriba Town (Imperri) CHC","Mount Hope Hospital","Sierra Rutile Hospital","Victoria MCHP","Yargoi CHP"]],["Jong Chiefdom",["Barbar MCHP","Gambia CHC","Gbaninga CHP","Henry Kormoi Community Hospital","Jorma CHP","Kabati CHP","Komende (Jong) MCHP","Mattru CHC","Mattru UBC Hospital","Mo-Savie MCHP","Mogbwe MCHP","Mongerewa MCHP","Moyowa MCHP","Red Cross (Mattru) CHP","Segbwema (Jong) CHP","Semabu (Jong) CHP","Tissana (Jong) CHP"]],["Kpanda Kemoh Chiefdom",["Gambia Popayma MCHP","Gbongeh MCHP","Lawana (Kpanda Kemo) MCHP","Mottuo CHC","Senjehun MCHP"]],["Kwamebai Krim Chiefdom",["Benduma CHC","Hoya CHP","Massah Kpoanguma CHP","Mosenteh CHP","Tei CHP","Topain CHP"]],["Nongoba Bullom Chiefdom",["Batahall CHP","Gbamani CHP","Gbap CHC","Maamu MCHP","Mbaoma Kpengeh CHC","Mbaoma Kpengeh CHP","Minah CHP","Ngaringa MCHP","Sembehun (Nongoba Bullom) MCHP","Subu MCHP","Torma Gbagba CHP","Waiba MCHP"]],["Sittia Chiefdom",["Delken CHC","Delken MCHP","Mania MCHP","Mbokie MCHP","Mo-Sandi CHP","Ngepay CHP","Sanhaya CHP","Yoni (Sittia) CHC"]],["Sogbini Chiefdom",["Grima (Sogbini) CHP","Kanga (Sogbini) MCHP","Kpetema (Sogbini) MCHP","Mandu CHP","Ngueh MCHP","Tihun CHC"]],["Yawbeko Chiefdom",["Mobefa MCHP","Sargor CHP","Senehun Gbloh MCHP","Talia (Yawbeko) CHC","Tuakan CHP"]],["Bonthe Town",["Bonthe Government Hospital","Bonthe Under Fives Clinic","Red Cross (Bonthe) CHP","St Joseph's Clinic","York Island CHP"]]]],["FAL","Falaba",[["Barawa Wollay Chiefdom",["Banadakafaia CHP","Bandakoro MCHP","Firawa CHC","Konombaia CHP","Kulanko MCHP"]],["Delmandugu Chiefdom",["Deldu Kamaron MCHP","Mansadu CHC","Masadu CHC","Mongo Kamaron CHP","Seremudu MCHP","Tambalia Balia MCHP"]],["Dembelia-Sinkunia Chiefdom",["Fullamansa MCHP","Gbindi CHP","Manna MCHP","Sinkunia CHC"]],["Folosaba Dembelia Chiefdom",["Dogoloya CHP","Koromasilaia MCHP","Largo MCHP","Musaia (Dembelia) CHC"]],["Folosaba Kamba Chiefdom",["Gbentu CHC","Hamdalia MCHP","Kalia MCHP","Kamba Mamudia CHP"]],["Kabelia Chiefdom",["Ganya CHP"]],["Kamadugu Yiraia Chiefdom",["Dankawalie CHC","Kamadu Badala MCHP","Kamadu Sokuralla CHP","Yiraia CHP"]],["Kulor Saradu Chiefdom",["Bandapirie CHP","Durukoro MCHP","Kulia CHP","Yarawadu MCHP"]],["Mongo Chiefdom",["Mongo Bendugu CHC","Mongo Karifaia MCHP","Seria CHP","Walia MCHP"]],["Morifindu Chiefdom",["Gberefeh MCHP","Kombili CHP","Serekolia CHC","Tubah MCHP"]],["Neya Chiefdom",["Banboria MCHP","Kurubonla CHC","Mansofinia CHP","Porpon MCHP"]],["Nyedu Chiefdom",["Bumbukoro CHC","Masonia MCHP"]],["Sulima Chiefdom",["Falaba CHC","Gberia Timbakor CHP","Kaliyereh MCHP","Koindu Kura CHP","Sonkoya MCHP"]]]],["KAI","Kailahun",[["Dea Chiefdom",["Baiwala CHP","Nagbena CHP","Sienga CHP"]],["Jahn Chiefdom",["Gbeika CHP"]],["Jawei Chiefdom",["Bombohun MCHP","Daru CHC","Kambama CHP","Kortuma MCHP","Mamabu CHP","Njala-Grima CHP","Nyeama CHP","Pellie CHP","Pewama CHP","SWAKAB (Jawei) Clinic"]],["Kissi Kama Chiefdom",["Dia CHC","Foidu CHP"]],["Kissi Teng Chiefdom",["Bayama (Kissi Teng) CHP","Kangama (Kissi Teng) CHP","Koindu CHC"]],["Kissi Tongi Chiefdom",["Buedu CHC","Dawa CHP","Gbandiwulo CHP","Madopolahun CHP","Sandia (Kissi Tongi) MCHP","Voahun CHP","Weh CHP"]],["Luawa Chiefdom",["Bandajuma Sinneh MCHP","Baoma (Luawa) CHP","Dodo-Kortuma CHP","Gbalahun CHP","Gbeworbu Gao CHP","Giema (Luawa) CHP","Jengbellu CHP","Kailahun Government Hospital","Konjo (Luawa) CHP","Kpandebu (Luawa) MCHP","Luawa Under Fives CHC","Madina (Luawa) MCHP","Mano-Sewalu CHP","Marie Stopes (Luawa) Clinic","Mende Buima MCHP","Morfindor CHP","Ngiehun (Luawa) CHP","Nyandehun (Luawa) CHP","Sandeyallu CHP","Sengema (Luawa) CHP","Talia (Luawa) MCHP"]],["Malema Chiefdom",["Bumpeh (Malema) CHP","Fobu CHP","Jojoima CHC","Madina (Malema) CHP","Njama (Malema) MCHP"]],["Mandu Chiefdom",["Baiima CHP","Levuma (Mandu) CHP","Mobai CHC","Yoyah CHP"]],["Njaluahun Chiefdom",["Bandajuma Kpolihun CHP","Dambu CHC","Daru Field Hospital Clinic","Follah MCHP","Laleihun (Njaluahun) CHP","Mano-Menima CHP","Niahun Gbuyama CHP","Nixon Hospital","Nixon Under Fives CHC","Njaluahun Military Hospital","Nyandehun Nguvoihun CHP","Pendembu-Njeigbla CHP","Segbwema (Njaluahun) MCHP"]],["Peje Bongre Chiefdom",["Gbahama (Peje Bongre) CHP","Grima MCHP","Mamboma (Peje Bongre) CHP","Manowa CHC","Ngolahun MCHP","Pujehun (Peje Bongre) CHP"]],["Peje West Chiefdom",["Bunumbu CHC","El-Shaddai (Peje West) Clinic","Jokibu CHP","Peje Baoma CHP","Pejewa (Peje West) CHP"]],["Penguia Chiefdom",["Kono-Bendu CHP","Lalehun CHP","Sandaru (Penguia) CHC","Woroma CHP"]],["Upper Bambara Chiefdom",["Bomaru CHP","Hand Maid Clinic","Jenneh MCHP","Mendekelema (Upper Bambara) CHP","Pendembu (Upper Bambara) CHC","Siama (Upper Bambara) CHP"]],["Yawei Chiefdom",["Bandajuma CHC","Bendu CHP","Kwellu-Ngieya CHP","Macca CHP","Malema (Yawei) CHP","Massayeima CHP"]]]],["KAM","Kambia",[["Bramaia Chiefdom",["Gbolon MCHP","Kanku Bramaia MCHP","Kukuna CHC","Shekaia MCHP"]],["Dixon Chiefdom",["Fodaya MCHP","Mafaray CHP"]],["Gbinleh Chiefdom",["Gbalamuya CHC","Madamaya Good Grace Clinic","Magbengbeh MCHP","Tawuya MCHP","Worreh MCHP"]],["Konimaka Chiefdom",["Barakuya MCHP","Konta (Bramaia) CHP"]],["Magbema Chiefdom",["Ahmadiyya Mission Clinic","Arab (Magbema) Clinic","Barmoi Luma CHP","Dibia CHP","Gbonkomaria CHP","Kamba MCHP","Kambia Government Hospital","Magbema Under Fives Clinic","Magbethy MCHP","Mathuraneh MCHP","Menicurve MCHP","Mile 18 MCHP","Modia MCHP","Red Cross (Magbema) CHP","Rokupr CHC","Senthai MCHP","Wullah Thenkle MCHP"]],["Mambolo Chiefdom",["Kalainkay MCHP","Macoth MCHP","Mambolo (Kambia) CHC","Mayakie MCHP","Rokel (Mambolo) MCHP","Romando MCHP","Rotain Bana CHP","Tombo Wallah CHP"]],["Masumgbala Chiefdom",["Kania CHC","Kawula CHC"]],["Munu Thalla Chiefdom",["Banka Makuloh MCHP","Barmoi Munu CHC","Gbalan Thallan MCHP"]],["Samu Chiefdom",["Bapuya CHP","Kangbor MCHP","Kassirie CHC","Kortimoh MCHP","Koya (Samu) MCHP","Kychom CHC","Mafufuneh CHC","Mange Bissan MCHP","Mapotolon CHC","Moribaya MCHP","Rokai MCHP","Rosinor CHP","Soriebolomia MCHP","Yelieboya CHP"]],["Tonko Limba Chiefdom",["Bubuya MCHP","Kamagbewu MCHP","Kamassasa CHC","Kamawala MCHP","Kasoria CHP","Katherie MCHP","Layia Gboray CHP","Madina (Tonko Limba) CHC","Madina Wesleyan Clinic","Masaralie MCHP","Masselleh CHP","Masunthun CHP","Mile 14 CHP","Numea CHP","Samaia MCHP","Sellah Kafta MCHP","Timbo MCHP","Yebaya MCHP"]]]],["KAR","Karene",[["Buya Chiefdom",["Kamasondo CHC","Manumtheneh MCHP","Masamboi MCHP","Rosint Buya MCHP"]],["Dibia Chiefdom",["Gbinti CHC","Gbombana MCHP","Magborognor MCHP","Roctolon MCHP","Rogballan (Dibia) CHP"]],["Gbanti (Karene) Chiefdom",["Borongoh Makarankay MCHP","Gbainkfay MCHP","Gbanti CHP","Gbinti Maria MCHP","Gbonkobana MCHP","Kambia CHP"]],["Gormbahun Chiefdom",["BatKanu CHC","Kiamunday MCHP","Magbaingba MCHP","Matoto MCHP"]],["Mafonda Makerembay Chiefdom",["Gbonkonka MCHP","Rochain Loko CHP"]],["Romende Chiefdom",["Foredugu MCHP","Gbomsamba MCHP","Mabureh Mende MCHP","Rokamba MCHP","Worreh Bana MCHP"]],["Safroko Chiefdom",["Maron CHP"]],["Sanda Loko Chiefdom",["Kamalo CHC","Laiya MCHP","Laminaya CHP","Madina Fullah MCHP","Maharibo CHP","Marcorba Loko MCHP","Mayolla CHP","Rochain Salcost CHP","Rothatha MCHP"]],["Sanda Magbolonthor Chiefdom",["Gbogbodo MCHP","Kantia MCHP","Komneh CHP","Magbolonthor MCHP","Sendugu CHC"]],["Sanda Tendaren Chiefdom",["Mabunduka CHC","Malontho MCHP","Manack MCHP","Mateboi CHC","Rogbin MCHP","Rokulan CHC","Royanka Lol CHP"]],["Sella Limba Chiefdom",["Kabba Ferry CHP","Kagboray MCHP","Kamabaio MCHP","Kamakwie CHP","Kamakwie Wesleyan Hospital","Kamawornie MCHP","Kaponkie MCHP","Kathanta Yimbor CHC","Masankorie CHP"]],["Tambaka Simibungie Chiefdom",["Komoya CHP","Samaya MCHP"]],["Tambaka Yobangie Chiefdom",["Dombaya CHP","Fintonia CHC","Sanya MCHP"]]]],["KEN","Kenema",[["Kenema City",["African Muslim Agency Clinic","Ahmadiyya Muslim (Nongowa) Hospital","BL Services Clinic","Burma 2 MCHP","Degbuama MCHP","Direct Aid Orphanage (Kenema City) Clinic","Egyptian (Kenema City) Clinic","Ensah Foundation Clinic","Friends For Lives Clinic","Gbo-Kakajama 1 MCHP","Gbo-Kakajama 2 MCHP","Gbo-Lambayama 1 CHC","Gbo-Lambayama 2 MCHP","Kenema City Military Clinic","Kenema Government Hospital","Kenema Under Fives CHP","Kondebotihun MCHP","Koyagbema MCHP","Kpayama 1 MCHP","Kpayama 2 MCHP","Kpetema (Kenema City) CHC","Lango Town MCHP","Malian Friendship Hospital","Marie Stopes (Kenema City) Clinic","Nongowa Static MCHP","Nyandeyama MCHP","Rainbow Clinic","Red Cross (Kenema City) CHP","Samai Town CHC","Torkpombu MCHP"]],["Dama Chiefdom",["Diamei MCHP","Gao MCHP","Giema (Dama) CHP","Konia (Dama) MCHP","Konjo (Dama) CHP","Kpandebu CHC","Lileima MCHP","Loppa CHP","Majihun MCHP","Patama MCHP","Tawahun MCHP","Tokpombu (Dama) CHP"]],["Dodo Chiefdom",["Dodo CHC","Guala MCHP","Kundorma CHP","Mbowohun CHP"]],["Gaura Chiefdom",["Joru CHC","Kokoru CHP","Mendekelema (Gaura) CHP","Perrie MCHP","Sandaru (Gaura) MCHP","Sembehun (Gaura) MCHP","Tikonko (Gaura) MCHP","Venima CHP"]],["Gorama Mende Chiefdom",["Bambara Kaima CHP","Fomaya CHP","Konta (Gorama Mende) CHP","Kortuhun (Gorama Mende) MCHP","Mondema CHC","Ngiegboiye CHP","Njagbewema (Gorama Mende) MCHP","Punduru CHP","Tungie CHC"]],["Kandu Leppiama Chiefdom",["Baoma Oil Mill CHC","Diema MCHP","Gbado CHP","Levuma (Kandu Leppiama) CHC","Sembehun (Kandu Leppiama) MCHP"]],["Koya (Kenema) Chiefdom",["Baoma (Koya) CHC","Bongor (Koya) MCHP","Jui (Koya) CHP","Menima MCHP","Njaluahun (Koya) MCHP","Nyandehun (Koya) MCHP","Serabu (Koya) CHP"]],["Langroma Chiefdom",["Woyama MCHP","Yabaima CHP"]],["Lower Bambara Chiefdom",["Bomie MCHP","Foindu (Lower Bambara) CHC","Foindu (Lower Bambara) CHP","Kamboma (Lower Bambara) CHC","Kamboma (Lower Bambara) MCHP","Komende Getewalu CHP","Komende Luyema MCHP","Konjo (Lower Bambara) CHC","Konjo (Lower Bambara) MCHP","Kornia Kpindema CHP","Kpandebu (Lower Bambara) CHC","Kpandebu (Lower Bambara) MCHP","Kpetema (Lower Bambara) CHP","Lowoma (Lower Bambara) CHC","Ngiehun (Lower Bambara) CHC","Njagbahun (Lower Bambara) MCHP","Panguma CHC","Panguma Hospital","Pelewahun (Lower Bambara) MCHP","Saama CHP","Sandeyiema MCHP","Sembiema MCHP","Semewabu MCHP","Tongo CHC","Wiema CHC"]],["Malegohun Chiefdom",["Bendu (Malegohun) CHC","Benduma (Malegohun) MCHP","Helegombu MCHP","Ngiehun Konjo CHP"]],["Niawa Chiefdom",["Bandawor MCHP","Gandorhun (Niawa) CHP","Sendumei CHC"]],["Nomo Chiefdom",["Baoma (Nomo) CHP","Damabara MCHP","Faama CHC"]],["Nongowa Chiefdom",["Bambawo MCHP","Hangah CHC","Jormu (Nongowa) CHP","Komende (Nongowa) MCHP","Konabu MCHP","Largo CHC","Massahun MCHP","Medicins Sans Frontiere Hospital","Ngelehun (Nongowa) MCHP","Niahun Buima MCHP","Niekabu CHC","Panderu MCHP","Potehun MCHP","Talia (Nongowa) CHC","Vaahun MCHP"]],["Simbaru Chiefdom",["Boajibu CHC","Gbageima MCHP"]],["Small Bo Chiefdom",["Blama CHC","Doujo CHP","Gelehun MCHP","London (Blama) MCHP","Nyangbe-Bo MCHP","Sarabu CHP","Tobanda CHC"]],["Tunkia Chiefdom",["Belebu CHP","Fayiema CHP","Gbeworbu CHP","Gegbwema CHC","Gorahun CHC","Jao (Tunkia) CHP","Mano Ngiebla CHP","Ngiewahun CHP","Nyiemiga MCHP","Shenge MCHP"]],["Wandor Chiefdom",["Baama CHC","Bambara MCHP","Faala CHP","Gendema MCHP","Kamboma (Wandor) MCHP"]]]],["KOI","Koinadugu",[["Diang Chiefdom",["Badala MCHP","Dalakuru CHP","Diang Kamaron MCHP","Diang Sokurala MCHP","Foria CHP","Kania (Diang) CHP","Kondembaia CHC","Lengekoro CHP","Nyawulia MCHP","Solia MCHP","Waia MCHP","Yara CHP","Yiben MCHP"]],["Gbonkorbor Kayaka Chiefdom",["Kakarima MCHP","Kasassie CHP","Madina Gbonkorbor CHP","Sawuria CHP"]],["Kallian Chiefdom",["Alkalia CHP","Kandeya MCHP","Kumala CHP","Sesawulia MCHP","Tukolie CHP","Worombalia MCHP"]],["Kamukeh Chiefdom",["Kambalia MCHP","Kambia MCHP","Mandia MCHP","Thellia CHP"]],["Kasunko Kakellay Chiefdom",["Fadugu CHC","Kagbasia MCHP","Kassasie Kakeleh MCHP","Madina Kamandie MCHP","Sawuria CHP"]],["Nieni Chiefdom",["Fankoya CHP","Kaya MCHP","Krutor CHP","Mangae MCHP","Safinia MCHP","Sumbaria CHP","Yiffin CHC"]],["Sengbeh Chiefdom",["Arab (Sengbeh) Clinic","Bambukoro CHP","Bambukura MCHP","Gbenikoro MCHP","Koinadugu 2 CHC","Kondeya (Sengbeh) MCHP","Momorimaria MCHP","Nasarah Clinic","Red Cross (Sengbeh) Clinic"]],["Thamiso Chiefdom",["Kamathoi MCHP","Karasa MCHP","Kasanikoro CHP"]],["Wara Wara Bafodia Chiefdom",["Bafodia CHC","Kadanso MCHP","Kakoya MCHP","Karpakie MCHP","Sakuta MCHP","Samamaia MCHP"]],["Wara Wara Yagala Chiefdom",["Arab (Wara Wara Yagala) Clinic","Heremakono CHP","Kabala Government Hospital","Kabala Static CHC","Kayako MCHP","Konkoba MCHP","Mamudia Koro MCHP","Marie Stopes (Kabala) Clinic","Sarakoh MCHP","Senekedugu CHP","Wara Wara Faith Clinic","Yataya CHP"]]]],["KON","Kono",[["Koidu New Sembehun City",["Adama Martha Memorial CHC","Arabic Clinic","Dabundeh Clinic","Egyptian (Koidu) Clinic","Gbongonlekeh Clinic","Gbongonleken Clinic","Hussein Mackie Memorial Hospital","In God Be Truth Clinic","Joanna Enterprise Clinic","Kamadu CHP","Kensay CHP","Kimbadu CHC","Kissi Bona CHP","Koakoyima CHC","Koeyor CHP","Koidu Government Hospital","Koidu Static CHC","Koidu Static CHP","Marie Stopes (Koidu) Clinic","Obama Clinic","Paul Sorie Farma's Hospital","Pessima Clinic","Simbakoro MCHP","Small Sefadu CHP","White House Clinic"]],["Fiama Chiefdom",["Bandasuma (Fiama) CHP","Bombordu CHP","Gbetema (Fiama) MCHP","Njagbwema (Fiama) CHC","Yekior MCHP"]],["Gbane Chiefdom",["Bandama (Gbane) MCHP","Fembedu CHP","Foindu (Gbane) CHP","Gandorhun (Gbane) CHC","Kanekor MCHP","Kuangor MCHP","Mbaoma (Gbane) CHP","Sunga MCHP"]],["Gbane Kandor Chiefdom",["Koardu CHC","Sindadu MCHP"]],["Gbense Chiefdom",["Boroma CHP","Gbangadu MCHP","Koakor MCHP","Musa and Family CHC","Quidadu MCHP","Small Sefadu CHP","Well Body Clinic"]],["Gorama Kono Chiefdom",["Bunabu CHP","Kangama (Gorama Kono) CHC","Njagbwema (Gorama Kono) CHP","Torkpumbu MCHP"]],["Kamara Chiefdom",["Peyima CHP","Samiquidu MCHP","Sukudu (Kamara) CHP","Tombodu CHC"]],["Lei Chiefdom",["Foakor MCHP","Gbongongor MCHP","Kenewa MCHP","Koima (Lei) MCHP","Komba Yendeh CHC","Kongoifeh CHP","Kulunbaya CHP","Kunundu MCHP","Saiama (Lei) CHP"]],["Mafindor Chiefdom",["Kamiendor CHC","Kamiendor MCHP","Koindu-Kuteh MCHP","Sambaya (Mafindor) CHP"]],["Nimikoro Chiefdom",["Aiah Mass Clinic","Ashley Clinic","Bumpeh (Nimikoro) CHC","Bumpeh (Nimikoro) CHP","Gondama (Nimikoro) MCHP","Jaiama CHC","Mansundu (Nimikoro) MCHP","Motema CHC","Ngaiya MCHP","Njagbwema (Nimikoro) CHC","Njagbwema (Nimikoro) CHP","Njala (Nimikoro) CHC","Seidu MCHP","Senjekoro MCHP","Tongorma MCHP","United Methodist Church Jaiama Clinic","Yengema (Nimikoro) CHC"]],["Nimiyama Chiefdom",["Condama CHP","Jaiama Sewafe CHC","Massabendu MCHP","Ngo Town CHP","Peya MCHP","Sandia (Nimiyama) MCHP","Walihun (Nimiyama) MCHP"]],["Sandor Chiefdom",["Bangambaya CHP","Dunamor CHP","Fabandu MCHP","Fanema MCHP","Fensedu MCHP","Gbambiadu MCHP","Gbeya MCHP","Kayima CHC","Kochero MCHP","Koima (Sandor) MCHP","Kondeya (Sandor) MCHP","Mansundu (Sandor) MCHP","Samandu MCHP","Seidu Sandor MCHP","Taiya MCHP","Tefeya CHC","Tefeya CHP","Wordu CHP","Yardu CHC","Yardu MCHP","Yengema Sandor CHP","Yormandu CHC"]],["Soa Chiefdom",["Bandasuma (Soa) MCHP","Feuror MCHP","Foindu Mongor CHP","Gbamandu MCHP","Kainkordu CHC","Kainkordu CHP","Kamindu MCHP","Manjama CHC","Manjama MCHP","Semendu MCHP","Sukudu (Soa) MCHP"]],["Tankoro Chiefdom",["Adama Marth Memorial CHC","Baiama CHC","Kensay CHP","Kimbadu CHC","Kissi Bona CHP","Koakoyima CHC","Koyadu CHC","Tongoro MCHP","White House Clinic","Woama CHP"]],["Toli Chiefdom",["Kondewakoro MCHP","Kpetema (Toli) MCHP"]]]],["MOY","Moyamba",[["Bagruwa Chiefdom",["Benkeh MCHP","Kawaya CHP","Mokassie CHP","Mosenegor MCHP","Ngiebu CHC","Sembehun (Bagruwa) CHC","Sembehunwo MCHP"]],["Bumpeh Chiefdom",["Belletin CHP","Bumpeh River CHP","Mende Town MCHP","Moforay MCHP","Mokaiyegbeh MCHP","Mosella CHP","Motorbong MCHP","Moyeamoh CHP","Rotifunk CHC","Sahun (Bumpeh) MCHP","Samu CHP","Seweima MCHP","UMC Rotifunk Hospital","Yenkessa MCHP"]],["Dasse Chiefdom",["Bambuibu Tommy MCHP","Hope Rising CHP","Kabaima MCHP","Kenema Gbandoma MCHP","Laugh Out Loud Clinic","Laught Out Loud Clinic","Mano (Dasse) CHC","Mogbaske CHP","Taninihun Kapuima MCHP"]],["Fakunya Chiefdom",["Falaba MCHP","Gandorhun (Fakunya) CHC","Mokalley MCHP","Mokorewa MCHP","Moyamba Junction CHC","Moyollo MCHP","Njagbahun (Fakunya) MCHP","Rotawa CHP"]],["Kaiyamba Chiefdom",["Gbonjeima MCHP","Kangahun CHC","Komende (Kaiyamba) MCHP","Korgbotuma MCHP","Levuma (Kaiyamba) MCHP","Moyamba Government Hospital","Moyamba Static 1 CHP","Moyamba Static 2 CHC","Salina CHP","Yoyema MCHP"]],["Kamajei Chiefdom",["Gondama (Kamajei) CHP","Joyah MCHP","Mogbuama MCHP","Senehun (Kamajei) CHC"]],["Kargboro Chiefdom",["Bumpetoke (Kargboro) CHP","Mokaisumana CHP","Mokandoh CHP","Mokobo MCHP","Mokonbetty MCHP","Mopailleh MCHP","Ngeihun (Kargboro) MCHP","Plaintain Island MCHP","Shenge CHC","Yorgbofore CHC","Yorgbofore MCHP","Youndu CHP"]],["Kongbora Chiefdom",["Bauya (Kongbora) CHC","Lawana (Kongbora) MCHP","Levuma Nyomeh CHP","Magbenka CHP","Taninihun Mboka MCHP"]],["Kori Chiefdom",["Bai Largo MCHP","Fogbo (Kori) CHP","Gbuihun MCHP","Judy Smith CHP","Juma MCHP","Konda CHP","Manjeihun MCHP","Mosongo MCHP","Njala (Kori) CHC","Njala University Hospital","Taiama (Kori) CHC","United Methodist Church Taiama CHP","Waiima (Kori) MCHP"]],["Kowa Chiefdom",["Bendu (Kowa) MCHP","Mofombo MCHP","Njama (Kowa) CHC","Tabe MCHP"]],["Lower Banta Chiefdom",["Gbangbatoke CHC","Kanga (Lower Banta) MCHP","Mokanji CHC","Mokotawa CHP","Moriba Town (Lower Banta) CHC","Moriba Town (Lower Banta) CHP","Mosenesie Junction CHP","Njagbahun (Lower Banta) MCHP","St Mary's Clinic"]],["Ribbi Chiefdom",["Bradford CHC","Ferry CHP","Mabang (Ribbi) MCHP","Mogbongisseh MCHP","Mokorbu MCHP","Motoni CHC","Motoni MCHP","Motonkoh MCHP","Rokolor MCHP","Suen CHP"]],["Timdale Chiefdom",["Bomotoke CHC","Mokaiyamba MCHP","Mokpanabom MCHP","Mosagbeh MCHP","Mosanda CHP"]],["Upper Banta Chiefdom",["Children of the Nation Ngolala CHP","Gondama (Upper Banta) MCHP","Modonkor CHP","Mogomgbe MCHP","Mokelleh CHC"]]]],["POR","Port Loko",[["Port Loko City",["Arab (Port Loko) Clinic","Ernest Bai Koroma University (EBK-PL) Clinic","Port Loko Government Hospital","Port Loko Under Fives CHP"]],["Bake-Loko Chiefdom",["Arab (Bake-Loko) Clinic","Ernest Bai Koroma University (EBK-PL) Clinic","Gbonkoh Kereneh MCHP","Kamaranka Under Fives CHP","Malal CHP","Sierra Leone Church Maforki CHP"]],["Bureh Chiefdom",["Bureh MCHP","Kalangba (Bureh) MCHP","Mange CHC","Masseseh MCHP"]],["Kaffu Bullom Chiefdom",["Al-Amin Clinic","Alimamy Amara Clinic","Arab (Lungi) Clinic","Bai Bureh Memorial Hospital","Conakry Dee CHC","Direct Aid Orphanage (Port Loko) Clinic","Evans CHC","Gbaneh Bana CHP","Gbaneh Lol MCHP","Grace Community Clinic","Kasongha CHP","Long Life Centre Clinic","Lungi Airport Centre Clinic","Lungi Government Hospital","Lungi Under Fives CHP","Mahera CHC","Mamankie MCHP","Mkamsondo MCHP","Modia CHC","Modia General Clinic","St John of God CHP","Tagrin CHC","Yongoro CHC"]],["Kamasondo Chiefdom",["Benkia MCHP","Bundulai MCHP","Katongha MCHP","Konta Wallah CHC","Malap CHP","Mana 2 CHP","Mapillah MCHP","Pepel CHC"]],["Kasseh Chiefdom",["Barmoi CHP","Kagbantama CHP","Kawengha MCHP","Rogballan (Kasseh) MCHP","Romeni MCHP"]],["Koya (Port Loko) Chiefdom",["Kissy Koya MCHP","Komrabai Ngolla CHP","Kurankoh CHP","M'baimba Adama MCHP","Mabora MCHP","Magbeni MCHP","Makalie MCHP","Makarankay CHP","Makiteh (Koya) CHP","Malenki MCHP","Masiaka (Koya) CHC","Masumana CHP","Mawoma MCHP","Mile 38 CHC","Rofoindu CHP","Rokon MCHP","Sumbuya (Koya) CHP","Warima (Koya) MCHP"]],["Lokomasama Chiefdom",["Babara CHC","Bailor CHP","Gbainty Wallah CHP","Kalangba (Lokomasama) MCHP","Kargbulor CHP","Love Bridge Hospital","Masulamani CHP","Mathen MCHP","Menika CHP","Musaia (Lokomasama) CHP","Petifu Junction CHC"]],["Maconteh Chiefdom",["Mabain MCHP","Minthomore CHP"]],["Maforki Chiefdom",["Mabonie CHP","Mafoimara CHP","Maforay (Maforki) MCHP","Magbengbenra MCHP","Makaba MCHP","Mapawn MCHP","Maronko MCHP","New Maforki CHP","Petifu (Maforki) MCHP","Rogbere Junction CHC"]],["Makama Chiefdom",["Kambia Makama CHP","Malekuray CHC"]],["Marampa Chiefdom",["Arab (Lunsar) Clinic","Baptist Eye Hospital","Lunsar CHC","Magbele MCHP","Magbill CHP","Makabo MCHP","Mamusa MCHP","Mange Acre CHC","Pincer's Lunsar Clinic","Poor Man's Clinic","Rolembray MCHP","St John of God Hospital","St John of God Under Fives Clinic"]],["Masimera Chiefdom",["Katick CHP","Konta Line CHC","Mamaligie MCHP","Masimera CHC","Mathineh CHP","Mayola Lal Ratun MCHP","Mayombo MCHP","Nonkoba CHP","Rokassa CHC","Rokel (Masimera) MCHP","Rotheren MCHP","Rothuma MCHP","Royeiben CHP"]],["Tainkatopa Chiefdom",["Asheea MCHP","Robaka MCHP","Rogbaneh MCHP"]]]],["PUJ","Pujehun",[["Barri Chiefdom",["Bandasuma (Barri) CHC","Jeoma Barri MCHP","Konia (Barri) MCHP","Kundorwahun CHP","Njaluahun (Barri) CHP","Potoru CHC","Saahun (Barri) MCHP","Tambeiyama MCHP","Taninahun (Barri) MCHP","Vaama (Barri) CHP","Waiima (Barri) MCHP"]],["Galliness Chiefdom",["Bandama (Galliness) MCHP","Blama Massaquoi CHC","Fonikoh MCHP","Funyehun CHP","Kpetema (Galliness) MCHP","Kpowubu MCHP","Makorma CHP"]],["Kabonde Chiefdom",["Pehala CHC"]],["Kpaka Chiefdom",["Liya MCHP","Massam CHC","Saahun (Kpaka) MCHP","Semabu (Kpaka) MCHP","Sumbuya Bessima CHP"]],["Kpanga Chiefdom",["Basalleh MCHP","Blama Puilla MCHP","Bomu Samba MCHP","Dandabu CHP","Gbondapi CHC","Gibina MCHP","Mandeima MCHP","Pujehun Government Hospital","Pujehun Static CHC","Salima Samba MCHP","Sawula MCHP","Sorbeh Grima MCHP","Taninahun Makemuma MCHP","Tongay MCHP","Vawahun Kayimba MCHP"]],["Kpanga Krim Chiefdom",["Bayama MCHP","Borborbu MCHP","Gobaru CHC","Vaama (Kpanga Krim) MCHP"]],["Makpele Chiefdom",["Dumagbe MCHP","Gbaa (Makpele) CHP","Gbahama (Makpele) MCHP","Gissiwolo MCHP","Gofor CHP","Ndombu MCHP","Pewa MCHP","Zimmi CHC"]],["Malen Chiefdom",["Bendu (Malen) MCHP","Hongai CHP","Jao (Malen) MCHP","Ngandorhun MCHP","Nianyahun MCHP","Nyandehun (Malen) MCHP","Sahn (Malen) CHC","Sengema (Malen) CHP","Taninahun (Malen) CHP"]],["Mano Sakrim Chiefdom",["Bengani MCHP","Gombu MCHP","Kassay MCHP","Mano Gbongema CHC","Mende MSK MCHP","Nyandehun (Mano Sakrim) MCHP","Senbengu MCHP"]],["Peje Chiefdom",["Bongay MCHP","Bumbeh MCHP","Futa Pejeh CHC","Helebu Pejeh MCHP","Pejewa (Futa Peje) MCHP"]],["Perri Chiefdom",["Blama Perri MCHP","Bomi MCHP","Bumpeh (Perri) CHC","Falaba CHP","Kowama (Perri) MCHP","Ngajubaoma/Missibu MCHP","Saama Perri MCHP"]],["Soro Gbeima Chiefdom",["Fairo CHC","Fanima (Soro) CHP","Futa Golawoma MCHP","Gondama Massaquoi MCHP","Jendema CHC","Koijeh MCHP","Malema 1 MCHP","Malema 2 MCHP","Navai MCHP","Sengama Soro MCHP","Sulima CHP","Tindor MCHP","Wai MCHP"]],["Sowa Chiefdom",["Bandajuma Sowa CHC","Geoma Jarjoh CHP","Lower Komende MCHP","Upper Komende MCHP","Vaawahun Sowa MCHP"]],["Yakemoh Kpukumu Krim Chiefdom",["Bangorma MCHP","Borma (Yakemu Kpukumu) MCHP","Karlu CHC","Kombeima MCHP","Kombopi MCHP","Messima MCHP","Saama Sowunde MCHP"]]]],["TON","Tonkolili",[["Dansogoia Chiefdom",["Bassaia MCHP","Bumbuna CHC","Kemedugu MCHP","New Ferengbeya CHP"]],["Gbokolenken Masankong Chiefdom",["Mansumana CHP","Warrima (Gbonkolenken) MCHP"]],["Gbokolenken Mayeppoh Chiefdom",["Makonkorie CHP","Mayepoh CHC","Mayepoh CHP","Petifu Mayepoh MCHP"]],["Gbokolenken Polie Chiefdom",["Mabankra MCHP","Mabarr Polie MCHP","Magbolu Ferry MCHP","Maraka MCHP","Mathamp MCHP"]],["Gbokolenken Yele Chiefdom",["Lion Heart Hospital","Mafay MCHP","Manowo CHC","Yeben MCHP","Yele CHC"]],["Kafe Chiefdom",["Kamarugu MCHP","Masumbrie CHC"]],["Kalantuba Chiefdom",["Kamasaypana MCHP","Kathombo MCHP"]],["Kholifa Mabang Chiefdom",["Komrabai Station MCHP","Mabai (Kholifa Mabang) MCHP","Mabang (Kholifa Mabang) CHC","Mamanso Kafla MCHP","Marunia MCHP","Mathinkalol MCHP"]],["Kholifa Mamuntha Chiefdom",["Maborie MCHP","Magbass CHP","Mamuntha MCHP","Masagbill MCHP","Masoko MCHP","Mayossoh MCHP"]],["Kholifa Rowalla Chiefdom",["Alim MCHP","Family (Magburaka) Clinic","Mabai (Kholifa Rowalla) MCHP","Mabom CHC","Magburaka Government Hospital","Magburaka Under Fives Clinic","Malone MCHP","Masanga Hospital","Masanga MCHP"]],["Kunike Barina Chiefdom",["Makali CHC","Makoni Line MCHP","Mapamurie MCHP","Massaba MCHP","Wonkibor MCHP"]],["Kunike Fulawusu Chiefdom",["Fothaneh Bana MCHP","Mafulka MCHP","Magbanabom MCHP","Magbanto Bana MCHP","Mamanso Sanka CHP","Petifu Mandugu MCHP"]],["Kunike Sanda Chiefdom",["Fothaneh Junction MCHP","Kamanthor MCHP","Mabineh MCHP","Maconteh Tama MCHP","Masiaka (Kunike Sanda) MCHP","Masingbi CHC","Matholey MCHP","Petifuline CHP"]],["Malal Chiefdom",["Makoba Bana MCHP","Robina CHP","Rochen Malal CHP"]],["Sambaya Bendugu Chiefdom",["Bendugu CHC","Dankawalia CHP","Kholifaga MCHP","Kunya CHP","Ninkikoro MCHP"]],["Simiria Chiefdom",["Mabontor CHC","Mabontor CHP","Makonthanday MCHP","Masumbrie CHC","Mayassoh MCHP"]],["Tane Chiefdom",["Makelleh MCHP","Makona MCHP","Makrugbeh CHP","Mananthelie MCHP","Mangaybana MCHP","Masankoro MCHP","Mathonkara MCHP","Mathufulie MCHP","Matotoka CHC","Rosengbeh MCHP"]],["Yoni Mabanta Chiefdom",["Bakeloko CHP","Bath Bana MCHP","Magbaesa MCHP","Magbaft MCHP","Magbassabana MCHP","Magbosie MCHP","Makeni-Rokfullah MCHP","Makundu MCHP","Matawa MCHP","Petifu Fulamasa CHP","Robarie MCHP","Ronietta MCHP","Rorocks CHC"]],["Yoni Mamala Chiefdom",["Ahmadiyya Muslim (Yoni Mamala) Hospital","Bonkababay CHP","Community Health Foundation (Mile 91) Hospital","Foindu (Yoni Mamala) MCHP","Hinistas CHC","Kumrabai Yoni CHP","Macrogba CHP","Magboki Road Mile 91 CHP","Magbosie MCHP","Makelleh CHP","Mamaka (Yoni Mamala) MCHP","Mananie MCHP","Masengbeh CHP","Maseperr MCHP","Mathoir CHC","Mayorgbor MCHP","Our Lady of Guadalupe Clinic","Rochen Kamandao CHP","Rokimbi MCHP","United Methodist Church Yonibana CHC","Yonibana MCHP","Yonibana Sai Hospital"]]]],["WAR","Western Area Rural",[["Koya Rural Zone",["Christ the King Clinic","Crossing MCHP","Don Bosco Fambul Clinic","Fogbo (Koya Rural) MCHP","Madaka MCHP","Makobeh MCHP","Makonkonday MCHP","Malambay CHP","Masorie CHP","MedZain MCHP","Monsignor Daniel Sullivan Health Clinic","Newton CHC","Songo CHC"]],["Mountain Rural Zone",["Charlotte CHP","Fourah Bay College CHC","Gloucester CHP","Leicester (Mountain Rural) CHP","Regent (Mountain Rural) CHC"]],["Waterloo Rural Zone",["ADRA Mobile Clinic","Adra Hospital","African Christian Fellowship (ACF) Clinic","Afro Arab Clinic","Arab (Waterloo) Clinic","Benguema Grassfield MCHP","Benguema Military (MI Room) Clinic","Biola Wright Memorial Clinic","Borah Maternity Clinic","Brown Memorial Clinic","Campbell Town CHP","Cashew Farm MCHP","Christ the King Clinic","Deep Eye Water MCHP","El-Shaddai (Waterloo Rural) Clinic","Evangelical College of Theology Clinic","Freetown Teachers College Clinic","Gift of Life Clinic","Grafton CHC","Hastings CHC","Heart and Hands Care Clinic","Jays Clinic","John Thorpe MCHP","Jui Police (MI Room) Clinic","Kissy Town CHP","Lumpa CHP","Mabureh CHP","MacDonald MCHP","Maila Clinic","Mapac Grafton Clinic","Margaret and Johnny MCHP","Mariama Hassan Hospital","Matainkay and Masantigie MCHP","MedZain MCHP","Monsignor Daniel Sullivan Health Clinic","New London MCHP","Rogbangba MCHP","Rokel (Waterloo Rural) CHP","Rokel Arab (Waterloo) Clinic","SWAKAB (Waterloo) Clinic","Salifu Kondeh Clinic","Sierra Leone-China Teaching Hospital","TECT Jui CHP","Waterloo CHC","Waterloo People's Clinic","Waterloo Rural Community Hospital","White Stone MCHP","Women in National Development AAPDEP Clinic","Yams Farm CHP"]],["York Rural Zone",["Adonkia CHP","Banana Island MCHP","Bethlehem Clinic","Emergency (Goderich) Hospital","Friends of God Clinic","Goderich CHC","Goderich Military (MI Room) Clinic","Hamilton MCHP","Kent CHP","Lakka Government Hospital","Lakka/Ogoo Farm CHC","Lion for Lion Clinic","Mambo CHP","Metchen MCHP","Milton Margai College (MMCET) Clinic","Mutual Faith Clinic","Sussex MCHP","Tissana (York Rural) MCHP","Tokeh MCHP","Tombo (York Rural) CHC","York CHC"]]]]];
 
-      <div id="iframeView" class="iframe-container">
-        <button id="backButton" class="back-button">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M19 12H5M12 5l-7 7 7 7"/>
-          </svg>
-          Back to Dashboard
-        </button>
-        <div class="iframe-wrapper">
-          <iframe id="moduleIframe" class="module-iframe" src="about:blank" title="Module Content"></iframe>
-        </div>
-      </div>
-    </div>
+/* Registrar IDs keep their original shape — HHR + a number — and are handed
+   out by walking the tree once (district, chiefdom, PHU, registrar), so every
+   ID in the country is unique and belongs to exactly one PHU. The PHU's own
+   location code (BO-03-007) is shown while drilling down, but it never enters
+   an HHR ID, a token or a record key. */
+const pad=(n,w)=>String(n).padStart(w,'0');
+const HHR_PAD=4;                        /* HHR0001 … HHR3130 */
+function hhrId(seq){ return 'HHR'+pad(seq,HHR_PAD); }
+const HHRS=[], HHR_BY_ID={}, HHR_AT={};
+(function buildRegistrars(){
+  let seq=0;
+  HIER.forEach((d,di)=>d[2].forEach((c,ci)=>c[1].forEach((phu,pi)=>{
+    for(let hi=0;hi<HHR_PER_PHU;hi++){
+      const rec={id:hhrId(++seq), seq:seq, di:di, ci:ci, pi:pi, hi:hi, n:hi+1,
+                 district:d[1], districtCode:d[0], chiefdom:c[0], phu:phu,
+                 phuCode:d[0]+'-'+pad(ci+1,2)+'-'+pad(pi+1,3)};
+      HHRS.push(rec); HHR_BY_ID[rec.id]=rec; HHR_AT[di+':'+ci+':'+pi+':'+hi]=rec;
+    }
+  })));
+})();
+/* from an ID back to the PHU it belongs to, or null if it is not a real ID */
+function hhrPlace(id){ return HHR_BY_ID[String(id||'').toUpperCase()]||null; }
+function hhrAt(di,ci,pi,hi){ return HHR_AT[di+':'+ci+':'+pi+':'+hi]||null; }
+function hhrCount(){ return HHRS.length; }
+function phuCount(){ return HIER.reduce((s,d)=>s+d[2].reduce((t,c)=>t+c[1].length,0),0); }
+/* HHR ID typed loosely — "27", "hhr 27", "HHR0027" — normalised to the padded
+   form, or null if it is not one of ours. */
+function normId(raw){
+  let s=String(raw||'').trim().toUpperCase().replace(/[\s\-_]/g,'');
+  s=s.replace(/^HHR/,'');
+  if(!s||!/^\d+$/.test(s)) return null;
+  const n=parseInt(s,10);
+  if(!n||n<1||n>hhrCount()) return null;
+  return hhrId(n);
+}
 
-    <div class="app-footer">
-      <span class="footer-text">ICF-SL 2026</span>
-    </div>
-    <div class="home-indicator"></div>
-  </div>
-
-  <script>
-    // Module definitions with icons and URLs
-    const allModules = {
-      "Attendance": { url: "attendance.html", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M22 21v-2a4 4 0 0 0-3-3.85" /></svg>` },
-      "Registration": { url: "registration.html", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.85" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>` },
-      "Distribution": { url: "distribution.html", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" /><path d="M8 8h8v8H8z" /><path d="M12 4v4" /><path d="M12 16v4" /><path d="M4 12h4" /><path d="M16 12h4" /></svg>` },
-      "Stock": { url: "stock.htm", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2" /><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" /></svg>` },
-      "Monitoring": { url: "monitoring.html", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-9 9m9-9a9 9 0 0 0-9-9m9 9h-4m-7 9A9 9 0 0 1 3 12m9 9v-4M3 12a9 9 0 0 1 9-9m-9 9h4m7-9a9 9 0 0 1 9 9" /><circle cx="12" cy="12" r="3" /></svg>` },
-      "Reconciliation": { url: "reconciliation.html", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M14 10l6-6M3 16h5v5M10 14l-6 6" /><path d="M21 16v5h-5M16 21l6-6M3 8h5V3M10 10l-6-6" /></svg>` }
+/* =========================================================
+   HHR DIRECTORY — communities, HHR name and telephone per HHR ID,
+   loaded from hhr_directory.csv sitting next to this file (columns:
+   HHRID, District, Chiefdom, PHU, Communities, FirstName, LastName,
+   Phone — Communities is a semicolon-separated list). District,
+   Chiefdom and PHU come from HIER above and are only repeated in the
+   CSV as a check when someone is filling it in.
+   Fetched once at startup and cached, so the app still opens offline
+   after the first successful load; a missing or unreachable CSV just
+   means no communities and blank name/phone to confirm by hand. */
+const DIR_URL='hhr_directory.csv';
+const DIR_CACHE_KEY='itn_hhr_directory_v1';
+let DIR={};
+function splitCsvLine(l){
+  const out=[]; let cur='', q=false;
+  for(let i=0;i<l.length;i++){
+    const c=l[i];
+    if(c==='"'){ q=!q; continue; }
+    if(c===','&&!q){ out.push(cur); cur=''; continue; }
+    cur+=c;
+  }
+  out.push(cur);
+  return out;
+}
+function parseDirectory(txt){
+  const lines=String(txt||'').split(/\r?\n/).filter(l=>l.trim().length);
+  if(!lines.length) return;
+  const header=splitCsvLine(lines[0]).map(h=>h.trim().toLowerCase());
+  const col=k=>header.indexOf(k);
+  const iId=col('hhrid'), iCom=col('communities'), iF=col('firstname'), iL=col('lastname'), iP=col('phone');
+  const out={};
+  for(let i=1;i<lines.length;i++){
+    const c=splitCsvLine(lines[i]);
+    const id=normId((c[iId]||'').trim());
+    if(!id) continue;
+    out[id]={
+      communities:(iCom>-1?(c[iCom]||''):'').split(';').map(s=>s.trim()).filter(Boolean),
+      first:(iF>-1?(c[iF]||''):'').trim(),
+      last:(iL>-1?(c[iL]||''):'').trim(),
+      phone:(iP>-1?(c[iP]||''):'').trim()
     };
-
-    // Order of modules (same as CSV columns)
-    const moduleOrder = ["Attendance", "Registration", "Distribution", "Stock", "Monitoring", "Reconciliation"];
-
-    const loginScreen = document.getElementById('loginScreen');
-    const dashboardView = document.getElementById('dashboardView');
-    const cardsContainer = document.getElementById('cardsContainer');
-    const iframeView = document.getElementById('iframeView');
-    const moduleIframe = document.getElementById('moduleIframe');
-    const backButton = document.getElementById('backButton');
-    const loginBtn = document.getElementById('loginBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const usernameInput = document.getElementById('usernameInput');
-    const passwordInput = document.getElementById('passwordInput');
-    const loginError = document.getElementById('loginError');
-    const dashboardUserInfo = document.getElementById('dashboardUserInfo');
-    const loadingMessage = document.getElementById('loadingMessage');
-    const loginForm = document.getElementById('loginForm');
-
-    let userDatabase = [];
-    let currentUser = null;
-
-    function parseCSVRow(row) {
-      const result = [];
-      let current = '';
-      let inQuotes = false;
-      
-      for (let i = 0; i < row.length; i++) {
-        const char = row[i];
-        if (char === '"') {
-          inQuotes = !inQuotes;
-        } else if (char === ',' && !inQuotes) {
-          result.push(current);
-          current = '';
-        } else {
-          current += char;
-        }
-      }
-      result.push(current);
-      return result.map(field => field.replace(/^"|"$/g, '').trim());
-    }
-
-    async function loadUserCSV() {
-      try {
-        loadingMessage.textContent = 'Loading user data from user.csv...';
-        const response = await fetch('user.csv');
-        
-        if (!response.ok) {
-          throw new Error('user.csv not found. Please create user.csv in the same directory.');
-        }
-        
-        const csvText = await response.text();
-        const lines = csvText.trim().split(/\r?\n/);
-        
-        if (lines.length < 2) {
-          throw new Error('CSV must have header row and at least one user');
-        }
-        
-        // Parse header row to get module column names
-        const headers = parseCSVRow(lines[0]);
-        
-        // Find username and password indices
-        const usernameIndex = headers.findIndex(h => h.toLowerCase() === 'username');
-        const passwordIndex = headers.findIndex(h => h.toLowerCase() === 'password');
-        
-        if (usernameIndex === -1 || passwordIndex === -1) {
-          throw new Error('CSV must contain "username" and "password" columns');
-        }
-        
-        // Get module column indices (all columns after password)
-        const moduleIndices = [];
-        const moduleNames = [];
-        
-        for (let i = 0; i < headers.length; i++) {
-          const header = headers[i];
-          if (i !== usernameIndex && i !== passwordIndex && moduleOrder.includes(header)) {
-            moduleIndices.push(i);
-            moduleNames.push(header);
-          }
-        }
-        
-        // Parse each user row
-        const users = [];
-        for (let i = 1; i < lines.length; i++) {
-          if (!lines[i].trim()) continue;
-          
-          const row = parseCSVRow(lines[i]);
-          const username = row[usernameIndex]?.trim();
-          const password = row[passwordIndex]?.trim();
-          
-          if (username && password) {
-            // Build tabs array based on Show/Hide values
-            const tabs = [];
-            for (let j = 0; j < moduleIndices.length; j++) {
-              const value = row[moduleIndices[j]]?.trim();
-              if (value && value.toLowerCase() === 'show') {
-                tabs.push(moduleNames[j]);
-              }
-            }
-            
-            users.push({ username, password, tabs });
-          }
-        }
-        
-        if (users.length === 0) {
-          throw new Error('No valid user records found in CSV');
-        }
-        
-        userDatabase = users;
-        
-        loadingMessage.textContent = `✓ Loaded ${userDatabase.length} users from user.csv`;
-        loadingMessage.style.color = '#2ecc71';
-        
-        // Debug info
-        const adminUser = userDatabase.find(u => u.username === 'admin');
-        if (adminUser) {
-          console.log('Admin user tabs:', adminUser.tabs);
-        }
-        
-        setTimeout(() => {
-          loadingMessage.style.display = 'none';
-          loginForm.style.display = 'block';
-        }, 1000);
-        
-      } catch (error) {
-        console.error('Error:', error);
-        loadingMessage.innerHTML = `✗ ${error.message}<br><br>Create user.csv with format:<br>username,password,Attendance,Registration,Distribution,Stock,Monitoring,Reconciliation<br>admin,admin123,Show,Show,Show,Show,Show,Show`;
-        loadingMessage.style.color = '#e74c3c';
-        loginBtn.disabled = true;
-      }
-    }
-
-    function renderCards(tabs) {
-      console.log('Rendering tabs:', tabs);
-      
-      cardsContainer.innerHTML = '';
-      
-      if (!tabs || tabs.length === 0) {
-        cardsContainer.innerHTML = `<div style="text-align:center;padding:40px;color:#6f7d95;">No modules assigned to this user. Contact administrator to enable modules.</div>`;
-        return;
-      }
-      
-      tabs.forEach(tab => {
-        const module = allModules[tab];
-        if (!module) return;
-        
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <div class="card-left">
-            <div class="card-icon">${module.icon}</div>
-            <span class="card-title">${tab}</span>
-          </div>
-          <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
-        `;
-        card.addEventListener('click', () => {
-          moduleIframe.src = module.url;
-          dashboardView.style.display = 'none';
-          iframeView.style.display = 'flex';
-        });
-        cardsContainer.appendChild(card);
-      });
-      
-      // Log the number of cards rendered
-      console.log(`Rendered ${tabs.length} cards`);
-    }
-
-    function login() {
-      const username = usernameInput.value.trim();
-      const password = passwordInput.value;
-      
-      if (!username || !password) {
-        loginError.textContent = 'Please enter username and password';
-        return;
-      }
-      
-      const user = userDatabase.find(u => u.username === username && u.password === password);
-      
-      if (user) {
-        currentUser = user.username;
-        console.log('Logged in as:', currentUser);
-        console.log('User tabs from CSV:', user.tabs);
-        
-        renderCards(user.tabs);
-        dashboardUserInfo.textContent = currentUser;
-        
-        loginScreen.style.display = 'none';
-        dashboardView.style.display = 'flex';
-        loginError.textContent = '';
-        usernameInput.value = '';
-        passwordInput.value = '';
-      } else {
-        loginError.textContent = 'Invalid username or password';
-      }
-    }
-
-    function logout() {
-      moduleIframe.src = 'about:blank';
-      dashboardView.style.display = 'none';
-      iframeView.style.display = 'none';
-      loginScreen.style.display = 'flex';
-    }
-
-    loginBtn.addEventListener('click', login);
-    logoutBtn.addEventListener('click', logout);
-    backButton.addEventListener('click', () => {
-      moduleIframe.src = 'about:blank';
-      iframeView.style.display = 'none';
-      dashboardView.style.display = 'flex';
+  }
+  DIR=out;
+}
+function dirFor(id){ return DIR[id]||null; }
+function loadDirectory(cb){
+  let settled=false;
+  const finish=ok=>{ if(settled) return; settled=true; cb&&cb(ok); };
+  const ctrl=('AbortController' in window)?new AbortController():null;
+  const t=setTimeout(()=>{ try{ ctrl&&ctrl.abort(); }catch(e){} },6000);
+  try{
+    fetch(DIR_URL,ctrl?{signal:ctrl.signal}:{}).then(r=>r.ok?r.text():Promise.reject(r.status)).then(txt=>{
+      clearTimeout(t); Store.set(DIR_CACHE_KEY,txt); parseDirectory(txt); finish(true);
+    }).catch(()=>{
+      clearTimeout(t);
+      const cached=Store.get(DIR_CACHE_KEY,null);
+      if(cached){ parseDirectory(cached); finish(true); } else finish(false);
     });
-    
-    usernameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') login(); });
-    passwordInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') login(); });
+  }catch(e){ clearTimeout(t); finish(false); }
+}
 
-    loadUserCSV();
-    loginScreen.style.display = 'flex';
-    dashboardView.style.display = 'none';
-    iframeView.style.display = 'none';
-  </script>
+/* ---------- storage ---------- */
+const Store=(()=>{let ok=false,mem={};try{localStorage.setItem('__t','1');localStorage.removeItem('__t');ok=true;}catch(e){}
+ return{get(k,d){if(ok){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v);}catch(e){return d;}}return k in mem?mem[k]:d;},
+        set(k,v){if(ok){try{localStorage.setItem(k,JSON.stringify(v));return;}catch(e){}}mem[k]=v;},
+        del(k){if(ok){try{localStorage.removeItem(k);return;}catch(e){}}delete mem[k];}};})();
+const SESS_KEY='itn_hhr_session_v1';
+const URL_KEY='itn_hhr_gas_url_v1';
+const recKey=id=>'itn_hhr_done_'+id;
+
+/* done[day][hh] = true. Kept per HHR so each login sees only its own work. */
+GAS_URL=Store.get(URL_KEY,GAS_URL)||GAS_URL;
+let me=Store.get(SESS_KEY,null);      /* the HHR currently logged in */
+let meCommunity='', meFirst='', meLast='', mePhone='';   /* set at sign-in, on every record */
+let done={};
+function loadDone(){ done = me ? Store.get(recKey(me),{}) : {}; loadRecs(); trackLoad(); }
+function saveDone(){ if(me) Store.set(recKey(me),done); }
+function isDone(d,h){ return !!(done[d]&&done[d][h]); }
+function setDone(d,h,v){
+  if(!done[d]) done[d]={};
+  if(v) done[d][h]=true; else delete done[d][h];
+  saveDone();
+}
+/* the answers themselves, per HHR: rec['d1h1'] = {...} */
+let recs={};
+function loadRecs(){ recs = me ? Store.get('itn_hhr_recs_'+me,{}) : {}; }
+function saveRecs(){ if(me) Store.set('itn_hhr_recs_'+me,recs); }
+function recKeyOf(d,h){ return 'd'+d+'h'+h; }
+function recGet(d,h){ return recs[recKeyOf(d,h)]||null; }
+function recSet(d,h,v){ recs[recKeyOf(d,h)]=v; saveRecs(); }
+/* A record is `unsent` before its first successful submission and `changed`
+   after an edit. Both mean the same thing to the sender: push it again. */
+function needsSend(r){ return !!r && (!r._submitted || !!r._dirty); }
+function isRevisit(r){ return !!r && r._status==='Revisit'; }
+function revisitCount(d){ let n=0; for(let h=1;h<=PER_DAY;h++) if(isRevisit(recGet(d,h))) n++; return n; }
+function revisitTotal(){ let n=0; for(let d=1;d<=DAYS;d++) n+=revisitCount(d); return n; }
+function dayRecs(d){ const out=[]; for(let h=1;h<=PER_DAY;h++){ const r=recGet(d,h); if(r) out.push(r); } return out; }
+function dayToSend(d){ return dayRecs(d).filter(needsSend); }
+function daySubmitted(d){ return dayComplete(d) && dayToSend(d).length===0; }
+function dayChanged(d){ return dayComplete(d) && dayRecs(d).some(r=>r._submitted&&r._dirty); }
+
+function dayCount(d){ let n=0; for(let h=1;h<=PER_DAY;h++) if(isDone(d,h)) n++; return n; }
+function dayComplete(d){ return dayCount(d)===PER_DAY; }
+function totalDone(){ let n=0; for(let d=1;d<=DAYS;d++) n+=dayCount(d); return n; }
+
+/* ---------- the two locking rules ----------
+   1. Household h opens only when household h-1 in the same day is complete.
+   2. Day d opens only when every household in day d-1 is complete. */
+function dayOpen(d){ return d===1 || dayComplete(d-1); }
+function hhOpen(d,h){
+  if(!dayOpen(d)) return false;
+  if(isDone(d,h)) return true;          /* already registered — always viewable */
+  return h===1 || isDone(d,h-1);
+}
+function nextHH(d){ for(let h=1;h<=PER_DAY;h++) if(!isDone(d,h)) return h; return null; }
+function currentDay(){ for(let d=1;d<=DAYS;d++) if(!dayComplete(d)) return d; return DAYS; }
+
+/* =========================================================
+   SENDING — one record per call, JSONP so it works from a phone
+   without CORS. The server upserts on _id.
+   ========================================================= */
+function sendRec(rec,cb){
+  if(!GAS_URL){ cb(false,'no-url'); return; }
+  const fn='__s'+Date.now()+Math.floor(Math.random()*1e4); let done=false;
+  const el=document.createElement('script');
+  window[fn]=r=>{ done=true; delete window[fn]; el.remove();
+    cb(!!(r&&(r.status==='ok'||r.status==='updated')), r&&r.status); };
+  el.onerror=()=>{ if(done) return; delete window[fn]; el.remove(); cb(false,'network'); };
+  el.src=GAS_URL+(GAS_URL.indexOf('?')>-1?'&':'?')+'data='+encodeURIComponent(JSON.stringify(rec))
+        +'&callback='+fn+'&t='+Date.now();
+  document.body.appendChild(el);
+  setTimeout(()=>{ if(!done){ try{delete window[fn]; el.remove();}catch(e){} cb(false,'timeout'); } },20000);
+}
+function setGAS(){
+  const v=prompt('Paste the NMDR submission URL (ends with /exec):',GAS_URL||'');
+  if(v===null) return;
+  const t=v.trim();
+  if(t&&t.indexOf('script.google.com')===-1){ toast('That does not look like a /exec URL'); return; }
+  GAS_URL=t; Store.set(URL_KEY,t); toast(t?'NMDR connected':'Disconnected'); renderDays();
+}
+
+const I={
+ home:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>',
+ back:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>',
+ out:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><path d="M15 17l5-5-5-5"/><path d="M20 12H9"/><path d="M13 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h7"/></svg>',
+ check:'<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>',
+ chart:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20h16"/><rect x="6" y="11" width="3" height="6" rx="1"/><rect x="11" y="6" width="3" height="11" rx="1"/><rect x="16" y="14" width="3" height="3" rx="1"/></svg>',
+ pin:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>',
+ clip:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M9 10h6M9 14h6"/></svg>',
+ arrow:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>',
+ route:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="18.5" r="2.3"/><circle cx="18" cy="5.5" r="2.3"/><path d="M8.2 17.6c2.9-.7 4-1.9 4-3.9 0-2.2-1.6-3.1-3.6-3.6"/><path d="M15.7 6.4c-2.3.8-3.3 1.9-3.5 3.7"/></svg>',
+ lock:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>'
+};
+const app=document.getElementById('app');
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2200);}
+
+/* =========================================================
+   SIGN IN — one HHR ID, district/chiefdom/PHU fill in on their own.
+   If the directory lists more than one community for that HHR, the
+   registrar picks which one before anything else opens; first name,
+   last name and telephone are then confirmed on a popup, prefilled
+   from the directory (or from what was confirmed here before).
+   ========================================================= */
+function renderSignIn(err,keepId){
+  const raw=keepId||'';
+  app.innerHTML=`<div class="body">
+    <div class="hero">
+      <h1>ITN Household Registration</h1>
+      <p>Enter your HHR ID to sign in. District, chiefdom and PHU fill in on their own.</p>
+    </div>
+    <div class="list">
+      <h2>Sign in</h2>
+      ${err?`<div class="flag bad">${esc(err)}</div>`:''}
+      <div class="card">
+        <div class="field"><div class="lbl">HHR ID</div>
+          <input type="text" id="siId" autocapitalize="none" autocomplete="off" spellcheck="false"
+            placeholder="e.g. HHR0027 or 27" value="${esc(raw)}"></div>
+        <div id="siPlace"></div>
+        <div class="field"><div class="lbl">Password</div>
+          <input type="password" id="siPw" autocomplete="off" placeholder="Password"></div>
+        <button class="btn btn-primary btn-block" id="siBtn" disabled onclick="doSignIn()">Sign in</button>
+      </div>
+      <div class="ver">Version ${esc(APP_VERSION)}</div>
+    </div></div>`;
+  const idInp=document.getElementById('siId');
+  const paintPlace=()=>{
+    const id=normId(idInp.value);
+    const box=document.getElementById('siPlace');
+    const btn=document.getElementById('siBtn');
+    if(!id){
+      box.innerHTML=idInp.value.trim()?'<div class="flag bad">No HHR with that ID.</div>':'';
+      btn.disabled=true; return;
+    }
+    const pl=hhrPlace(id), d=dirFor(id);
+    box.innerHTML=`<div class="card" style="margin-bottom:11px;background:var(--sky-50)">
+      <div class="kv"><span class="k">District</span><span class="v">${esc(pl.district)}</span></div>
+      <div class="kv"><span class="k">Chiefdom</span><span class="v">${esc(pl.chiefdom)}</span></div>
+      <div class="kv"><span class="k">PHU</span><span class="v">${esc(pl.phu)}</span></div>
+      <div class="kv"><span class="k">Registrar</span><span class="v">${pl.n} of ${HHR_PER_PHU}</span></div>
+      ${d&&d.communities.length?`<div class="kv"><span class="k">Communities</span><span class="v">${d.communities.length}</span></div>`:''}
+    </div>`;
+    btn.disabled=false;
+  };
+  idInp.addEventListener('input',paintPlace);
+  document.getElementById('siPw').addEventListener('keydown',e=>{ if(e.key==='Enter') doSignIn(); });
+  paintPlace();
+  idInp.focus();
+}
+function doSignIn(){
+  const idRaw=document.getElementById('siId').value;
+  const id=normId(idRaw);
+  const pw=document.getElementById('siPw').value;
+  if(!id){ renderSignIn('No HHR with that ID.',idRaw); return; }
+  if(pw!=='admin'){ renderSignIn('Password is wrong. Try again.',idRaw); return; }
+  me=id; Store.set(SESS_KEY,me);
+  pickCommunity();
+}
+/* zero or one community: skip straight through. More than one: the
+   registrar picks before the menu opens, or from "Change community" later. */
+function pickCommunity(){
+  const d=dirFor(me);
+  const list=d?d.communities:[];
+  if(list.length<=1){ meCommunity=list[0]||''; Store.set('itn_hhr_community_'+me,meCommunity); confirmIdentity(); return; }
+  const saved=Store.get('itn_hhr_community_'+me,'');
+  app.innerHTML=`<div class="body">
+    <div class="hero"><h1>Which community?</h1>
+      <p>${esc(me)} covers ${list.length} communities. Pick the one you are registering today.</p></div>
+    <div class="list"><div class="grid g1">
+      ${list.map(c=>`<button class="tile ${c===saved?'done':''}" onclick="chooseCommunity(${JSON.stringify(c)})">
+        <div class="top"><span class="tn small">${esc(c)}</span></div></button>`).join('')}
+    </div></div></div>`;
+}
+function chooseCommunity(c){
+  meCommunity=c; Store.set('itn_hhr_community_'+me,c);
+  confirmIdentity();
+}
+/* first/last name and telephone go on every record from here on — prefilled
+   from the directory, or from what was confirmed on this device before,
+   always editable so a wrong entry in the CSV does not stick. */
+function confirmIdentity(){
+  const d=dirFor(me)||{};
+  const saved=Store.get('itn_hhr_ident_'+me,{});
+  const first=saved.first!=null?saved.first:(d.first||'');
+  const last=saved.last!=null?saved.last:(d.last||'');
+  const phone=saved.phone!=null?saved.phone:(d.phone||'');
+  modal(`<h3>Confirm your details</h3>
+    <p>These go on every household you register. Correct them if they are wrong.</p>
+    <div class="field"><div class="lbl">First name</div><input type="text" id="idFirst" value="${esc(first)}" placeholder="First name"></div>
+    <div class="field"><div class="lbl">Last name</div><input type="text" id="idLast" value="${esc(last)}" placeholder="Last name"></div>
+    <div class="field"><div class="lbl">Telephone</div><input type="tel" id="idPhone" inputmode="numeric" maxlength="9" value="${esc(phone)}" placeholder="076123456"></div>
+    <div class="acts"><button class="btn btn-primary btn-block" onclick="saveIdentity()">Continue</button></div>`);
+  setTimeout(()=>{ const f=document.getElementById('idFirst'); if(f) f.focus(); },50);
+}
+function saveIdentity(){
+  const first=document.getElementById('idFirst').value.trim();
+  const last=document.getElementById('idLast').value.trim();
+  const phone=digits(document.getElementById('idPhone').value).slice(0,PHONE_LEN);
+  if(!first||!last){ toast('First and last name are needed'); return; }
+  if(phone.length!==PHONE_LEN){ toast('Telephone must be '+PHONE_LEN+' digits'); return; }
+  meFirst=first; meLast=last; mePhone=phone;
+  Store.set('itn_hhr_ident_'+me,{first:first,last:last,phone:phone});
+  closeModal();
+  loadDone(); renderMenu();
+}
+function editMyDetails(){ confirmIdentity(); }
+function changeCommunity(){ pickCommunity(); }
+function logout(){
+  if(!confirm('Sign out of '+me+'? Registered households stay on this device.')) return;
+  autoStop(true);
+  me=null; meCommunity=''; meFirst=''; meLast=''; mePhone='';
+  Store.del(SESS_KEY); done={}; recs={}; track={}; renderSignIn();
+}
+
+/* where the signed-in registrar is posted, for the screens that show it */
+function mePlaceLine(){
+  const pl=hhrPlace(me);
+  const base = pl ? me+' \u00b7 '+pl.phu+', '+pl.chiefdom+', '+pl.district : String(me||'');
+  return meCommunity ? base+' \u00b7 '+meCommunity : base;
+}
+/* =========================================================
+   MENU — what this app does
+   ========================================================= */
+function renderMenu(){
+  const t=totalDone(), all=DAYS*PER_DAY, cur=currentDay();
+  const mapped=gpsDays().length;
+  const d=dirFor(me);
+  app.innerHTML=`<div class="body">
+    <div class="hero">
+      <h1>ITN Household Registration</h1>
+      <p>${esc(mePlaceLine())}<br>${PER_DAY} households a day, ${DAYS} days.</p>
+    </div>
+    <div class="list">
+      ${outBar()}
+      <button class="menu-card" onclick="renderDays()">
+        <span class="mi b">${I.clip}</span>
+        <span class="mt"><h3>Registration</h3>
+          <span>Register households day by day, 25 a day.</span>
+          <span class="mm">${t} of ${all} done \u00b7 Day ${cur}${revisitTotal()?' \u00b7 '+revisitTotal()+' revisit'+(revisitTotal()===1?'':'s'):''}</span></span>
+        <span class="ma">${I.arrow}</span></button>
+      <button class="menu-card" onclick="renderTrack(0)">
+        <span class="mi g">${I.pin}</span>
+        <span class="mt"><h3>HHR Movement Tracking</h3>
+          <span>Your route through the day on the map, household 1 to 25.</span>
+          <span class="mm">${mapped?mapped+' day'+(mapped===1?'':'s')+' with GPS points':'no GPS points yet'}</span></span>
+        <span class="ma">${I.arrow}</span></button>
+      <button class="menu-card" onclick="renderAuto(0)">
+        <span class="mi s">${I.route}</span>
+        <span class="mt"><h3>Automatic GPS Tracking</h3>
+          <span>A point every 5 minutes while the app is open, joined into your track.</span>
+          <span class="mm">${autoOn?'tracking on \u00b7 '+trackPts(currentDay()).length+' point'+(trackPts(currentDay()).length===1?'':'s')+' today'
+             :(trackTotal()?trackTotal()+' point'+(trackTotal()===1?'':'s')+' recorded \u00b7 tracking off':'not started')}</span></span>
+        <span class="ma">${I.arrow}</span></button>
+      <button class="menu-card" onclick="renderAchv()">
+        <span class="mi y">${I.chart}</span>
+        <span class="mt"><h3>Target &amp; Achievement</h3>
+          <span>What you have done against your target, per day and overall.</span>
+          <span class="mm">${Math.round(t/all*100)}% of your ${all} \u00b7 ${DAYS*PER_DAY-t} to go</span></span>
+        <span class="ma">${I.arrow}</span></button>
+      <div style="height:4px"></div>
+      <button class="btn btn-ghost btn-block btn-sm" onclick="editMyDetails()">Edit my details${meFirst?' \u00b7 '+esc(meFirst+' '+meLast):''}</button>
+      ${d&&d.communities.length>1?`<button class="btn btn-ghost btn-block btn-sm" onclick="changeCommunity()">Change community${meCommunity?' \u00b7 '+esc(meCommunity):''}</button>`:''}
+      <button class="btn btn-ghost btn-block btn-sm" onclick="logout()">Sign out of ${esc(me)}</button>
+      <div class="ver">Version ${esc(APP_VERSION)}${GAS_URL?' \u00b7 NMDR connected':''}</div>
+    </div></div>`;
+}
+
+/* =========================================================
+   DAYS 1 … 10
+   ========================================================= */
+function renderDays(){
+  const cur=currentDay();
+  let tiles='';
+  for(let d=1;d<=DAYS;d++){
+    const n=dayCount(d), full=dayComplete(d), open=dayOpen(d);
+    const sent=daySubmitted(d), out=dayToSend(d).length;
+    const cls = full?'done' : !open?'locked todo' : (d===cur?'todo next':'todo');
+    const badge = full?(sent?'Submitted':out+' to send') : !open?I.lock+' Locked' : (n?n+' of '+PER_DAY:'Not started');
+    const line = full ? (sent?'All '+PER_DAY+' submitted':out+' record'+(out===1?'':'s')+' waiting to submit')
+                      : n+' of '+PER_DAY+' households registered';
+    tiles+=`<button class="tile ${cls}" ${open?`onclick="renderDay(${d})"`:`onclick="toast('Finish Day ${d-1} first — all ${PER_DAY} households.')"`}>
+      <div class="top"><span class="tn">Day ${d}</span><span class="tb">${badge}</span></div>
+      <div class="tk">${line}</div>
+      <div class="ttrack"><div class="tfill ${full?'full':''}" style="width:${Math.round(n/PER_DAY*100)}%"></div></div>
+    </button>`;
+  }
+  const t=totalDone(), all=DAYS*PER_DAY;
+  app.innerHTML=`<div class="appbar">
+      <button class="ico-btn" onclick="renderMenu()">${I.back}</button>
+      <div class="titles"><div class="eyebrow">Registration</div><div class="title">${esc(me)} · daily workload</div></div>
+      <span class="tag-pill me">${esc(me)}</span>
+    </div>
+    <div class="body"><div class="list">
+      <h2>Your 10 days</h2>
+      <div class="sub">25 households a day. A day opens once the day before it is finished.</div>
+      <div class="stat-grid">
+        <div class="stat"><div class="n ${t>=all?'g':''}">${t}</div><div class="l">Households registered of ${all}</div></div>
+        <div class="stat"><div class="n r">${all-t}</div><div class="l">Still to register</div></div>
+      </div>
+      ${outBar()}
+      <div class="legend"><span><i class="d"></i>Complete</span><span><i class="t"></i>Not complete</span><span><i class="l"></i>Locked</span></div>
+      <div class="grid g2">${tiles}</div>
+    </div></div>`;
+}
+
+/* Everything on the device that still has to reach NMDR, in day order. */
+function allToSend(){
+  const out=[];
+  for(let d=1;d<=DAYS;d++) dayToSend(d).forEach(r=>out.push(r));
+  return out;
+}
+/* Records are saved first and sent when they can be. This pushes whatever is
+   waiting: on load, when the browser comes back online, when the app returns to
+   the foreground, and once a minute as a safety net. */
+let autoBusy=false;
+function autoSync(cb){
+  if(autoBusy||!GAS_URL||!navigator.onLine){ cb&&cb(0); return; }
+  const q=allToSend();
+  if(!q.length){ cb&&cb(0); return; }
+  autoBusy=true;
+  let i=0, sent=0;
+  const step=()=>{
+    if(i>=q.length){
+      autoBusy=false; saveRecs();
+      if(sent) refreshAfterSync();
+      cb&&cb(sent); return;
+    }
+    const rec=q[i];
+    sendRec(rec,(ok,status)=>{
+      if(ok){ rec._submitted=true; rec._dirty=false; rec._submittedAt=new Date().toISOString(); sent++; }
+      else rec._lastError=status||'failed';
+      saveRecs(); i++;
+      if(!ok&&!navigator.onLine){ autoBusy=false; cb&&cb(sent); return; }
+      setTimeout(step,250);
+    });
+  };
+  step();
+}
+/* only redraw a screen that is actually showing sync state */
+function refreshAfterSync(){
+  if(document.querySelector('.sync-bar')){
+    if(document.querySelector('.dayrow')) renderAchv();
+    else if(document.querySelector('.grid.g4')) renderDay(formD||currentDay());
+    else if(document.querySelector('.menu-card')) renderMenu();
+  }
+}
+window.addEventListener('online',()=>{ toast('Back online \u2014 sending what is waiting'); autoSync(n=>{ if(n) toast(n+' record'+(n===1?'':'s')+' sent to NMDR'); }); });
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden) autoSync(); });
+setInterval(()=>autoSync(),60000);
+
+/* Days finished but not yet in NMDR. */
+function outstandingDays(){
+  const out=[]; for(let d=1;d<=DAYS;d++) if(dayComplete(d)&&dayToSend(d).length) out.push(d);
+  return out;
+}
+function outBar(){
+  if(!GAS_URL) return `<div class="sync-bar off"><span class="d"></span>
+    <div class="t"><b>Not connected to NMDR.</b> Records stay on this device until the connection is set.</div>
+    <button class="btn btn-ghost btn-sm" style="flex:0 0 auto" onclick="setGAS()">Connect</button></div>`;
+  const o=outstandingDays();
+  if(!o.length) return `<div class="sync-bar ok"><span class="d"></span>
+    <div class="t"><b>Nothing waiting.</b> Every finished day is in NMDR.</div></div>`;
+  return `<div class="sync-bar warn"><span class="d"></span>
+    <div class="t"><b>Day ${o.join(', Day ')} not submitted.</b><br>Open the day and submit its records.</div></div>`;
+}
+
+
+
+/* =========================================================
+   TARGET AND ACHIEVEMENT
+   ---------------------------------------------------------
+   Target is fixed by the workload: 25 households a day, 10 days,
+   250 in all. Achievement is what has been registered, with the
+   part that has reached NMDR shown separately from the part
+   still sitting on the phone.
+   ========================================================= */
+function achvDay(d){
+  const rs=dayRecs(d);
+  const sent=rs.filter(r=>r._submitted&&!r._dirty).length;
+  return {
+    d:d, target:PER_DAY, done:dayCount(d), sent:sent, pending:rs.length-sent,
+    open:dayOpen(d),
+    people:rs.reduce((s,r)=>s+(Number(r.size)||0),0),
+    itns:rs.reduce((s,r)=>s+(Number(r.itns)||0),0),
+    u5:rs.reduce((s,r)=>s+(Number(r.u5)||0),0)
+  };
+}
+function achvAll(){
+  const days=[]; for(let d=1;d<=DAYS;d++) days.push(achvDay(d));
+  const sum=k=>days.reduce((s,x)=>s+x[k],0);
+  return {days:days, target:DAYS*PER_DAY, done:sum('done'), sent:sum('sent'), pending:sum('pending'),
+          people:sum('people'), itns:sum('itns'), u5:sum('u5'),
+          daysDone:days.filter(x=>x.done===PER_DAY).length};
+}
+/* A ring rather than a bar, because a share of a target reads faster as one. */
+function ring(pct,label,sub,colour){
+  const R=54, C=2*Math.PI*R, on=Math.max(0,Math.min(100,pct))/100*C;
+  return `<div class="rw">
+    <svg viewBox="0 0 128 128" width="128" height="128">
+      <circle cx="64" cy="64" r="${R}" fill="none" stroke="#e3f1fb" stroke-width="15"/>
+      <circle cx="64" cy="64" r="${R}" fill="none" stroke="${colour}" stroke-width="15" stroke-linecap="round"
+        stroke-dasharray="${on.toFixed(1)} ${(C-on).toFixed(1)}" transform="rotate(-90 64 64)"/>
+    </svg>
+    <div class="ring-txt"><span class="p">${label}</span><span class="s">${esc(sub)}</span></div>
+  </div>`;
+}
+function renderAchv(){
+  const a=achvAll();
+  const pct=Math.round(a.done/a.target*100);
+  const cur=currentDay(), today=achvDay(cur);
+  const rows=a.days.map(x=>{
+    const w=Math.round(x.done/x.target*100), pw=Math.round(x.pending/x.target*100);
+    return `<div class="dayrow ${x.open?'':'locked'}">
+      <span class="dl">Day ${x.d}</span>
+      <span class="dt">
+        <span class="df ${x.done===x.target?'full':''}" style="width:${w}%"></span>
+        <span class="dp" style="left:${Math.round(x.sent/x.target*100)}%;width:${pw}%"></span>
+      </span>
+      <span class="dv">${x.done}/${x.target}</span></div>`;
+  }).join('');
+  app.innerHTML=`<div class="appbar">
+      <button class="ico-btn" onclick="renderMenu()">${I.back}</button>
+      <div class="titles"><div class="eyebrow">${esc(me)} \u00b7 target and achievement</div><div class="title">${a.done} of ${a.target} households</div></div>
+      <span class="tag-pill me">${pct}%</span>
+    </div>
+    <div class="body"><div class="list">
+      <div class="ring-card">
+        ${ring(pct,pct+'%','of '+a.target+' households',pct>=100?'#2aa17c':'#2680bd')}
+        <div class="rl"><h4>Overall</h4>
+          <div class="kv"><span class="k">Target</span><span class="v">${a.target}</span></div>
+          <div class="kv"><span class="k">Registered</span><span class="v">${a.done}</span></div>
+          <div class="kv"><span class="k">Remaining</span><span class="v">${a.target-a.done}</span></div>
+          <div class="kv"><span class="k">Days finished</span><span class="v">${a.daysDone} of ${DAYS}</span></div>
+        </div>
+      </div>
+
+      <div class="ring-card">
+        ${ring(today.target?Math.round(today.done/today.target*100):0,
+               today.done+'/'+today.target,'Day '+cur,today.done>=today.target?'#2aa17c':'#3d9ad6')}
+        <div class="rl"><h4>Day ${cur} \u00b7 the day you are on</h4>
+          <div class="kv"><span class="k">Registered today</span><span class="v">${today.done}</span></div>
+          <div class="kv"><span class="k">Left to reach 25</span><span class="v">${Math.max(0,today.target-today.done)}</span></div>
+          <div class="kv"><span class="k">In NMDR</span><span class="v">${today.sent}</span></div>
+          <div class="kv"><span class="k">Still on the phone</span><span class="v">${today.pending}</span></div>
+        </div>
+      </div>
+
+      <div class="bigstat">
+        <div class="b"><div class="n g">${a.sent}</div><div class="l">Records in NMDR</div></div>
+        <div class="b"><div class="n ${a.pending?'w':''}">${a.pending}</div><div class="l">Registered, not yet submitted</div></div>
+        <div class="b"><div class="n">${a.people}</div><div class="l">People counted in your households</div></div>
+        <div class="b"><div class="n">${a.itns}</div><div class="l">ITNs your households are due</div></div>
+      </div>
+
+      <div class="card">
+        <h4><span class="dot"></span>Every day against its target of ${PER_DAY}</h4>
+        ${rows}
+        <div class="achv-legend">
+          <span><i class="a"></i>Registered</span><span><i class="f"></i>Day complete</span>
+          <span><i class="p"></i>Not yet submitted</span><span><i class="t"></i>Target</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h4><span class="dot"></span>Households you have reached</h4>
+        <div class="kv"><span class="k">People in those households</span><span class="v">${a.people}</span></div>
+        <div class="kv"><span class="k">Under-fives among them</span><span class="v">${a.u5}</span></div>
+        <div class="kv"><span class="k">ITNs to be given</span><span class="v">${a.itns}</span></div>
+        <div class="kv"><span class="k">Average household size</span><span class="v">${a.done?(a.people/a.done).toFixed(1):'\u2014'}</span></div>
+        <div class="kv"><span class="k">ITNs per household</span><span class="v">${a.done?(a.itns/a.done).toFixed(1):'\u2014'}</span></div>
+      </div>
+      ${a.pending?`<button class="btn btn-primary btn-block btn-sm" onclick="renderDays()">Go and submit the ${a.pending} outstanding record${a.pending===1?'':'s'}</button>`:''}
+    </div></div>`;
+}
+
+/* =========================================================
+   HHR MOVEMENT TRACKING
+   ---------------------------------------------------------
+   The GPS point taken at each household, in the order they were
+   registered, numbered 1 to 25 and joined by lines. Drawn with
+   Leaflet on OpenStreetMap tiles, so this screen needs internet;
+   the ordered list below the map works without it.
+   ========================================================= */
+const LEAFLET_CSS='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+const LEAFLET_JS ='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+let trackDay=0, lmap=null, lloading=false;
+
+/* the points of one day, in registration order, GPS only */
+/* A registered household is drawn at the point taken when it was registered; a
+   household still waiting for a revisit is drawn at the point taken on the visit
+   where nobody was home. Registering it later turns that marker from yellow to
+   green on its own, because the record stops being a revisit. */
+function trackPoints(d){
+  const out=[];
+  for(let h=1;h<=PER_DAY;h++){
+    const r=recGet(d,h);
+    if(!r) continue;
+    if(isRevisit(r)){
+      if(r.revisitLat!==''&&r.revisitLat!=null)
+        out.push({h:h,lat:+r.revisitLat,lng:+r.revisitLng,acc:r.revisitAcc,r:r,rev:true});
+    } else if(r.gpsLat!==''&&r.gpsLat!=null){
+      out.push({h:h,lat:+r.gpsLat,lng:+r.gpsLng,acc:r.gpsAcc,r:r,rev:false});
+    }
+  }
+  return out;
+}
+function gpsDays(){ const o=[]; for(let d=1;d<=DAYS;d++) if(trackPoints(d).length) o.push(d); return o; }
+/* metres between two points, straight line */
+function metres(a,b){
+  const R=6371000, t=Math.PI/180;
+  const dLat=(b.lat-a.lat)*t, dLng=(b.lng-a.lng)*t;
+  const la=a.lat*t, lb=b.lat*t;
+  const x=Math.sin(dLat/2)**2+Math.cos(la)*Math.cos(lb)*Math.sin(dLng/2)**2;
+  return Math.round(2*R*Math.asin(Math.sqrt(x)));
+}
+/* Households registered within this many metres of each other cannot be told
+   apart on the map, so they share one marker labelled with all their numbers
+   (2,3,4) instead of stacking and hiding each other. */
+const CLUSTER_M=20;
+function clusterPoints(pts,thresh){
+  const t=thresh||CLUSTER_M, groups=[];
+  pts.forEach(p=>{
+    let g=null;
+    for(let i=0;i<groups.length;i++){ if(metres(groups[i],p)<=t){ g=groups[i]; break; } }
+    if(g){
+      g.items.push(p);
+      g.lat=g.items.reduce((s,x)=>s+x.lat,0)/g.items.length;   /* centre of the group */
+      g.lng=g.items.reduce((s,x)=>s+x.lng,0)/g.items.length;
+    } else {
+      groups.push({lat:p.lat,lng:p.lng,items:[p]});
+    }
+  });
+  groups.forEach(g=>{
+    g.hs=g.items.map(x=>x.h).sort((a,b)=>a-b);
+    g.label=g.hs.length<=6?g.hs.join(','):g.hs.slice(0,5).join(',')+' +'+(g.hs.length-5);
+  });
+  return groups;
+}
+/* which group each household ended up in */
+function groupOf(groups,h){ return groups.find(g=>g.hs.indexOf(h)>-1)||null; }
+/* the route: group centres in visit order, without repeating a point you are
+   already standing on */
+function routeLine(pts,groups){
+  const out=[];
+  pts.forEach(p=>{
+    const g=groupOf(groups,p.h); if(!g) return;
+    const last=out[out.length-1];
+    if(!last||last[0]!==g.lat||last[1]!==g.lng) out.push([g.lat,g.lng]);
+  });
+  return out;
+}
+function pathLength(pts){ let m=0; for(let i=1;i<pts.length;i++) m+=metres(pts[i-1],pts[i]); return m; }
+const asDist=m=>m<1000?m+' m':(m/1000).toFixed(1)+' km';
+const hhmm=iso=>String(iso||'').slice(11,16);
+
+function renderTrack(d){
+  const days=gpsDays();
+  if(!d) d = days.indexOf(trackDay)>-1 ? trackDay : (days.length?days[days.length-1]:1);
+  trackDay=d;
+  const pts=trackPoints(d);
+  const groups=clusterPoints(pts);
+  const shared=groups.filter(g=>g.hs.length>1);
+  const chips=[];
+  for(let x=1;x<=DAYS;x++){
+    const has=trackPoints(x).length;
+    chips.push(`<button class="${x===d?'on':''}" ${has?`onclick="renderTrack(${x})"`:'disabled'}>Day ${x}${has?' \u00b7 '+has:''}</button>`);
+  }
+  let steps='';
+  pts.forEach((p,i)=>{
+    const gap=i?metres(pts[i-1],p):0;
+    const g=groupOf(groups,p.h);
+    const with_=g&&g.hs.length>1?g.hs.filter(x=>x!==p.h):[];
+    const who = p.rev ? 'Revisit \u00b7 nobody available'
+                      : esc((p.r.first||'')+' '+(p.r.last||''))+' \u00b7 '+esc(p.r.token||'');
+    steps+=`<div class="step-row">
+      <span class="sn ${p.rev?'rev':'reg'}${i===0?' start':''}">${p.h}</span>
+      <span class="sm"><span class="t">${who}</span>
+        <span class="s">${p.lat.toFixed(5)}, ${p.lng.toFixed(5)}${p.acc?' (\u00b1'+p.acc+' m)':''}${hhmm(p.r.gpsAt)?' \u00b7 '+hhmm(p.r.gpsAt):''}${with_.length?' \u00b7 same point as '+with_.join(', '):''}</span></span>
+      <span class="sg">${i?'+'+asDist(gap):'start'}</span></div>`;
+  });
+  app.innerHTML=`<div class="appbar">
+      <button class="ico-btn" onclick="renderMenu()">${I.back}</button>
+      <div class="titles"><div class="eyebrow">${esc(me)} \u00b7 movement tracking</div><div class="title">Day ${d} route</div></div>
+      <span class="tag-pill me">${pts.length}/${PER_DAY}</span>
+    </div>
+    <div class="body"><div class="list">
+      <div class="daybar">${chips.join('')}</div>
+      ${pts.length?`<div class="stat-grid">
+          <div class="stat"><div class="n">${pts.length}</div><div class="l">Households mapped on Day ${d}${pts.filter(p=>p.rev).length?' ('+pts.filter(p=>p.rev).length+' revisit)':''}</div></div>
+          <div class="stat"><div class="n g">${asDist(pathLength(pts))}</div><div class="l">Distance along the route</div></div>
+        </div>
+        ${shared.length?`<div class="sync-bar wait"><span class="d"></span>
+          <div class="t">${shared.length} point${shared.length===1?'':'s'} hold more than one household \u2014 within ${CLUSTER_M} m the GPS cannot separate them, so they share one marker: ${esc(shared.map(g=>g.label).join(' \u00b7 '))}.</div></div>`:''}`:''}
+      <div id="map"></div>
+      <div id="mapmsg"></div>
+      ${pts.length?`<div class="legend" style="margin:11px 2px 0">
+        <span><i class="mg"></i>Registered</span><span><i class="my"></i>Waiting for a revisit</span>
+        <span><i class="s"></i>First household of the day</span></div>`:''}
+      ${pts.length?`<div class="sub" style="margin:15px 0 8px"><b>Household 1 to ${pts[pts.length-1].h}</b>, in the order you registered them.${hhmm(pts[0].r.gpsAt)?' Started '+hhmm(pts[0].r.gpsAt)+', finished '+hhmm(pts[pts.length-1].r.gpsAt)+'.':''}</div>
+        <div class="card steps">${steps}</div>`
+        :`<div class="sync-bar wait" style="margin-top:13px"><span class="d"></span>
+           <div class="t">No GPS points for Day ${d} yet. A point is taken at each household as it is registered.</div></div>`}
+    </div></div>`;
+  if(pts.length) drawMap(pts); else document.getElementById('map').style.display='none';
+}
+
+/* Leaflet is pulled in on first use so the rest of the app does not wait on it. */
+function withLeaflet(cb){
+  if(window.L){ cb(true); return; }
+  if(lloading){ setTimeout(()=>withLeaflet(cb),300); return; }
+  lloading=true;
+  const css=document.createElement('link');
+  css.rel='stylesheet'; css.href=LEAFLET_CSS; document.head.appendChild(css);
+  const js=document.createElement('script');
+  js.src=LEAFLET_JS;
+  js.onload=()=>{ lloading=false; cb(!!window.L); };
+  js.onerror=()=>{ lloading=false; cb(false); };
+  document.head.appendChild(js);
+  setTimeout(()=>{ if(lloading){ lloading=false; cb(!!window.L); } },15000);
+}
+function mapMsg(html){ const e=document.getElementById('mapmsg'); if(e) e.innerHTML=html; }
+function drawMap(pts){
+  const host=document.getElementById('map');
+  if(!host) return;
+  host.innerHTML=`<div style="height:100%;display:grid;place-items:center"><div class="spin"></div></div>`;
+  withLeaflet(ok=>{
+    const h=document.getElementById('map');
+    if(!h) return;
+    if(!ok||!window.L){
+      h.style.display='none';
+      mapMsg(`<div class="sync-bar warn"><span class="d"></span>
+        <div class="t"><b>Map needs internet.</b> The route is listed below with its coordinates.</div>
+        <button class="btn btn-ghost btn-sm" style="flex:0 0 auto" onclick="renderTrack(${trackDay})">Retry</button></div>`);
+      return;
+    }
+    mapMsg('');
+    h.innerHTML='';
+    if(lmap){ try{ lmap.remove(); }catch(e){} lmap=null; }
+    const groups=clusterPoints(pts);
+    const line=routeLine(pts,groups);
+    lmap=L.map(h,{zoomControl:true,attributionControl:true});
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      {maxZoom:19, attribution:'\u00a9 OpenStreetMap contributors'}).addTo(lmap);
+    if(line.length>1){
+      L.polyline(line,{color:'#2680bd',weight:3.5,opacity:.9}).addTo(lmap);
+      L.polyline(line,{color:'#ffffff',weight:1,opacity:.7,dashArray:'4 7'}).addTo(lmap);
+    }
+    const firstH=pts[0].h;
+    groups.forEach(g=>{
+      const anyRev=g.items.some(p=>p.rev);
+      const k=(anyRev?'rev':'reg')+(g.hs.indexOf(firstH)>-1?' start':'');
+      const multi = g.hs.length>1;
+      const w = multi ? 12+g.label.length*7 : 26;
+      const body = g.items.map(p=>p.rev
+        ? `<b>Household ${p.h}</b><br><span style="color:#8a6d00">Revisit \u2014 nobody was available</span><br>
+           Point taken ${hhmm(p.r.revisitAt)||''}`
+        : `<b>Household ${p.h}</b><br>${esc((p.r.first||'')+' '+(p.r.last||''))}<br>
+           ${esc(p.r.token||'')}<br>${p.r.size||''} people \u00b7 ${p.r.itns||''} ITN${p.r.itns===1?'':'s'}${hhmm(p.r.gpsAt)?' \u00b7 '+hhmm(p.r.gpsAt):''}${p.r._wasRevisit==='Yes'?'<br><span style="color:#8a6d00">was a revisit</span>':''}`
+      ).join('<hr style="border:none;border-top:1px solid #dceaf5;margin:7px 0">');
+      L.marker([g.lat,g.lng],{icon:L.divIcon({className:'',
+          html:`<div class="mk ${k} ${multi?'multi':''}">${esc(g.label)}</div>`,
+          iconSize:[w,26],iconAnchor:[w/2,13]}),zIndexOffset:multi?1000:0}).addTo(lmap)
+        .bindPopup(`<div class="mpop">${multi?`<div style="font:600 11px var(--body);color:#5f7f96;margin-bottom:6px">${g.hs.length} households at this point</div>`:''}${body}</div>`);
+    });
+    if(line.length>1) lmap.fitBounds(L.latLngBounds(line).pad(0.18));
+    else lmap.setView(line[0],17);
+    setTimeout(()=>{ try{ lmap.invalidateSize(); }catch(e){} },200);
+  });
+}
+
+
+/* =========================================================
+   AUTOMATIC GPS TRACKING
+   ---------------------------------------------------------
+   A point every five minutes for as long as the app is open, on
+   whichever screen the registrar happens to be. It keeps its own
+   watch, apart from the one the household form uses, so opening a
+   household cannot switch tracking off. Points stay on the device.
+   ========================================================= */
+const AUTO_MS=300000;      /* five minutes between banked points */
+const AUTO_FRESH=120000;   /* a reading older than this is not banked */
+const AUTO_GAP=720000;     /* a hole longer than this is drawn as a gap */
+const DWELL_M=20;          /* points this close together are the same spot */
+let autoWatch=null, autoOn=false, autoFix=null, autoTimer=null, autoLock=null;
+let autoDay=0, amap=null, track={};
+
+function trackKey(){ return 'itn_hhr_track_'+me; }
+function trackOnKey(){ return 'itn_hhr_trackon_'+me; }
+function trackLoad(){ track = me ? Store.get(trackKey(),{}) : {}; }
+function trackSave(){ if(me) Store.set(trackKey(),track); }
+function trackPts(d){ return track['d'+d]||[]; }
+function trackDays(){ const o=[]; for(let d=1;d<=DAYS;d++) if(trackPts(d).length) o.push(d); return o; }
+function trackLast(d){ const a=trackPts(d); return a.length?a[a.length-1]:null; }
+function trackTotal(){ let n=0; for(let d=1;d<=DAYS;d++) n+=trackPts(d).length; return n; }
+function trackBank(f,d){
+  const k='d'+d;
+  if(!track[k]) track[k]=[];
+  track[k].push({lat:f.lat,lng:f.lng,acc:f.acc,t:f.at});
+  trackSave();
+}
+/* Due is measured from the last banked point, never from the timer, so a
+   throttled or suspended page comes back on the right cadence instead of
+   banking a burst of catch-up points. */
+function trackDue(d){
+  const last=trackLast(d);
+  return !last || Date.now()-Date.parse(last.t)>=AUTO_MS;
+}
+function autoTake(p){
+  if(!p||!p.coords) return;
+  autoFix={lat:+p.coords.latitude.toFixed(6), lng:+p.coords.longitude.toFixed(6),
+           acc:Math.round(p.coords.accuracy||0), at:new Date().toISOString()};
+  const d=currentDay();
+  if(autoOn&&trackDue(d)) trackBank(autoFix,d);
+  autoPaint();
+}
+function autoStart(quiet){
+  if(!navigator.geolocation){ toast('This browser has no location support'); return; }
+  autoOn=true; Store.set(trackOnKey(),true);
+  if(autoWatch==null){
+    try{
+      autoWatch=navigator.geolocation.watchPosition(autoTake,
+        e=>{ if(!autoFix&&!quiet) toast(e&&e.code===1?'Tracking needs location permission':'No position yet \u2014 step into the open'); },
+        {enableHighAccuracy:true, timeout:45000, maximumAge:0});
+    }catch(e){}
+  }
+  if(!autoTimer) autoTimer=setInterval(autoTick,15000);
+  wakeOn();
+  if(!quiet) toast('Tracking on \u2014 a point every 5 minutes');
+  autoPaint();
+}
+function autoStop(quiet){
+  autoOn=false; Store.del(trackOnKey());
+  if(autoWatch!=null&&navigator.geolocation&&navigator.geolocation.clearWatch){
+    try{ navigator.geolocation.clearWatch(autoWatch); }catch(e){}
+  }
+  autoWatch=null;
+  if(autoTimer){ clearInterval(autoTimer); autoTimer=null; }
+  wakeOff();
+  if(!quiet) toast('Tracking off');
+  autoPaint();
+}
+/* The safety net: brings the watch back if the browser dropped it, and asks
+   for a one-off position when the watch has gone quiet past the five minutes. */
+function autoTick(){
+  if(!autoOn) return;
+  if(autoWatch==null) autoStart(true);
+  const d=currentDay();
+  if(trackDue(d)){
+    if(autoFix&&Date.now()-Date.parse(autoFix.at)<AUTO_FRESH) trackBank(autoFix,d);
+    else if(navigator.geolocation){
+      try{ navigator.geolocation.getCurrentPosition(autoTake,()=>{},
+        {enableHighAccuracy:false, timeout:30000, maximumAge:60000}); }catch(e){}
+    }
+  }
+  autoPaint();
+}
+/* Holding the screen awake is what makes a five-minute cadence survive a
+   working day: a locked phone suspends the page and tracking stops. */
+function wakeOn(){
+  try{
+    if(!('wakeLock' in navigator)||autoLock) return;
+    navigator.wakeLock.request('screen').then(l=>{
+      autoLock=l; l.addEventListener('release',()=>{ autoLock=null; });
+    }).catch(()=>{});
+  }catch(e){}
+}
+function wakeOff(){ try{ if(autoLock){ autoLock.release(); autoLock=null; } }catch(e){} }
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&autoOn) wakeOn(); });
+
+/* Consecutive points within DWELL_M are one stop, drawn as a single dot
+   sized by how long the registrar stood there. */
+function dwellGroups(pts){
+  const out=[];
+  pts.forEach(p=>{
+    const g=out[out.length-1];
+    if(g&&metres(g,p)<=DWELL_M){
+      g.items.push(p);
+      g.lat=g.items.reduce((s,x)=>s+x.lat,0)/g.items.length;
+      g.lng=g.items.reduce((s,x)=>s+x.lng,0)/g.items.length;
+    } else out.push({lat:p.lat,lng:p.lng,items:[p]});
+  });
+  out.forEach(g=>{
+    g.from=g.items[0].t; g.to=g.items[g.items.length-1].t;
+    g.mins=Math.round((Date.parse(g.to)-Date.parse(g.from))/60000);
+  });
+  return out;
+}
+function trackWalk(d){ return pathLength(trackPts(d).map(p=>({lat:p.lat,lng:p.lng}))); }
+function trackSpan(d){
+  const a=trackPts(d); if(a.length<2) return 0;
+  return Date.parse(a[a.length-1].t)-Date.parse(a[0].t);
+}
+const asMins=ms=>{ const m=Math.round(ms/60000); return m<60?m+' min':Math.floor(m/60)+'h '+(m%60)+'m'; };
+
+function autoStatus(){
+  const d=currentDay(), last=trackLast(d), n=trackPts(d).length;
+  const nextIn=last?Math.max(0,AUTO_MS-(Date.now()-Date.parse(last.t))):0;
+  const mmss=ms=>{ const s=Math.round(ms/1000); return Math.floor(s/60)+':'+pad(s%60,2); };
+  const bar = !autoOn
+    ? `<div class="sync-bar off"><span class="d"></span>
+        <div class="t"><b>Tracking is off.</b> Nothing is being recorded.${n?' Day '+d+' has '+n+' point'+(n===1?'':'s')+' from earlier.':''}</div></div>`
+  : last
+    ? `<div class="sync-bar ok"><span class="d"></span>
+        <div class="t"><b>Tracking on \u00b7 ${n} point${n===1?'':'s'} on Day ${d}.</b><br>
+        Last point ${hhmm(last.t)} (\u00b1${last.acc} m) \u00b7 next in ${mmss(nextIn)}</div></div>`
+    : `<div class="sync-bar wait"><span class="d"></span>
+        <div class="t"><b>Tracking on.</b> Looking for the first point\u2026</div></div>`;
+  return `<div id="autoStatus">${bar}
+    <button class="btn ${autoOn?'btn-danger':'btn-ok'} btn-block" onclick="${autoOn?'autoStop()':'autoStart()'}">${autoOn?'Stop tracking':'Start tracking'}</button>
+    <div class="note" style="margin-top:13px">Keep the app open. The screen is held awake while tracking runs. If the phone is locked or another app comes to the front, the browser stops the page and no points are taken until you come back to it.</div>
+  </div>`;
+}
+function autoPaint(){
+  const e=document.getElementById('autoStatus');
+  if(e) e.outerHTML=autoStatus();
+}
+
+function renderAuto(d){
+  const days=trackDays();
+  if(!d) d = days.indexOf(autoDay)>-1?autoDay:(days.length?days[days.length-1]:currentDay());
+  autoDay=d;
+  const pts=trackPts(d), groups=dwellGroups(pts), stops=groups.filter(g=>g.mins>=10);
+  const chips=[];
+  for(let x=1;x<=DAYS;x++){
+    const n=trackPts(x).length;
+    chips.push(`<button class="${x===d?'on':''}" ${(n||x===currentDay())?`onclick="renderAuto(${x})"`:'disabled'}>Day ${x}${n?' \u00b7 '+n:''}</button>`);
+  }
+  app.innerHTML=`<div class="appbar">
+      <button class="ico-btn" onclick="renderMenu()">${I.back}</button>
+      <div class="titles"><div class="eyebrow">${esc(me)} \u00b7 automatic tracking</div><div class="title">Day ${d} track</div></div>
+      <span class="tag-pill me">${pts.length}</span>
+    </div>
+    <div class="body"><div class="list">
+      ${autoStatus()}
+      <div class="daybar">${chips.join('')}</div>
+      ${pts.length?`<div class="stat-grid">
+          <div class="stat"><div class="n">${asDist(trackWalk(d))}</div><div class="l">Distance walked on Day ${d}</div></div>
+          <div class="stat"><div class="n g">${trackSpan(d)?asMins(trackSpan(d)):'\u2014'}</div><div class="l">${hhmm(pts[0].t)} to ${hhmm(pts[pts.length-1].t)}</div></div>
+        </div>`:''}
+      <div id="amap"></div>
+      <div id="amapmsg"></div>
+      ${pts.length?`<div class="legend" style="margin:11px 2px 0">
+          <span><i class="tk"></i>Your track</span><span><i class="tg"></i>Gap in tracking</span>
+          <span><i class="mg"></i>Household registered</span><span><i class="my"></i>Revisit</span></div>
+        <div class="card" style="margin-top:13px">
+          <div class="kv"><span class="k">Points banked</span><span class="v">${pts.length}</span></div>
+          <div class="kv"><span class="k">Separate stops</span><span class="v">${groups.length}</span></div>
+          <div class="kv"><span class="k">Stops of 10 minutes or more</span><span class="v">${stops.length}</span></div>
+          <div class="kv"><span class="k">Households registered that day</span><span class="v">${dayCount(d)} of ${PER_DAY}</span></div>
+        </div>`
+      :`<div class="sync-bar wait" style="margin-top:13px"><span class="d"></span>
+          <div class="t">No track for Day ${d} yet. ${d===currentDay()?'Start tracking above and a point is banked every 5 minutes.':'Tracking was not running on that day.'}</div></div>`}
+    </div></div>`;
+  if(pts.length) drawAuto(d);
+  else { const m=document.getElementById('amap'); if(m) m.style.display='none'; }
+}
+
+function drawAuto(d){
+  const host=document.getElementById('amap');
+  if(!host) return;
+  host.innerHTML=`<div style="height:100%;display:grid;place-items:center"><div class="spin"></div></div>`;
+  withLeaflet(ok=>{
+    const h=document.getElementById('amap');
+    if(!h) return;
+    if(!ok||!window.L){
+      h.style.display='none';
+      const m=document.getElementById('amapmsg');
+      if(m) m.innerHTML=`<div class="sync-bar warn"><span class="d"></span>
+        <div class="t"><b>Map needs internet.</b> The points are safe on the phone and draw as soon as there is a connection.</div>
+        <button class="btn btn-ghost btn-sm" style="flex:0 0 auto" onclick="renderAuto(${d})">Retry</button></div>`;
+      return;
+    }
+    const msg=document.getElementById('amapmsg'); if(msg) msg.innerHTML='';
+    h.innerHTML='';
+    if(amap){ try{ amap.remove(); }catch(e){} amap=null; }
+    amap=L.map(h,{zoomControl:true,attributionControl:true});
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      {maxZoom:19, attribution:'\u00a9 OpenStreetMap contributors'}).addTo(amap);
+    const groups=dwellGroups(trackPts(d));
+    /* one segment at a time, so a hole in the tracking is dashed rather than
+       drawn as a walk in a straight line the registrar never made */
+    for(let i=1;i<groups.length;i++){
+      const a=groups[i-1], b=groups[i];
+      const gap=Date.parse(b.from)-Date.parse(a.to)>AUTO_GAP;
+      L.polyline([[a.lat,a.lng],[b.lat,b.lng]],
+        {color:gap?'#98adbd':'#5f7f96', weight:gap?2:3, opacity:gap?.7:.85,
+         dashArray:gap?'5 8':null}).addTo(amap);
+    }
+    groups.forEach(g=>{
+      L.circleMarker([g.lat,g.lng],{radius:4+Math.min(9,g.mins/6),color:'#5f7f96',
+        weight:2,fillColor:'#ffffff',fillOpacity:.95}).addTo(amap)
+        .bindPopup(`<div class="mpop"><b>${hhmm(g.from)}${g.mins?'\u2013'+hhmm(g.to):''}</b><br>
+          ${g.items.length} point${g.items.length===1?'':'s'}${g.mins?' \u00b7 stopped ' +g.mins+' min':''}<br>
+          ${g.lat.toFixed(5)}, ${g.lng.toFixed(5)}</div>`);
+    });
+    /* the households sit on top, so the walk and the work read together */
+    const hh=clusterPoints(trackPoints(d));
+    hh.forEach(g=>{
+      const anyRev=g.items.some(p=>p.rev), multi=g.hs.length>1;
+      const w=multi?12+g.label.length*7:26;
+      L.marker([g.lat,g.lng],{icon:L.divIcon({className:'',
+        html:`<div class="mk ${anyRev?'rev':'reg'} ${multi?'multi':''}">${esc(g.label)}</div>`,
+        iconSize:[w,26],iconAnchor:[w/2,13]}),zIndexOffset:1000}).addTo(amap)
+        .bindPopup(`<div class="mpop"><b>Household ${g.hs.join(', ')}</b></div>`);
+    });
+    const all=groups.map(g=>[g.lat,g.lng]).concat(hh.map(g=>[g.lat,g.lng]));
+    if(all.length>1) amap.fitBounds(L.latLngBounds(all).pad(0.18));
+    else amap.setView(all[0],17);
+    setTimeout(()=>{ try{ amap.invalidateSize(); }catch(e){} },200);
+  });
+}
+
+/* =========================================================
+   25 HOUSEHOLD CARDS FOR ONE DAY
+   ========================================================= */
+function renderDay(d){
+  gpsStop();
+  if(!dayOpen(d)){ renderDays(); return; }
+  const nx=nextHH(d);
+  let tiles='';
+  for(let h=1;h<=PER_DAY;h++){
+    const ok=isDone(d,h), open=hhOpen(d,h);
+    const rec=recGet(d,h), pend=ok&&needsSend(rec), rev=isRevisit(rec);
+    const cls = rev?'revisit' : ok?'done' : open?(h===nx?'todo next':'todo') : 'locked todo';
+    const state = rev?'Revisit' : ok?(pend?'To send':'Sent') : open?(h===nx?'Next':'To do') : I.lock;
+    tiles+=`<button class="tile hh ${cls}" ${open?`onclick="openHH(${d},${h})"`:`onclick="toast('Household ${h-1} has to be registered first.')"`}>
+      ${pend?'<span class="pend"></span>':''}
+      <span class="hn">${h}</span><span class="hs">${state}</span></button>`;
+  }
+  const n=dayCount(d);
+  app.innerHTML=`<div class="appbar">
+      <button class="ico-btn" onclick="renderDays()">${I.back}</button>
+      <div class="titles"><div class="eyebrow">${esc(me)} · Day ${d} of ${DAYS}</div><div class="title">25 households</div></div>
+      <span class="tag-pill me">${n}/${PER_DAY}</span>
+    </div>
+    <div class="body"><div class="list">
+      <h2>Day ${d}</h2>
+      <div class="sub">${n} of ${PER_DAY} visited${revisitCount(d)?', '+revisitCount(d)+' waiting for a revisit':''}.${nx?' Household '+nx+' is next — they open one at a time, in order.':' Day '+d+' is complete'+(d<DAYS?', Day '+(d+1)+' is now open.':'.')}</div>
+      ${daySubmitBar(d)}
+      <div class="legend"><span><i class="d"></i>Registered</span><span><i class="r"></i>Revisit</span><span><i class="t"></i>Not registered</span><span><i class="l"></i>Locked</span></div>
+      <div class="grid g4">${tiles}</div>
+    </div></div>`;
+}
+
+/* The day's records are submitted as a batch, once the day is finished. */
+function daySubmitBar(d){
+  if(!dayComplete(d)) return `<div class="sync-bar wait"><span class="d"></span>
+    <div class="t">Records are submitted once all ${PER_DAY} households of the day are registered.</div></div>`;
+  const out=dayToSend(d), changed=dayRecs(d).filter(r=>r._submitted&&r._dirty).length;
+  if(!out.length) return `<div class="sync-bar ok"><span class="d"></span>
+    <div class="t"><b>Day ${d} submitted.</b> All ${PER_DAY} records are in NMDR.</div></div>`;
+  const label = changed===out.length
+    ? 'Resubmit '+changed+' changed record'+(changed===1?'':'s')
+    : 'Submit Day '+d+' \u00b7 '+out.length+' record'+(out.length===1?'':'s');
+  return `<div class="sync-bar warn"><span class="d"></span>
+    <div class="t"><b>${out.length} record${out.length===1?'':'s'} not submitted.</b>${changed?'<br>'+changed+' of them changed since the last submission.':''}</div>
+    <button class="btn btn-primary btn-sm" style="flex:0 0 auto" onclick="submitDay(${d})">${changed===out.length?'Resubmit':'Submit'}</button></div>`;
+}
+/* Sends one record at a time and reports what got through. A record that fails
+   keeps its unsent flag, so pressing Submit again picks up only what is left. */
+function submitDay(d){
+  if(!GAS_URL){ setGAS(); return; }
+  const q=dayToSend(d);
+  if(!q.length){ toast('Day '+d+' is already submitted'); return; }
+  if(!navigator.onLine){ modal(`<h3>No internet</h3>
+    <p>Day ${d} has ${q.length} record${q.length===1?'':'s'} to submit. They are safe on this device \u2014 connect and submit again.</p>
+    <div class="acts"><button class="btn btn-primary" onclick="closeModal()">Close</button></div>`); return; }
+  let i=0, sent=0, failed=0;
+  const draw=()=>modal(`<h3>Submitting Day ${d}</h3><div class="spin"></div>
+    <p style="text-align:center">Record ${Math.min(i+1,q.length)} of ${q.length}</p>`);
+  draw();
+  const step=()=>{
+    if(i>=q.length){ saveRecs(); doneSubmit(d,sent,failed); return; }
+    const rec=q[i]; draw();
+    sendRec(rec,(ok,status)=>{
+      if(ok){ rec._submitted=true; rec._dirty=false; rec._submittedAt=new Date().toISOString(); sent++; }
+      else { rec._lastError=status||'failed'; failed++; }
+      saveRecs(); i++; setTimeout(step,250);
+    });
+  };
+  step();
+}
+function doneSubmit(d,sent,failed){
+  const left=dayToSend(d).length;
+  modal(`<h3>${failed?'Partly submitted':'Day '+d+' submitted'}</h3>
+    <p>${sent} record${sent===1?'':'s'} went into NMDR.${failed?' '+failed+' could not be sent and are still on this device.':''}</p>
+    ${failed?`<div class="err">Day ${d} has ${left} record${left===1?'':'s'} left to submit.</div>`
+            :`<div class="gps-ok">Nothing left to send for Day ${d}.</div>`}
+    <div class="acts">
+      <button class="btn btn-ghost" onclick="closeModal();renderDay(${d})">Day ${d}</button>
+      ${failed?`<button class="btn btn-primary" onclick="closeModal();submitDay(${d})">Try the rest</button>`
+              :`<button class="btn btn-ok" onclick="closeModal();renderDays()">Back to the days</button>`}
+    </div>`);
+}
+
+
+/* =========================================================
+   REVISIT — coming back to a household nobody was home at
+   ---------------------------------------------------------
+   The registrar has to be standing at the household to open it: a fresh
+   fix must be within REVISIT_M of the point taken on the first visit.
+   ========================================================= */
+const REVISIT_M=50;
+function renderRevisitCard(){
+  const d=formD,h=formH,r=recGet(d,h)||{};
+  app.innerHTML=`<div class="appbar">
+      <button class="ico-btn" onclick="renderDay(${d})">${I.back}</button>
+      <div class="titles"><div class="eyebrow">${esc(me)} \u00b7 Day ${d}</div><div class="title">Household ${h} \u00b7 revisit</div></div>
+      <span class="tag-pill me">${hhSerial(d,h)}/${DAYS*PER_DAY}</span>
+    </div>
+    <div class="body"><div class="list">
+      <div class="hd-head" style="background:linear-gradient(160deg,#e0a100,#a67c00)">
+        <div class="id">Revisit</div>
+        <div class="meta">Nobody was available on ${esc(String(r._ts||'').slice(0,10))}.<br>
+          Point taken: ${esc(r.revisitLat)}, ${esc(r.revisitLng)} (\u00b1${esc(r.revisitAcc)} m)</div></div>
+      ${r._submitted?`<div class="sync-bar ok"><span class="d"></span><div class="t"><b>The revisit is in NMDR.</b></div></div>`
+        :`<div class="sync-bar warn"><span class="d"></span><div class="t"><b>Saved on this device.</b><br>It goes to NMDR on its own as soon as there is internet.</div></div>`}
+      <div class="note">To register this household you must be at it. Tap below while you are standing there \u2014 your position is checked against the point taken on the first visit, and must be within ${REVISIT_M} m.</div>
+      <div id="gate"></div>
+    </div></div>
+    <div class="footer">
+      <button class="btn btn-ghost btn-sm" onclick="renderDay(${d})">Day ${d}</button>
+      <button class="btn btn-ok" onclick="revisitGate()">I am at the household</button>
+    </div>`;
+}
+/* The tap that starts this is also the user gesture the browser wants before
+   it will raise a permission box. */
+function revisitGate(){
+  const d=formD,h=formH,r=recGet(d,h)||{};
+  modal(`<h3>Checking you are at the household</h3><div class="spin"></div>
+    <p style="text-align:center">Taking your position\u2026</p>`);
+  gpsFix=null; gpsState='idle';
+  beginGps();
+  const t0=Date.now();
+  const tick=()=>{
+    if(gpsState==='ok'&&gpsFix){ gateResult(gpsFix,r); return; }
+    if(gpsState==='fail'){
+      modal(`<h3>No GPS point yet</h3><p>${esc(gpsErr)} ${esc(gpsHint.replace(/<[^>]+>/g,''))}</p>
+        <div class="acts">
+          <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+          <button class="btn btn-primary" onclick="revisitGate()">Try again</button>
+        </div>`);
+      return;
+    }
+    if(Date.now()-t0>45000){
+      modal(`<h3>Still no position</h3><p>The check needs a GPS point. Step into the open and try again.</p>
+        <div class="acts"><button class="btn btn-ghost" onclick="closeModal()">Close</button>
+        <button class="btn btn-primary" onclick="revisitGate()">Try again</button></div>`);
+      return;
+    }
+    setTimeout(tick,300);
+  };
+  setTimeout(tick,200);
+}
+function gateResult(fix,r){
+  const away=metres({lat:Number(r.revisitLat),lng:Number(r.revisitLng)},{lat:fix.lat,lng:fix.lng});
+  if(away>REVISIT_M){
+    modal(`<h3>You are not at the household</h3>
+      <p>You are about <b>${asDist(away)}</b> from the point taken on the first visit. Go to where you took that GPS point before, then take it again.</p>
+      <div class="err">Household ${formH} cannot be opened from here.</div>
+      <div class="acts">
+        <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+        <button class="btn btn-primary" onclick="revisitGate()">Take it again</button>
+      </div>`);
+    return;
+  }
+  closeModal();
+  /* at the household: open the full form, keeping the first-visit point */
+  showErr=false; editing=false;
+  form={hhrPhone:Store.get('itn_hhr_phone_'+me,mePhone||'')};
+  renderForm();
+  toast('You are '+asDist(away)+' from the first point \u2014 carry on');
+}
+/* =========================================================
+   ONE HOUSEHOLD
+   ========================================================= */
+/* ---------- the registration form ---------- */
+/* Q3 branches: a household with no phone gives an alternative contact; with no
+   alternative either, the registrar's own number is recorded so the household
+   can still be reached through them. */
+const FORM=[
+  {id:'adults', n:1, q:'Are adults available in the household to do the registration?', type:'yn',
+     help:'If nobody is there, take the GPS point and mark the household for a revisit.'},
+  {id:'first', n:2, q:'First name of household head', type:'text', ph:'First name', when:a=>a.adults==='Yes'},
+  {id:'last',  n:3, q:'Last name of household head',  type:'text', ph:'Last name',  when:a=>a.adults==='Yes'},
+  {id:'hasPhone', n:4, q:'Do you have a telephone number?', type:'yn', when:a=>a.adults==='Yes'},
+  {id:'phone',       q:'Telephone number', type:'tel', ph:'076123456',
+     when:a=>a.adults==='Yes'&&a.hasPhone==='Yes'},
+  {id:'hasAlt',      q:'Do you have someone else\u2019s number you can give if we want to call you?', type:'yn',
+     when:a=>a.adults==='Yes'&&a.hasPhone==='No'},
+  {id:'altPhone',    q:'Telephone number of that person', type:'tel', ph:'076123456',
+     when:a=>a.adults==='Yes'&&a.hasPhone==='No'&&a.hasAlt==='Yes'},
+  {id:'hhrPhone',    q:'HHR telephone number', type:'tel', ph:'Your own number',
+     help:'The household has no number to give, so your number is recorded as the contact.',
+     when:a=>a.adults==='Yes'&&a.hasPhone==='No'&&a.hasAlt==='No'},
+  {id:'size',  n:5, q:'Number of people in the household', type:'int', unit:'people', min:1, max:60,
+     when:a=>a.adults==='Yes'},
+  {id:'itns',  n:6, q:'ITNs to be given', type:'calc',
+     help:'1 to 2 people = 1 ITN, 3 to 4 = 2 ITNs, 5 or more = 3 ITNs.',
+     from:a=>itnsFor(a.size), when:a=>a.adults==='Yes'},
+  {id:'u5',    n:7, q:'How many under-fives are in the household?', type:'int', unit:'under-fives', min:0, max:30,
+     when:a=>a.adults==='Yes'},
+  {id:'preg',  n:8, q:'How many pregnant women are in the household?', type:'int', unit:'pregnant women', min:0, max:20,
+     when:a=>a.adults==='Yes'},
+  {id:'token', n:9, q:'Household token', type:'calc',
+     help:'Generated from your HHR ID, the household number and the head\u2019s initials.',
+     from:a=>a._token||'', when:a=>a.adults==='Yes'}
+];
+function itnsFor(size){
+  const n=parseInt(size,10);
+  if(!n||n<1) return '';
+  if(n<=2) return 1;
+  if(n<=4) return 2;
+  return 3;
+}
+/* HHR01_1_MK — the household number runs across the whole 10 days for this
+   HHR (Day 1 HH1 = 1 … Day 10 HH25 = 250) so no two tokens can collide. */
+function hhSerial(d,h){ return (d-1)*PER_DAY+h; }
+function tokenFor(id,d,h,first,last){
+  const ini=(String(first||'').trim()[0]||'')+(String(last||'').trim()[0]||'');
+  return id+'_'+hhSerial(d,h)+'_'+ini.toUpperCase();
+}
+const digits=v=>String(v||'').replace(/\D/g,'');
+const PHONE_LEN=9;
+function visibleQs(a){ return FORM.filter(q=>!q.when||q.when(a)); }
+function fieldErr(q,a){
+  if(q.type==='calc') return '';
+  const v=a[q.id];
+  if(v===undefined||v===null||String(v).trim()==='') return 'Required.';
+  if(q.type==='tel'){
+    const n=digits(v).length;
+    if(n<PHONE_LEN) return 'A telephone number is exactly '+PHONE_LEN+' digits \u2014 this one has '+n+'.';
+    if(n>PHONE_LEN) return 'A telephone number is exactly '+PHONE_LEN+' digits.';
+  }
+  if(q.type==='int'){
+    const n=Number(v);
+    if(!Number.isInteger(n)) return 'Whole numbers only.';
+    if(q.min!=null&&n<q.min) return 'Cannot be less than '+q.min+'.';
+    if(q.max!=null&&n>q.max) return 'Cannot be more than '+q.max+'.';
+  }
+  /* under-fives and pregnant women are both counted among the household, so
+     together they cannot outnumber it */
+  if((q.id==='u5'||q.id==='preg')&&a.size!==undefined&&String(a.size).trim()!==''){
+    const u=Number(a.u5), p=Number(a.preg), size=Number(a.size);
+    if(!isNaN(u)&&!isNaN(p)&&u+p>size)
+      return 'Under-fives ('+u+') and pregnant women ('+p+') come to '+(u+p)+', more than the '+size+' people in the household.';
+  }
+  return '';
+}
+
+/* =========================================================
+   ONE HOUSEHOLD
+   ========================================================= */
+let form={}, formD=0, formH=0, showErr=false, editing=false;
+/* The GPS point is taken in the background from the moment the form opens, so
+   by the time the token has been written and submission reaches the GPS step it
+   is almost always already captured. It stays LAST in the flow — nothing is
+   saved before it — but the wait moves off the end of the interview. */
+let gpsFix=null, gpsState='idle', gpsErr='', gpsHint='', gpsNext=null;
+let gpsWatch=null, gpsT0=0, gpsTick=null;
+const GPS_GOOD=25;        /* metres: accurate enough to stop chasing a better one */
+const GPS_BUDGET=60000;   /* keep trying to improve for this long, then settle */
+
+/* Diagnostics for the field: whatever the browser actually told us, kept so a
+   registrar can read it back over the phone instead of "it does not work". */
+let gpsDiag='';
+function gpsContext(){
+  const secure=(window.isSecureContext!==false);
+  return (location.protocol||'?')+(secure?' · secure':' · NOT secure');
+}
+/* Two things stop a fix before the signal is ever involved, and both look like
+   bad GPS: a page that is not https, and a permission prompt the browser will
+   not show without a tap. Neither is a reason to refuse to try — we attempt
+   anyway and keep a button so the registrar can trigger it by hand. */
+function gpsStop(){
+  if(gpsWatch!=null&&navigator.geolocation&&navigator.geolocation.clearWatch){
+    try{ navigator.geolocation.clearWatch(gpsWatch); }catch(e){}
+  }
+  gpsWatch=null;
+  if(gpsTick){ clearInterval(gpsTick); gpsTick=null; }
+}
+function gpsSecs(){ return gpsT0?Math.round((Date.now()-gpsT0)/1000):0; }
+
+/* Two attempts run together, because one alone is what makes this hard in the
+   field: a quick coarse fix so there is something within a second or two, and
+   a watch on the real GPS that keeps replacing it with a better one. The best
+   reading wins. We stop as soon as it is accurate enough, or when the time
+   budget runs out. */
+function beginGps(){
+  if(editing) return;
+  gpsStop();
+  if(!navigator.geolocation){
+    gpsState='fail'; gpsErr='This browser has no location support.'; gpsHint='';
+    gpsDiag='no navigator.geolocation · '+gpsContext(); paintGps(); return;
+  }
+  gpsFix=null; gpsState='getting'; gpsErr=''; gpsHint=''; gpsDiag=''; gpsT0=Date.now();
+  paintGps();
+
+  /* 1 — fast and rough: happy with a cached or network-derived position */
+  try{
+    navigator.geolocation.getCurrentPosition(
+      p=>gpsTake(p),
+      ()=>{},                                /* its failure is not fatal, the watch continues */
+      {enableHighAccuracy:false, timeout:15000, maximumAge:120000});
+  }catch(e){}
+
+  /* 2 — the real thing, reporting repeatedly as the fix sharpens */
+  try{
+    gpsWatch=navigator.geolocation.watchPosition(
+      p=>gpsTake(p),
+      e=>gpsProblem(e),
+      {enableHighAccuracy:true, timeout:45000, maximumAge:0});
+  }catch(e){
+    try{
+      navigator.geolocation.getCurrentPosition(p=>gpsTake(p),e2=>gpsProblem(e2),
+        {enableHighAccuracy:true, timeout:45000, maximumAge:0});
+    }catch(e2){ gpsProblem({code:0,message:String(e2&&e2.message||e2)}); }
+  }
+
+  /* the card counts up while it searches, so a long wait looks like progress
+     rather than a hang */
+  gpsTick=setInterval(()=>{
+    if(gpsState==='getting'||(gpsState==='ok'&&gpsWatch!=null)) paintGps();
+    if(gpsT0&&Date.now()-gpsT0>GPS_BUDGET){
+      if(gpsFix) gpsStop();
+      else if(gpsState==='getting'){
+        gpsState='fail';
+        gpsErr='No location after '+Math.round(GPS_BUDGET/1000)+' seconds.';
+        gpsHint='Tap <b>Take the GPS point</b> below. If a permission box appears, allow it. Then step into the open, away from walls and roofs.';
+        gpsDiag='no response · '+gpsContext();
+        gpsStop();
+      }
+      paintGps();
+    }
+  },1000);
+}
+function gpsTake(p){
+  if(!p||!p.coords) return;
+  const f={lat:+p.coords.latitude.toFixed(6), lng:+p.coords.longitude.toFixed(6),
+           acc:Math.round(p.coords.accuracy||0), at:new Date().toISOString()};
+  if(!gpsFix||f.acc<=gpsFix.acc) gpsFix=f;      /* keep the sharpest reading */
+  gpsState='ok'; gpsErr=''; gpsHint=''; gpsDiag='';
+  if(gpsFix.acc<=GPS_GOOD||Date.now()-gpsT0>GPS_BUDGET) gpsStop();
+  paintGps();
+}
+function gpsProblem(e){
+  if(gpsFix){ gpsStop(); return; }             /* already have a point — ignore */
+  const code=e&&e.code;
+  const insecure=(window.isSecureContext===false);
+  gpsState='fail';
+  if(code===1){
+    gpsErr='The browser did not give permission.';
+    gpsHint=insecure
+      ? 'This page is not on https, and browsers refuse location there. Open the app from its https web address rather than a downloaded copy of the file.'
+      : 'Tap <b>Take the GPS point</b> below and allow location when the box appears. If no box appears, allow it from the padlock or (i) beside the address, and check location is on in the phone settings.';
+  } else if(code===2){
+    gpsErr='The device cannot work out where it is.';
+    gpsHint='Turn location on in the phone settings, step into the open, and tap <b>Take the GPS point</b>. Indoors it often fails.';
+  } else {
+    gpsErr='Location is taking too long.';
+    gpsHint='Step into the open, away from walls and roofs, then tap <b>Take the GPS point</b>.';
+  }
+  gpsDiag='code '+(code==null?'?':code)+(e&&e.message?' · '+e.message:'')+' · '+gpsContext();
+  gpsStop(); paintGps();
+}
+/* Always one tap away. Some browsers will not raise the permission box unless
+   the request comes from a tap, so the automatic attempt on its own is not
+   enough — this button is the gesture. */
+function gpsButton(label,kind){
+  return `<button class="btn ${kind||'btn-primary'} btn-block btn-sm" style="margin-top:9px" onclick="beginGps()">${label}</button>`;
+}
+function gpsCard(){
+  const secs=gpsSecs();
+  const body =
+    gpsState==='ok'
+      ? `<div class="gps-ok">Captured \u00b7 ${gpsFix.lat}, ${gpsFix.lng} (\u00b1${gpsFix.acc} m)</div>
+         ${gpsWatch!=null?`<div class="q-help" style="margin:8px 0 0">Still sharpening the point \u2014 you can carry on, the best reading is kept.</div>`:''}
+         ${gpsFix.acc>GPS_GOOD&&gpsWatch==null?`<div class="q-help" style="margin:8px 0 0">\u00b1${gpsFix.acc} m is rough. Fine to submit, or take it again in the open for a tighter point.</div>
+           ${gpsButton('Take the GPS point again','btn-ghost')}`:''}`
+  : gpsState==='fail'
+      ? `<div class="err">${esc(gpsErr)} A point is needed before this household can be registered.</div>
+         ${gpsHint?`<div class="q-help" style="margin:8px 0 0">${gpsHint}</div>`:''}
+         ${gpsButton('Take the GPS point')}
+         ${gpsDiag?`<div class="gps-diag">${esc(gpsDiag)}</div>`:''}`
+  :       `<div class="sync-bar wait" style="margin:0"><span class="d"></span>
+            <div class="t">Looking for the location\u2026 ${secs}s. Carry on with the questions \u2014 it keeps searching in the background.</div></div>
+           ${secs>=8?gpsButton('Take the GPS point now','btn-ghost'):''}`;
+  return `<div class="q-card" id="qc_gps">
+    <span class="q-no">GPS</span>
+    <div class="q-txt">Location of the household</div>
+    <div class="q-help">Taken automatically, no typing. Recorded with the household when you submit.</div>
+    ${body}</div>`;
+}
+function paintGps(){ const e=document.getElementById('qc_gps'); if(e) e.outerHTML=gpsCard(); }
+
+function openHH(d,h){
+  if(!hhOpen(d,h)){ renderDay(d); return; }
+  formD=d; formH=h; showErr=false; editing=false;
+  form=Object.assign({},recGet(d,h));
+  if(!form.hhrPhone) form.hhrPhone=Store.get('itn_hhr_phone_'+me,mePhone||'');
+  if(isDone(d,h)){
+    gpsStop(); gpsFix=null; gpsState='idle';
+    isRevisit(recGet(d,h)) ? renderRevisitCard() : renderSaved();
+    return;
+  }
+  renderForm();
+  beginGps();          /* start the fix now, not at the end */
+}
+/* Editing changes the values of an existing record. Its token has already been
+   written on paper and given to the household head, so the token is frozen
+   from the first submission onwards even if a name is corrected. */
+function editHH(){
+  editing=true; showErr=false;
+  form=Object.assign({},recGet(formD,formH));
+  renderForm();
+}
+function refreshToken(){
+  if(editing&&form.token){ form._token=form.token; return; }
+  form._token=tokenFor(me,formD,formH,form.first,form.last);
+}
+
+function ctl(q){
+  const v=form[q.id]==null?'':form[q.id];
+  if(q.type==='yn'){
+    return `<div class="opts">
+      <div class="opt yes ${v==='Yes'?'sel':''}" data-q="${q.id}" data-v="Yes"><span class="mark"></span><span>Yes</span></div>
+      <div class="opt no ${v==='No'?'sel':''}" data-q="${q.id}" data-v="No"><span class="mark"></span><span>No</span></div>
+    </div>`;
+  }
+  if(q.type==='calc'){
+    const val=q.from(form);
+    return `<div class="field"><input type="text" readonly value="${esc(val===''?'\u2014':val)}"></div>`;
+  }
+  const t=q.type==='tel'?'tel':q.type==='int'?'number':'text';
+  const attrs=[q.min!=null?`min="${q.min}"`:'',q.max!=null?`max="${q.max}"`:'',q.type==='int'?'step="1" inputmode="numeric"':'',
+               q.type==='tel'?`inputmode="numeric" maxlength="${PHONE_LEN}"`:'',q.ph?`placeholder="${esc(q.ph)}"`:''].join(' ');
+  const inp=`<input type="${t}" ${attrs} data-k="${q.id}" value="${esc(v)}">`;
+  return q.unit?`<div class="field unit">${inp}<span class="u">${esc(q.unit)}</span></div>`:`<div class="field">${inp}</div>`;
+}
+function qCard(q){
+  const e=showErr?fieldErr(q,form):'';
+  return `<div class="q-card ${e?'missing':''}" id="qc_${q.id}">
+    ${q.n?`<span class="q-no">Q${q.n}</span>`:''}
+    <div class="q-txt">${esc(q.q)}${q.type==='calc'?'':'<span class="req">*</span>'}</div>
+    ${q.help?`<div class="q-help">${esc(q.help)}</div>`:''}
+    ${ctl(q)}
+    ${e?`<div class="err">${esc(e)}</div>`:''}
+  </div>`;
+}
+function renderForm(){
+  refreshToken();
+  const d=formD,h=formH;
+  app.innerHTML=`<div class="appbar">
+      <button class="ico-btn" onclick="renderDay(${d})">${I.back}</button>
+      <div class="titles"><div class="eyebrow">${esc(me)} · Day ${d}</div><div class="title">Household ${h} of ${PER_DAY}</div></div>
+      <span class="tag-pill me">${hhSerial(d,h)}/${DAYS*PER_DAY}</span>
+    </div>
+    <div class="body"><div class="list" id="fb">
+      <div class="hd-head"><div class="id">${esc(editing?(form.token||''):me+' \u00b7 D'+d+' \u00b7 HH'+h)}</div>
+        <div class="meta">Household ${h} on Day ${d} \u2014 number ${hhSerial(d,h)} of your ${DAYS*PER_DAY}.${editing?'<br>Correcting the answers on a record that is already registered.':''}</div></div>
+      ${editing?`<div class="note">Change the answers that are wrong and save. This updates the same record \u2014 it does not create a second registration, and the token stays as it was given to the household head.</div>`:''}
+      ${visibleQs(form).map(qCard).join('')}
+      ${editing?'':gpsCard()}
+    </div></div>
+    <div class="footer">${editing
+      ? `<button class="btn btn-ghost btn-sm" onclick="editing=false;renderSaved()">Cancel</button>
+         <button class="btn btn-ok" onclick="submitHH()">Save changes</button>`
+      : `<button class="btn btn-ok btn-block" onclick="submitHH()">Register household ${h}</button>`}</div>`;
+  wireForm();
+}
+function wireForm(){
+  const b=document.getElementById('fb'); if(!b) return;
+  b.addEventListener('click',e=>{
+    const o=e.target.closest('.opt'); if(!o) return;
+    form[o.dataset.q]=o.dataset.v;
+    if(o.dataset.q==='hasPhone'){ delete form.hasAlt; delete form.phone; delete form.altPhone; }
+    if(o.dataset.q==='hasAlt'){ delete form.altPhone; }
+    renderForm();
+    const c=document.getElementById('qc_'+o.dataset.q); if(c) c.scrollIntoView({behavior:'smooth',block:'center'});
+  });
+  b.addEventListener('input',e=>{
+    const i=e.target.closest('[data-k]'); if(!i) return;
+    const k=i.dataset.k;
+    const qq=FORM.find(x=>x.id===k);
+    if(qq&&qq.type==='tel'){                     /* digits only, never more than 9 */
+      const clean=digits(i.value).slice(0,PHONE_LEN);
+      if(i.value!==clean){ const at=i.selectionStart; i.value=clean;
+        try{ i.setSelectionRange(Math.min(at,clean.length),Math.min(at,clean.length)); }catch(_){} }
+    }
+    form[k]=i.value;
+    const card=document.getElementById('qc_'+k);
+    if(card){ card.classList.remove('missing'); const er=card.querySelector('.err'); if(er) er.remove(); }
+    if(k==='first'||k==='last'){ refreshToken(); paint('token',form._token); }
+    if(k==='size'){ paint('itns',itnsFor(form.size)); }
+  });
+}
+function paint(id,val){
+  const c=document.getElementById('qc_'+id); if(!c) return;
+  const i=c.querySelector('input'); if(i) i.value=(val===''||val==null)?'\u2014':val;
+}
+
+/* ---------- submit: token, then GPS ---------- */
+function submitHH(){
+  refreshToken();
+  const qs=visibleQs(form), bad=qs.filter(q=>fieldErr(q,form));
+  if(bad.length){
+    showErr=true; renderForm();
+    const f=document.getElementById('qc_'+bad[0].id);
+    if(f) f.scrollIntoView({behavior:'smooth',block:'center'});
+    toast(bad.length+' question'+(bad.length===1?'':'s')+' to fix');
+    return;
+  }
+  showErr=false;
+  if(editing){ saveEdit(); return; }
+  /* nobody home: no names, no token — just the point and a revisit flag */
+  if(form.adults==='No'){ gpsStep(finishRevisit); return; }
+  tokenStep(false);
+}
+/* An edit keeps the record's _id, token and GPS point, bumps its revision and
+   marks it for resending. The server updates that row rather than adding one. */
+function saveEdit(){
+  const d=formD,h=formH,old=recGet(d,h)||{};
+  const rec=Object.assign({},old,form,{
+    itns:itnsFor(form.size),
+    token:old.token||form._token,
+    _community:meCommunity||old._community||'',
+    _hhrFirst:meFirst||old._hhrFirst||'',
+    _hhrLast:meLast||old._hhrLast||'',
+    _hhrTel:mePhone||old._hhrTel||'',
+    _rev:(old._rev||1)+1,
+    _dirty:true,
+    _updatedAt:new Date().toISOString()
+  });
+  delete rec._token;
+  if(rec.hhrPhone) Store.set('itn_hhr_phone_'+me,rec.hhrPhone);
+  recSet(d,h,rec);
+  editing=false;
+  const was=!!old._submitted;
+  modal(`<h3>Changes saved</h3>
+    <div class="tok-show">${esc(rec.token)}</div>
+    <p style="margin-top:12px">${esc(rec.first+' '+rec.last)} \u00b7 ${rec.size} people \u00b7 ${rec.itns} ITN${rec.itns===1?'':'s'} \u00b7 ${rec.u5} under-five${Number(rec.u5)===1?'':'s'} \u00b7 ${rec.preg} pregnant<br>Revision ${rec._rev} \u00b7 same record, same token.</p>
+    ${was?`<div class="sync-bar warn" style="margin:0"><span class="d"></span>
+        <div class="t">This record was already submitted. Resubmit it so NMDR gets the corrected values.</div></div>`
+        :`<div class="gps-ok">It will go up with the rest of Day ${d}.</div>`}
+    <div class="acts">
+      <button class="btn btn-ghost" onclick="closeModal();renderSaved()">Close</button>
+      ${dayComplete(d)?`<button class="btn btn-primary" onclick="closeModal();submitDay(${d})">Resubmit now</button>`
+                      :`<button class="btn btn-ok" onclick="closeModal();renderDay(${d})">Day ${d}</button>`}
+    </div>`);
+}
+function closeModal(){ document.getElementById('modal').innerHTML=''; }
+function modal(html){ document.getElementById('modal').innerHTML=`<div class="ovl"><div class="sheet">${html}</div></div>`; }
+
+/* Step 1 — show the token and have the HHR write it down for the household. */
+function tokenStep(again){
+  modal(`<h3>${again?'Please write the token down':'Write this token down'}</h3>
+    <p>${again
+      ? 'The household head must be given the token on paper before this household can be submitted. Write it down and hand it over now.'
+      : 'HHR: write this token on paper and give it to the household head.'}</p>
+    <div class="tok-show">${esc(form._token)}</div>
+    ${again?`<div class="err" style="margin-top:10px">Not submitted yet.</div>`:''}
+    <p style="margin:14px 0 0">Have you written down the token and given it to the household head?</p>
+    <div class="acts">
+      <button class="btn btn-ghost" onclick="tokenStep(true)">No, not yet</button>
+      <button class="btn btn-ok" onclick="gpsStep()">Yes, it is written</button>
+    </div>`);
+}
+/* Step 2 — the GPS point. Usually already in hand, so this passes straight
+   through; otherwise it waits for the fix that is already being taken. */
+function gpsStep(next){
+  gpsNext = (typeof next==='function') ? next : finish;
+  if(gpsState==='ok'&&gpsFix){ gpsNext(gpsFix); return; }
+  /* a fix that failed earlier in the interview gets one fresh attempt now —
+     the registrar may well have moved outside since */
+  if(gpsState!=='getting') beginGps();
+  modal(`<h3>Waiting for the GPS point</h3><div class="spin"></div>
+    <p style="text-align:center" id="gpsWait">Everything else is ready. Step into the open if you can \u2014 the household is saved the moment a point comes in.</p>`);
+  const t0=Date.now();
+  const tick=()=>{
+    if(gpsState==='ok'&&gpsFix){ gpsNext(gpsFix); return; }
+    if(gpsState==='fail'){ gpsFail(gpsErr||'GPS could not get a fix.'); return; }
+    if(Date.now()-t0>30000){ gpsFail('GPS is taking too long.'); return; }
+    setTimeout(tick,250);
+  };
+  setTimeout(tick,150);
+}
+/* A GPS point is required. Without one the household is not registered — the
+   only ways out are to try again or to leave the form open and come back. */
+function gpsFail(msg){
+  modal(`<h3>No GPS point yet</h3>
+    <p>${esc(msg)} Step outside or into the open and try again. The household cannot be registered without its GPS point.</p>
+    <div class="err">Household ${formH} is not registered.</div>
+    <div class="acts">
+      <button class="btn btn-ghost" onclick="closeModal();paintGps()">Not now</button>
+      <button class="btn btn-primary" onclick="beginGps();gpsStep(gpsNext)">Try again</button>
+    </div>`);
+}
+function finish(gps){
+  const d=formD,h=formH;
+  const was=recGet(d,h)||{};          /* a revisit being completed keeps its first point */
+  const rec=Object.assign({},form,{
+    _status:'Registered',
+    revisitLat:was.revisitLat||'', revisitLng:was.revisitLng||'',
+    revisitAcc:was.revisitAcc||'', revisitAt:was.revisitAt||'',
+    _wasRevisit:isRevisit(was)?'Yes':'',
+    _id:me+'-D'+d+'-H'+h,          /* stable — a resubmission updates this row */
+    _hhr:me, _day:d, _hh:h, _serial:hhSerial(d,h),
+    _district:(hhrPlace(me)||{}).district||'', _chiefdom:(hhrPlace(me)||{}).chiefdom||'',
+    _phu:(hhrPlace(me)||{}).phu||'', _phuCode:(hhrPlace(me)||{}).phuCode||'',
+    _community:meCommunity||'', _hhrFirst:meFirst||'', _hhrLast:meLast||'', _hhrTel:mePhone||'',
+    token:form._token, itns:itnsFor(form.size),
+    gpsLat:gps.lat, gpsLng:gps.lng, gpsAcc:gps.acc, gpsAt:gps.at,
+    _rev:(was._rev||0)+1, _submitted:false, _dirty:false, _submittedAt:'',
+    _ts:was._ts||new Date().toISOString(), _registeredAt:new Date().toISOString()
+  });
+  delete rec._token;
+  if(rec.hhrPhone) Store.set('itn_hhr_phone_'+me,rec.hhrPhone);
+  recSet(d,h,rec);
+  setDone(d,h,true);
+  gpsStop(); gpsFix=null; gpsState='idle';
+  closeModal();
+  savedModal(rec,'sending');
+  /* each household goes up on its own, as soon as it is registered */
+  if(!GAS_URL||!navigator.onLine){ savedModal(rec,'queued'); return; }
+  sendRec(rec,(ok,status)=>{
+    if(ok){ rec._submitted=true; rec._dirty=false; rec._submittedAt=new Date().toISOString(); }
+    else rec._lastError=status||'failed';
+    saveRecs();
+    savedModal(rec,ok?'sent':'failed');
+  });
+}
+/* Nobody was home. The point is taken so the household can be found again, and
+   the card turns yellow until someone comes back to it. */
+function finishRevisit(gps){
+  const d=formD,h=formH;
+  const rec={
+    _id:me+'-D'+d+'-H'+h, _hhr:me, _day:d, _hh:h, _serial:hhSerial(d,h),
+    _district:(hhrPlace(me)||{}).district||'', _chiefdom:(hhrPlace(me)||{}).chiefdom||'',
+    _phu:(hhrPlace(me)||{}).phu||'', _phuCode:(hhrPlace(me)||{}).phuCode||'',
+    _community:meCommunity||'', _hhrFirst:meFirst||'', _hhrLast:meLast||'', _hhrTel:mePhone||'',
+    _status:'Revisit', adults:'No', token:'',
+    revisitLat:gps.lat, revisitLng:gps.lng, revisitAcc:gps.acc, revisitAt:gps.at,
+    gpsLat:'', gpsLng:'', gpsAcc:'', gpsAt:'',
+    _rev:1, _submitted:false, _dirty:false, _submittedAt:'',
+    _ts:new Date().toISOString()
+  };
+  recSet(d,h,rec);
+  setDone(d,h,true);
+  gpsStop(); gpsFix=null; gpsState='idle';
+  closeModal();
+  revisitModal(rec,'sending');
+  if(!GAS_URL||!navigator.onLine){ revisitModal(rec,'queued'); return; }
+  sendRec(rec,(ok,status)=>{
+    if(ok){ rec._submitted=true; rec._dirty=false; rec._submittedAt=new Date().toISOString(); }
+    else rec._lastError=status||'failed';
+    saveRecs();
+    revisitModal(rec,ok?'sent':'queued');
+  });
+}
+function revisitModal(rec,state){
+  const d=rec._day,h=rec._hh;
+  const line =
+    state==='sending' ? `<div class="sync-bar wait" style="margin:13px 0 0"><span class="d"></span><div class="t">Sending to NMDR\u2026</div></div>`
+  : state==='sent'   ? `<div class="gps-ok" style="margin-top:13px">In NMDR.</div>`
+  :                    `<div class="sync-bar warn" style="margin:13px 0 0"><span class="d"></span>
+        <div class="t"><b>Saved on this device.</b><br>It goes to NMDR on its own as soon as there is internet.</div></div>`;
+  modal(`<h3>Household ${h} marked for revisit</h3>
+    <p>Nobody was available. The GPS point is saved so you can find the household again, and the card stays <b>yellow</b> until it is registered.</p>
+    <div class="gps-ok">Point \u00b7 ${rec.revisitLat}, ${rec.revisitLng} (\u00b1${rec.revisitAcc} m)</div>
+    ${line}
+    <div class="acts">
+      ${state==='sending'?'':`<button class="btn btn-ok btn-block" onclick="closeModal();renderDay(${d})">Back to Day ${d}</button>`}
+    </div>`);
+}
+
+/* The household that was just registered. There is deliberately no shortcut to
+   the next one: the registrar goes back to the day and opens the next card. */
+function savedModal(rec,state){
+  const d=rec._day,h=rec._hh;
+  const full=dayComplete(d);
+  const line =
+    state==='sending' ? `<div class="sync-bar wait" style="margin:13px 0 0"><span class="d"></span>
+        <div class="t">Sending this household to NMDR\u2026</div></div>`
+  : state==='sent'    ? `<div class="gps-ok" style="margin-top:13px">In NMDR.</div>`
+  : state==='queued'  ? `<div class="sync-bar warn" style="margin:13px 0 0"><span class="d"></span>
+        <div class="t"><b>Saved on this device.</b><br>${GAS_URL?'No internet \u2014 submit it from the household or with the day.':'NMDR is not connected.'}</div></div>`
+  :                     `<div class="sync-bar warn" style="margin:13px 0 0"><span class="d"></span>
+        <div class="t"><b>Saved, but it did not reach NMDR.</b><br>Open the household and submit it again.</div></div>`;
+  modal(`<h3>Household ${h} registered</h3>
+    <div class="tok-show">${esc(rec.token)}</div>
+    <p style="margin-top:12px">${esc(rec.first+' '+rec.last)} \u00b7 ${rec.size} people \u00b7 ${rec.itns} ITN${rec.itns===1?'':'s'} \u00b7 ${rec.u5} under-five${Number(rec.u5)===1?'':'s'} \u00b7 ${rec.preg} pregnant</p>
+    <div class="gps-ok">GPS \u00b7 ${rec.gpsLat}, ${rec.gpsLng} (\u00b1${rec.gpsAcc} m)</div>
+    ${line}
+    ${full?`<div class="sync-bar warn" style="margin:13px 0 0"><span class="d"></span>
+        <div class="t"><b>Day ${d} is finished.</b>${dayToSend(d).length?' '+dayToSend(d).length+' record'+(dayToSend(d).length===1?'':'s')+' still to submit.':' Everything is in NMDR.'}</div></div>`:''}
+    <div class="acts">
+      ${state==='sending'?'':`<button class="btn btn-${full&&dayToSend(d).length?'ghost':'ok'} btn-block" onclick="closeModal();renderDay(${d})">Back to Day ${d}</button>`}
+      ${state!=='sending'&&full&&dayToSend(d).length?`<button class="btn btn-primary" onclick="closeModal();submitDay(${d})">Submit the rest of Day ${d}</button>`:''}
+    </div>`);
+}
+
+/* ---------- a household already registered ---------- */
+function renderSaved(){
+  const d=formD,h=formH,r=recGet(d,h)||{};
+  const row=(k,v)=>`<div class="rv-item"><span class="q">${esc(k)}</span><span class="a">${esc(v===''||v==null?'\u2014':v)}</span></div>`;
+  const contact = r.hasPhone==='Yes' ? r.phone+' (household head)'
+    : r.hasAlt==='Yes' ? r.altPhone+' (someone else)'
+    : r.hhrPhone ? r.hhrPhone+' (HHR)' : '\u2014';
+  app.innerHTML=`<div class="appbar">
+      <button class="ico-btn" onclick="renderDay(${d})">${I.back}</button>
+      <div class="titles"><div class="eyebrow">${esc(me)} \u00b7 Day ${d}</div><div class="title">Household ${h} \u00b7 registered</div></div>
+      <span class="tag-pill me">${hhSerial(d,h)}/${DAYS*PER_DAY}</span>
+    </div>
+    <div class="body"><div class="list">
+      <div class="hd-head"><div class="id">${esc(r.token||'')}</div>
+        <div class="meta">${esc((r.first||'')+' '+(r.last||''))}<br>Registered ${esc(String(r._ts||'').slice(0,16).replace('T',' '))}</div></div>
+      ${r._submitted&&!r._dirty
+        ? `<div class="sync-bar ok"><span class="d"></span><div class="t"><b>Submitted to NMDR.</b>${r._rev>1?' Revision '+r._rev+'.':''}</div></div>`
+        : r._submitted&&r._dirty
+        ? `<div class="sync-bar warn"><span class="d"></span><div class="t"><b>Changed since it was submitted.</b><br>Resubmit Day ${d} so NMDR gets revision ${r._rev}.</div>
+             <button class="btn btn-primary btn-sm" style="flex:0 0 auto" onclick="submitDay(${d})">Resubmit</button></div>`
+        : `<div class="sync-bar wait"><span class="d"></span><div class="t"><b>Registered, not yet submitted.</b><br>${dayComplete(d)?'Day '+d+' is finished — submit its records.':'It goes up when all '+PER_DAY+' households of Day '+d+' are done.'}</div></div>`}
+      <div class="flag ok">Registered.${h<PER_DAY?' Household '+(h+1)+' is open.':' Day '+d+' is complete.'}</div>
+      <div class="card" style="padding-top:6px">
+        ${row('Household head',(r.first||'')+' '+(r.last||''))}
+        ${row('Contact number',contact)}
+        ${row('People in household',r.size)}
+        ${row('ITNs to be given',r.itns)}
+        ${row('Under-fives',r.u5)}
+        ${row('Pregnant women',r.preg)}
+        ${row('Token',r.token)}
+        ${row('Community',r._community)}
+        ${row('GPS',r.gpsLat?r.gpsLat+', '+r.gpsLng+' (\u00b1'+r.gpsAcc+' m)':'not recorded')}
+        ${row('Revision',r._rev||1)}
+      </div>
+    </div></div>
+    <div class="footer">
+      <button class="btn btn-ghost btn-sm" onclick="editHH()">Edit</button>
+      ${needsSend(r)
+        ? `<button class="btn btn-ok" onclick="submitOne(${d},${h})">${r._submitted?'Resubmit this record':'Submit this record'}</button>`
+        : `<button class="btn btn-primary" onclick="renderDay(${d})">Back to Day ${d}</button>`}
+    </div>`;
+}
+/* One record on its own — for when a household fails in the day batch, or an
+   edit needs to reach NMDR without waiting for the rest of the day. */
+function submitOne(d,h){
+  if(!GAS_URL){ setGAS(); return; }
+  const rec=recGet(d,h);
+  if(!rec){ toast('Nothing to submit'); return; }
+  if(!needsSend(rec)){ toast('Household '+h+' is already submitted'); return; }
+  if(!navigator.onLine){ modal(`<h3>No internet</h3>
+    <p>Household ${h} is safe on this device. Connect and submit again.</p>
+    <div class="acts"><button class="btn btn-primary" onclick="closeModal()">Close</button></div>`); return; }
+  modal(`<h3>Submitting household ${h}</h3><div class="spin"></div>
+    <p style="text-align:center">${esc(rec.token||'')}</p>`);
+  sendRec(rec,(ok,status)=>{
+    if(ok){ rec._submitted=true; rec._dirty=false; rec._submittedAt=new Date().toISOString(); }
+    else rec._lastError=status||'failed';
+    saveRecs();
+    const left=dayToSend(d).length;
+    modal(`<h3>${ok?'Household '+h+' submitted':'Could not submit household '+h}</h3>
+      <div class="tok-show">${esc(rec.token||'')}</div>
+      ${ok?`<div class="gps-ok" style="margin-top:12px">In NMDR${rec._rev>1?' as revision '+rec._rev:''}.${left?' '+left+' other record'+(left===1?'':'s')+' still to send for Day '+d+'.':''}</div>`
+          :`<div class="err" style="margin-top:12px">${esc(status==='network'||status==='timeout'?'The connection failed. It stays on this device \u2014 try again.':'The server refused it ('+(status||'error')+').')}</div>`}
+      <div class="acts">
+        <button class="btn btn-ghost" onclick="closeModal();renderSaved()">Close</button>
+        ${ok?(left?`<button class="btn btn-primary" onclick="closeModal();submitDay(${d})">Send the other ${left}</button>`
+                  :`<button class="btn btn-ok" onclick="closeModal();renderDay(${d})">Day ${d}</button>`)
+            :`<button class="btn btn-primary" onclick="closeModal();submitOne(${d},${h})">Try again</button>`}
+      </div>`);
+  });
+}
+
+/* ---------- start ---------- */
+function boot(){
+  if(me&&hhrPlace(me)){
+    meCommunity=Store.get('itn_hhr_community_'+me,'');
+    const ident=Store.get('itn_hhr_ident_'+me,{});
+    meFirst=ident.first||''; meLast=ident.last||''; mePhone=ident.phone||'';
+    loadDone(); renderMenu(); autoSync();
+    if(Store.get(trackOnKey(),false)) autoStart(true);   /* a reload costs a gap, not the day */
+  } else { me=null; renderSignIn(); }
+}
+loadDirectory(()=>{ boot(); });
+</script>
 </body>
 </html>
