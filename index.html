@@ -1533,12 +1533,12 @@ function itnsFor(size){
   if(n<=4) return 2;
   return 3;
 }
-/* HHR01_1_MK — the household number runs across the whole 10 days for this
+/* HHR00001_01 — the household number runs across the whole 10 days for this
    HHR (Day 1 HH1 = 1 … Day 10 HH25 = 250) so no two tokens can collide. */
 function hhSerial(d,h){ return (d-1)*PER_DAY+h; }
 function tokenFor(id,d,h,first,last){
-  const ini=(String(first||'').trim()[0]||'')+(String(last||'').trim()[0]||'');
-  return id+'_'+hhSerial(d,h)+'_'+ini.toUpperCase();
+  /* Token format: HHR00001_01, HHR00001_02, ... */
+  return id+'_'+pad(hhSerial(d,h),2);
 }
 const digits=v=>String(v||'').replace(/\D/g,'');
 const PHONE_LEN=9;
